@@ -46,7 +46,7 @@ class Parameter:
 templates = []
 
 parser = argparse.ArgumentParser()
-parser.add_argument("filename")
+parser.add_argument("filename", help="ASCII Cue file to parse")
 args = parser.parse_args()
 
 if not os.path.isfile(args.filename):
