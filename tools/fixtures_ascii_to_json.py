@@ -18,8 +18,6 @@ import json
 import os
 import sys
 
-# TODO: Handle multiple modes
-
 
 class Template:
     def __init__(self, name):
@@ -44,6 +42,7 @@ class Parameter:
 
 
 templates = []
+multi_parts = {}
 
 parser = argparse.ArgumentParser()
 parser.add_argument("filename", help="ASCII Cue file to parse")
@@ -65,6 +64,7 @@ for line in data:
         name = line[10:]
         template = Template(name)
         templates.append(template)
+        text_part = ""
     if on_template:
         if line[:0] == "!":
             on_template = False
@@ -74,6 +74,18 @@ for line in data:
             template.model_name = line[12:]
         if line[:11].upper() == "$$MODENAME ":
             template.mode_name = line[11:]
+        if line[:7].upper() == "$$DCID ":
+            if line[7:] in multi_parts.keys():
+                # This is another part of a template
+                template = multi_parts.get(line[7:])[0]
+                text_part = f" PART {multi_parts.get(line[7:])[1]}"
+                del templates[-1]
+        if line[:15].upper() == "$$TEMPLATEPART ":
+            # template with several parts
+            items = line[15:].split(" ")
+            dcid = items[1]
+            part = items[0]
+            multi_parts[dcid] = (template, part)
         if line[:12].upper() == "$$PARAMETER ":
             items = line[12:].split(" ")
             param_number = int(items[0])
@@ -88,7 +100,7 @@ for line in data:
             param_name = ""
             for item in items[5:]:
                 param_name += item + " "
-            param_name = param_name[:-1]
+            param_name = param_name[:-1] + text_part
             parameter = Parameter(param_name, param_number, param_type)
             on_parameter = True
         if on_parameter:
@@ -129,7 +141,7 @@ for line in data:
 
 for template in templates:
     data = {
-        "name": template.name,
+        "name": template.model_name,
         "manufacturer": template.manufacturer,
         "model_name": template.model_name,
         "parameters": {},
@@ -156,8 +168,24 @@ for template in templates:
         os.makedirs(path)
 
     if template.model_name:
-        file_name = f"{path}/{template.model_name}.json"
+        file_name = f"{path}/{template.model_name} {template.mode_name}.json"
     else:
         file_name = f"{path}/{template.name}.json"
-    with open(file_name, "w") as write_file:
-        json.dump(data, write_file, indent=4, sort_keys=False)
+
+    if os.path.isfile(file_name):
+        # If template already exist, merge new datas
+        with open(file_name, "r") as read_file:
+            old_data = json.load(read_file)
+        # Merge dictionnaries
+        if sys.version_info >= (3, 9):
+            new_data = old_data | data
+        elif sys.version_info >= (3, 5):
+            new_data = {**old_data, **data}
+        else:
+            new_data = old_data.copy()
+            new_data.update(data)
+        with open(file_name, "w") as write_file:
+            json.dump(new_data, write_file, indent=4, sort_keys=False)
+    else:
+        with open(file_name, "w") as write_file:
+            json.dump(data, write_file, indent=4, sort_keys=False)
