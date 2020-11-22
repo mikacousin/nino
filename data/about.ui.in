@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="nino">
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkAboutDialog" id="about_dialog">
+    <property name="can_focus">False</property>
+    <property name="modal">True</property>
+    <property name="type_hint">normal</property>
+    <property name="program_name">Niño</property>
+    <property name="version">@REVISION@</property>
+    <property name="copyright">Copyright © 2020 Mika Cousin</property>
+    <property name="comments" translatable="yes">A Lighting Console.</property>
+    <property name="website">@PACKAGE_URL@</property>
+    <property name="website_label" translatable="yes">Visit Niño website</property>
+    <property name="authors">Mika Cousin &lt;mika.cousin@gmail.com&gt;</property>
+    <property name="logo_icon_name">com.github.mikacousin.nino</property>
+    <property name="license_type">gpl-3-0</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="aboutdialog-vbox1">
+        <property name="can_focus">False</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="aboutdialog-action_area1">
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -189,3 +189,20 @@ for template in templates:
     else:
         with open(file_name, "w") as write_file:
             json.dump(data, write_file, indent=4, sort_keys=False)
+
+index = {}
+
+for root, dirs, files in os.walk("fixtures/"):
+    for name in files:
+        if name != "index.json":
+            file_name = os.path.join(root, name)
+            with open(file_name, "r") as read_file:
+                d = json.load(read_file)
+            index[file_name] = {
+                "manufacturer": d["manufacturer"],
+                "model_name": d["model_name"],
+                "mode": d["modes"][0]["name"],
+            }
+
+with open("fixtures/index.json", "w") as index_file:
+    json.dump(index, index_file, indent=4, sort_keys=True)

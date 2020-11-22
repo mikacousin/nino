@@ -1,0 +1,11 @@
+<interface domain="nino">
+  <menu id="app-menu">
+    <section>
+      <item>
+        <attribute name="action">app.quit</attribute>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="accel">&lt;Primary&gt;q</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

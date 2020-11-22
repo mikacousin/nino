@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Niño
+# Copyright (c) 2020 Mika Cousin <mika.cousin@gmail.com>
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+import cProfile
+import gettext
+import locale
+import os
+import sys
+
+import gi
+gi.require_version("Gdk", "3.0")
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gio  # noqa: E402
+
+# Make sure we'll find all modules
+sys.path.insert(1, "@pythondir@")
+
+from nino.application import Nino  # noqa: E402
+
+LOCALEDIR = "@localedir@"
+PKGDATADIR = "@pkgdatadir@"
+
+
+def _run_nino():
+    """Start application"""
+    app = Nino()
+    app.run(sys.argv)
+
+
+if __name__ == "__main__":
+    locale.bindtextdomain("nino", LOCALEDIR)
+    locale.textdomain("nino")
+    gettext.bindtextdomain("nino", LOCALEDIR)
+    gettext.textdomain("nino")
+
+    resource = Gio.resource_load(os.path.join(PKGDATADIR, "nino.gresource"))
+    Gio.Resource._register(resource)
+
+    run_profile = os.environ.get("NINO_PROFILING", False)
+
+    if run_profile:
+        prof = cProfile.Profile()
+        res = prof.runcall(_run_nino)
+        prof.dump_stats("nino-runstats")
+    else:
+        _run_nino()
