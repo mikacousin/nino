@@ -40,8 +40,12 @@ def _run_nino():
 
 
 if __name__ == "__main__":
-    locale.bindtextdomain("nino", LOCALEDIR)
-    locale.textdomain("nino")
+    # Needed for Windows
+    try:
+        locale.bindtextdomain("nino", LOCALEDIR)
+        locale.textdomain("nino")
+    except AttributeError:
+        pass
     gettext.bindtextdomain("nino", LOCALEDIR)
     gettext.textdomain("nino")
 
