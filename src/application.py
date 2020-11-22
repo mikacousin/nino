@@ -47,6 +47,9 @@ class Nino(Gtk.Application):
         style_context.add_provider_for_screen(
             screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
         )
+        # Use dark theme
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-application-prefer-dark-theme", True)
         self.create_main_windows()
 
     def do_startup(self):
