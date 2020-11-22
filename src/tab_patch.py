@@ -114,6 +114,21 @@ class FixturesLibrary(Gtk.VBox):
         text = model.get_value(iterr, 1).lower()
         if query in text:
             self.make_path_visible(model, iterr)
+            self.make_subtree_visible(model, iterr)
+
+    def make_subtree_visible(self, model, iterr):
+        """Display subtree of matching branch
+
+        Args:
+            model (Gtk.TreeModel): Model
+            iterr (Gtk.TreeIter): iter
+        """
+        for i in range(model.iter_n_children(iterr)):
+            subtree = model.iter_nth_child(iterr, i)
+            if model.get_value(subtree, 0):
+                continue
+            self.fixtures.set_value(subtree, 0, True)
+            self.make_subtree_visible(model, subtree)
 
     def make_path_visible(self, model, iterr):
         """Make branch visible
