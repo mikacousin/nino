@@ -1,6 +1,7 @@
 # Niño
 
 This project follows [olc](https://mikacousin.github.io/olc) with better foundations.
+Tested on Archlinux and Windows 10 (with [MSYS2](https://www.msys2.org)).
 
 ## Building from git 
 
