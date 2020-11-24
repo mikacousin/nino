@@ -64,14 +64,19 @@ class Nino(Gtk.Application, Console):
         nb_monitors = Gdk.Display.get_default().get_n_monitors()
         if not self.live:
             self.live = LiveWindow(self)
-            self.live.move(0, 0)
         if not self.playback:
             self.playback = PlaybackWindow(self)
-            if nb_monitors > 1:
-                display = Gdk.Display.get_default()
-                monitor = display.get_monitor(1)
-                monitor_geometry = monitor.get_geometry()
-                self.playback.move(monitor_geometry.x, monitor_geometry.y)
+        if nb_monitors > 1:
+            # With 2 monitors, open each window on different monitors and maximize it
+            display = Gdk.Display.get_default()
+            monitor = display.get_monitor(0)
+            monitor_geometry = monitor.get_geometry()
+            self.live.move(monitor_geometry.x, monitor_geometry.y)
+            monitor = display.get_monitor(1)
+            monitor_geometry = monitor.get_geometry()
+            self.playback.move(monitor_geometry.x, monitor_geometry.y)
+            self.live.maximize()
+            self.playback.maximize()
         self.live.show_all()
         self.playback.show_all()
 

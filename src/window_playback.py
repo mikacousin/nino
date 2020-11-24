@@ -26,7 +26,6 @@ class PlaybackWindow(Gtk.ApplicationWindow):
         self.app = app
 
         self.set_default_size(1440, 900)
-        # self.maximize()
 
         vbox = Gtk.VBox()
 

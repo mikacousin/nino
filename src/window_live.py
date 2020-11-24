@@ -28,7 +28,6 @@ class LiveWindow(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self, title="Niño", application=app)
 
         self.set_default_size(1440, 900)
-        self.maximize()
 
         header = Gtk.HeaderBar(title="Niño")
         header.set_show_close_button(True)
