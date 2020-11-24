@@ -365,7 +365,7 @@ class TabPatch(Gtk.Box):
 
     def channel(self, _widget):
         """Channel signal"""
-        if not App().keystring or not App().keystring().isdigit():
+        if not App().keystring or not App().keystring.isdigit():
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
             return
