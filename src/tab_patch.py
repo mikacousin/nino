@@ -22,16 +22,16 @@ from nino.defines import App, MAX_CHANNELS, UNIVERSES
 from nino.paths import get_fixtures_dir
 from nino.widgets_output import OutputWidget
 
-# TODO:
-# - Clear patch when change fixture
-# - If no fixture, patch dimmer
-
 
 class FixturesLibrary(Gtk.VBox):
     """Fixtures library
 
     Attributes:
         show_fixtures (Fixtures): Fixtures in the show
+        fixtures (Gtk.TreeStore): Fixtures library TreeStore
+        search_entry (Gtk.SearchEntry): Search Entry
+        filter (Gtk.TreeModel): fixtures filter
+        view (Gtk.TreeView): fixtures view
     """
 
     def __init__(self, fixtures):
@@ -39,7 +39,6 @@ class FixturesLibrary(Gtk.VBox):
 
         self.show_fixtures = fixtures
 
-        # TODO: Just for tests
         # Load fixtures index
         path = get_fixtures_dir()
         with open(os.path.join(path, "index.json"), "r") as index_file:
@@ -80,8 +79,7 @@ class FixturesLibrary(Gtk.VBox):
         self.view = Gtk.TreeView(model=self.filter)
         self.view.connect("row-activated", self.fixtures_activated)
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Fixtures", renderer, text=1)
-        self.view.append_column(column)
+        self.view.append_column(Gtk.TreeViewColumn("Fixtures", renderer, text=1))
         self.pack_end(self.view, True, True, 0)
 
     def refresh_results(self, _widget):
@@ -171,7 +169,7 @@ class FixturesLibrary(Gtk.VBox):
                     found = True
                     break
             if not found:
-                fixture = self.get_fixture(
+                fixture = get_fixture(
                     manufacturer=fixture_manufacturer,
                     model=fixture_model,
                     mode=fixture_mode,
@@ -184,28 +182,46 @@ class FixturesLibrary(Gtk.VBox):
                 self.show_fixtures.flowbox.add(button)
                 self.show_fixtures.flowbox.show_all()
 
-    def get_fixture(self, manufacturer=None, model=None, mode=None):
-        path = get_fixtures_dir()
-        with open(os.path.join(path, "index.json"), "r") as index_file:
-            index = json.load(index_file)
-        for file_name, fixture in index.items():
-            if (
-                fixture.get("manufacturer") == manufacturer
-                and fixture.get("model_name") == model
-                and fixture.get("mode") == mode
-            ):
-                break
-        with open(os.path.join(path, file_name), "r") as fixture_file:
-            fixture_json = json.load(fixture_file)
-        fixture = Fixture(fixture_json.get("name"))
-        fixture.manufacturer = fixture_json.get("manufacturer")
-        fixture.model_name = fixture_json.get("model_name")
-        fixture.parameters = fixture_json.get("parameters")
-        fixture.modes = fixture_json.get("modes")
-        return fixture
+
+def get_fixture(manufacturer=None, model=None, mode=None):
+    """Find fixture with his name
+
+    Args:
+        manufacturer (str): Manufacturer name
+        model (str): Model name
+        mode (str): Mode name
+
+    Returns:
+        fixture (Fixture): fixture
+    """
+    path = get_fixtures_dir()
+    with open(os.path.join(path, "index.json"), "r") as index_file:
+        index = json.load(index_file)
+    file_name = None
+    for file_name, fixture in index.items():
+        if (
+            fixture.get("manufacturer") == manufacturer
+            and fixture.get("model_name") == model
+            and fixture.get("mode") == mode
+        ):
+            break
+    with open(os.path.join(path, file_name), "r") as fixture_file:
+        fixture_json = json.load(fixture_file)
+    fixture = Fixture(fixture_json.get("name"))
+    fixture.manufacturer = fixture_json.get("manufacturer")
+    fixture.model_name = fixture_json.get("model_name")
+    fixture.parameters = fixture_json.get("parameters")
+    fixture.modes = fixture_json.get("modes")
+    return fixture
 
 
 class FixtureButton(Gtk.Button):
+    """Button for fixtures
+
+    Attributes:
+        fixture (Fixture): fixture or None
+    """
+
     def __init__(self):
         Gtk.Button.__init__(self)
         self.fixture = None
@@ -254,6 +270,29 @@ class Fixtures(Gtk.ScrolledWindow):
             App().patch.patch_channel(channel, output, universe, fixture)
 
 
+class SacnWidget(Gtk.ScrolledWindow):
+    """sACN View Widget"""
+
+    def __init__(self):
+        Gtk.ScrolledWindow.__init__(self)
+        self.set_vexpand(True)
+        self.set_hexpand(True)
+        vbox = Gtk.VBox()
+        flowbox = []
+        outputs = {}
+        for univ in UNIVERSES:
+            vbox.pack_start(Gtk.Label(label=f"Universe {univ}"), True, True, 0)
+            flowbox.append(Gtk.FlowBox())
+            flowbox[-1].set_valign(Gtk.Align.START)
+            flowbox[-1].set_max_children_per_line(512)
+            flowbox[-1].set_selection_mode(Gtk.SelectionMode.NONE)
+            for output in range(512):
+                outputs[univ, output] = OutputWidget(univ, output + 1)
+                flowbox[-1].add(outputs[univ, output])
+            vbox.pack_start(flowbox[-1], True, True, 0)
+        self.add(vbox)
+
+
 class TabPatch(Gtk.Box):
     """Tab Patch
 
@@ -280,6 +319,33 @@ class TabPatch(Gtk.Box):
         self.add(paned)
 
         # Channels list and Templates
+        scrollable = self.create_channels_list()
+        paned2 = Gtk.Paned(orientation=Gtk.Orientation.VERTICAL)
+        window_height = window.get_size()[1]
+        paned2.set_position((window_height / 8) * 5)
+        paned2.pack1(scrollable, resize=True, shrink=False)
+        fixtures = Fixtures(self.treeview)
+        paned2.pack2(fixtures, resize=True, shrink=False)
+        paned.pack1(paned2, resize=True, shrink=False)
+
+        # sACN universes / Fixtures library
+        stack = Gtk.Stack()
+        stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        stack.add_titled(SacnWidget(), "sacn", "sACN universes")
+        stack.add_titled(FixturesLibrary(fixtures), "fixtures", "Fixtures library")
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(stack)
+        vbox = Gtk.VBox()
+        vbox.pack_start(stack_switcher, False, False, 0)
+        vbox.pack_start(stack, True, True, 0)
+        paned.pack2(vbox, resize=True, shrink=False)
+
+    def create_channels_list(self):
+        """Create Channels list
+
+        Returns:
+            scrollable (Gtk.ScrolledWindow)
+        """
         liststore = Gtk.ListStore(int, str, str)
         for chan in range(1, MAX_CHANNELS + 1):
             liststore.append([chan, "", ""])
@@ -295,49 +361,14 @@ class TabPatch(Gtk.Box):
         scrollable.set_vexpand(True)
         scrollable.set_hexpand(True)
         scrollable.add(self.treeview)
-        paned2 = Gtk.Paned(orientation=Gtk.Orientation.VERTICAL)
-        window_height = window.get_size()[1]
-        paned2.set_position((window_height / 8) * 5)
-        paned2.pack1(scrollable, resize=True, shrink=False)
-        fixtures = Fixtures(self.treeview)
-        paned2.pack2(fixtures, resize=True, shrink=False)
-        paned.pack1(paned2, resize=True, shrink=False)
-
-        # sACN universes / Fixtures library
-        stack = Gtk.Stack()
-        stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
-        scrollable = Gtk.ScrolledWindow()
-        scrollable.set_vexpand(True)
-        scrollable.set_hexpand(True)
-        vbox = Gtk.VBox()
-        flowbox = []
-        outputs = {}
-        for univ in UNIVERSES:
-            vbox.pack_start(Gtk.Label(label=f"Universe {univ}"), True, True, 0)
-            flowbox.append(Gtk.FlowBox())
-            flowbox[-1].set_valign(Gtk.Align.START)
-            flowbox[-1].set_max_children_per_line(512)
-            flowbox[-1].set_selection_mode(Gtk.SelectionMode.NONE)
-            for output in range(512):
-                outputs[univ, output] = OutputWidget(univ, output + 1)
-                flowbox[-1].add(outputs[univ, output])
-            vbox.pack_start(flowbox[-1], True, True, 0)
-        scrollable.add(vbox)
-        stack.add_titled(scrollable, "sacn", "sACN universes")
-        fixtures_library = FixturesLibrary(fixtures)
-        stack.add_titled(fixtures_library, "fixtures", "Fixtures library")
-        stack_switcher = Gtk.StackSwitcher()
-        stack_switcher.set_stack(stack)
-        vbox = Gtk.VBox()
-        vbox.pack_start(stack_switcher, False, False, 0)
-        vbox.pack_start(stack, True, True, 0)
-        paned.pack2(vbox, resize=True, shrink=False)
+        return scrollable
 
     def channel(self, _widget):
         """Channel signal"""
-        if not App().keystring:
+        if not App().keystring or not App().keystring().isdigit():
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
             return
-        # TODO: Validate channel
         channel = int(App().keystring)
         path = Gtk.TreePath.new_from_indices([channel - 1])
         self.treeview.set_cursor(path, None, False)
@@ -346,54 +377,22 @@ class TabPatch(Gtk.Box):
 
     def output(self, _widget):
         """Output signal"""
-        if not App().keystring or not App().keystring.replace(".", "", 1).isdigit():
-            # Invalid entry
+        if not validate_entry(App().keystring):
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
             return
-        if "." in App().keystring:
-            if App().keystring[0] == ".":
-                # Change universe
-                output = None
-                universe = int(App().keystring[1:])
-            else:
-                # Output.Universe
-                split = App().keystring.split(".")
-                output = int(split[0])
-                universe = int(split[1])
-        else:
-            # Output in first universe
-            output = int(App().keystring)
-            universe = UNIVERSES[0]
+        output, universe = parse_entry(App().keystring)
+        if not universe:
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
         model, selected_channels = self.treeview.get_selection().get_selected_rows()
         footprint = 0
-        ref = None
-        for path in selected_channels:
-            if not ref:
-                ref = model[path][2]
-            else:
-                if model[path][2] != ref:
-                    print("No multipatch with different fixtures")
-                    return
+        if not verify_fixture(model, selected_channels):
+            print("No multipatch with different fixtures")
+            return
         for i, path in enumerate(selected_channels):
-            if not model[path][2]:
-                # No fixture, use Dimmer
-                model[path][2] = "Dimmer"
-                fixture = App().fixtures[0]
-            else:
-                # Find fixture
-                for fixture in App().fixtures:
-                    fixture_model = fixture.model_name
-                    try:
-                        mode = fixture.modes[0].get("name")
-                    except IndexError:
-                        mode = ""
-                    if mode:
-                        name = f"{fixture_model} {mode}"
-                    else:
-                        name = f"{fixture_model}"
-                    if name == model[path][2]:
-                        break
+            fixture = get_fixture_by_name(model, path)
             channel = model[path][0]
             if output:
                 real_output = output + (i * footprint)
@@ -418,3 +417,96 @@ class TabPatch(Gtk.Box):
             model[path][1] = text
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
+
+
+def get_fixture_by_name(model, path):
+    """Get fixture by name
+
+    Args:
+        model (Gtk.TreeModel): Model with datas
+        path (Gtk.TreePath): row
+
+    Returns:
+        fixture
+    """
+    if not model[path][2]:
+        # No fixture, use Dimmer
+        model[path][2] = "Dimmer"
+        fixture = App().fixtures[0]
+    else:
+        # Find fixture
+        for fixture in App().fixtures:
+            fixture_model = fixture.model_name
+            try:
+                mode = fixture.modes[0].get("name")
+            except IndexError:
+                mode = ""
+            if mode:
+                name = f"{fixture_model} {mode}"
+            else:
+                name = f"{fixture_model}"
+            if name == model[path][2]:
+                break
+    return fixture
+
+
+def validate_entry(text):
+    """Validate entry
+
+    Args:
+        text (str): text entry
+
+    Returns:
+        (bool)
+    """
+    if not text or not text.replace(".", "", 1).isdigit():
+        return False
+    return True
+
+
+def parse_entry(text):
+    """Parse entry
+
+    Args:
+        text (str): Text entry
+
+    Returns:
+        output (int), universe (int)
+    """
+    if "." in text:
+        if text[0] == ".":
+            # Change universe
+            output = None
+            universe = int(text[1:])
+        else:
+            # Output.Universe
+            split = text.split(".")
+            output = int(split[0])
+            universe = int(split[1])
+    else:
+        # Output in first universe
+        output = int(text)
+        universe = UNIVERSES[0]
+    if universe not in UNIVERSES:
+        universe = 0
+    return output, universe
+
+
+def verify_fixture(model, selected_channels):
+    """Verify if all fixtures are the same
+
+    Args:
+        model (Gtk.TreeModel): Model with datas
+        selected_channels (Gtk.TreePath): Channels
+
+    Returns:
+        (bool) True if Ok
+    """
+    ref = None
+    for path in selected_channels:
+        if not ref:
+            ref = model[path][2]
+        else:
+            if model[path][2] != ref:
+                return False
+    return True

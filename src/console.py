@@ -18,6 +18,8 @@ from nino.defines import UNIVERSES
 
 
 class Fixture:
+    """A fixture is a template device"""
+
     def __init__(self, name):
         self.name = name
         self.manufacturer = ""
@@ -36,6 +38,8 @@ class Fixture:
 
 
 class Device:
+    """A device is a patched fixture"""
+
     def __init__(self, channel, output, universe, fixture):
         self.channel = channel
         if output is not None:
@@ -57,6 +61,8 @@ class Device:
 
 
 class Patch:
+    """Channels associate with devices"""
+
     def __init__(self):
         self.channels = {}
 
@@ -78,9 +84,11 @@ class Patch:
             self.channels[channel].universe = universe
             if self.channels[channel].fixture is not fixture:
                 self.channels[channel].fixture = fixture
-                self.parameters = {}
+                self.channels[channel].parameters = {}
                 for param in fixture.parameters.values():
-                    self.parameters[param.get("number")] = param.get("default")
+                    self.channels[channel].parameters[param.get("number")] = param.get(
+                        "default"
+                    )
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
@@ -89,6 +97,8 @@ class Patch:
 
 
 class Console:
+    """Application's heart"""
+
     def __init__(self):
         # Dimmer fixture at index 0
         self.fixtures = []
