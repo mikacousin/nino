@@ -13,11 +13,12 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 from gi.repository import Gdk, Gio, GLib, Gtk
 
+from nino.console import Console
 from nino.window_live import LiveWindow
 from nino.window_playback import PlaybackWindow
 
 
-class Nino(Gtk.Application):
+class Nino(Gtk.Application, Console):
     """Niño is a Gtk application
 
     Attributes:
@@ -25,6 +26,7 @@ class Nino(Gtk.Application):
     """
 
     def __init__(self):
+        Console.__init__(self)
         Gtk.Application.__init__(
             self,
             application_id="com.github.mikacousin.nino",
@@ -93,6 +95,7 @@ class Nino(Gtk.Application):
             "eight": ("_number", "i"),
             "nine": ("_number", "i"),
             "zero": ("_number", "i"),
+            "dot": ("_dot", None),
             "channel": ("_channel", None),
             "output": ("_output", None),
         }
@@ -119,14 +122,20 @@ class Nino(Gtk.Application):
         self.set_accels_for_action("app.eight(8)", ["8", "KP_8"])
         self.set_accels_for_action("app.nine(9)", ["9", "KP_9"])
         self.set_accels_for_action("app.zero(0)", ["0", "KP_0"])
+        self.set_accels_for_action("app.dot", ["period"])
         self.set_accels_for_action("app.channel", ["c"])
         self.set_accels_for_action("app.output", ["o"])
 
     def _exit(self, _action, _parameter):
+        self.sender.stop()
         self.quit()
 
     def _number(self, _action, param):
         self.keystring += str(param)
+        self.playback.statusbar.push(self.playback.context_id, self.keystring)
+
+    def _dot(self, _action, _parameter):
+        self.keystring += "."
         self.playback.statusbar.push(self.playback.context_id, self.keystring)
 
     def _channel(self, _action, _parameter):

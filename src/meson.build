@@ -21,6 +21,7 @@ configure_file(
 
 nino_sources = [
   'application.py',
+  'console.py',
   'defines.py',
   'tab_live.py',
   'tab_patch.py',

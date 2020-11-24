@@ -16,6 +16,7 @@ import os
 
 from gi.repository import GObject, Gtk
 
+from nino.console import Fixture
 from nino.defines import App, MAX_CHANNELS, UNIVERSES
 from nino.paths import get_fixtures_dir
 from nino.widgets_output import OutputWidget
@@ -159,6 +160,8 @@ class FixturesLibrary(Gtk.VBox):
             fixture_mode = model[path][1]
             path.up()
             fixture_model = model[path][1]
+            path.up()
+            fixture_manufacturer = model[path][1]
             label = f"{fixture_model} {fixture_mode}"
             # If fixture is already in show, doesn't add it
             found = False
@@ -167,10 +170,44 @@ class FixturesLibrary(Gtk.VBox):
                     found = True
                     break
             if not found:
-                button = Gtk.Button.new_with_label(label)
+                fixture = self.get_fixture(
+                    manufacturer=fixture_manufacturer,
+                    model=fixture_model,
+                    mode=fixture_mode,
+                )
+                App().fixtures.append(fixture)
+                button = FixtureButton()
+                button.set_label(label)
+                button.fixture = fixture
                 button.connect("clicked", self.show_fixtures.clicked)
                 self.show_fixtures.flowbox.add(button)
                 self.show_fixtures.flowbox.show_all()
+
+    def get_fixture(self, manufacturer=None, model=None, mode=None):
+        path = get_fixtures_dir()
+        with open(os.path.join(path, "index.json"), "r") as index_file:
+            index = json.load(index_file)
+        for file_name, fixture in index.items():
+            if (
+                fixture.get("manufacturer") == manufacturer
+                and fixture.get("model_name") == model
+                and fixture.get("mode") == mode
+            ):
+                break
+        with open(os.path.join(path, file_name), "r") as fixture_file:
+            fixture_json = json.load(fixture_file)
+        fixture = Fixture(fixture_json.get("name"))
+        fixture.manufacturer = fixture_json.get("manufacturer")
+        fixture.model_name = fixture_json.get("model_name")
+        fixture.parameters = fixture_json.get("parameters")
+        fixture.modes = fixture_json.get("modes")
+        return fixture
+
+
+class FixtureButton(Gtk.Button):
+    def __init__(self):
+        Gtk.Button.__init__(self)
+        self.fixture = None
 
 
 class Fixtures(Gtk.ScrolledWindow):
@@ -183,16 +220,17 @@ class Fixtures(Gtk.ScrolledWindow):
     def __init__(self, channels):
         Gtk.ScrolledWindow.__init__(self)
 
-        # TODO: Just for tests
         # Fixtures
-        fixtures = ["Dimmer"]
+        fixtures = App().fixtures
 
         self.channels = channels
 
         self.flowbox = Gtk.FlowBox()
         self.flowbox.set_valign(Gtk.Align.START)
         for fixture in fixtures:
-            button = Gtk.Button.new_with_label(fixture)
+            button = FixtureButton()
+            button.set_label(fixture.name)
+            button.fixture = fixture
             button.connect("clicked", self.clicked)
             self.flowbox.add(button)
         self.add(self.flowbox)
@@ -207,6 +245,12 @@ class Fixtures(Gtk.ScrolledWindow):
         model, selected_channels = self.channels.get_selection().get_selected_rows()
         for path in selected_channels:
             model[path][2] = label
+            model[path][1] = ""
+            channel = model[path][0]
+            output = 0
+            universe = 0
+            fixture = button.fixture
+            App().patch.patch_channel(channel, output, universe, fixture)
 
 
 class TabPatch(Gtk.Box):
@@ -301,14 +345,76 @@ class TabPatch(Gtk.Box):
 
     def output(self, _widget):
         """Output signal"""
-        if not App().keystring:
+        if not App().keystring or not App().keystring.replace(".", "", 1).isdigit():
+            # Invalid entry
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
             return
-        output = int(App().keystring)
+        if "." in App().keystring:
+            if App().keystring[0] == ".":
+                # Change universe
+                output = None
+                universe = int(App().keystring[1:])
+            else:
+                # Output.Universe
+                split = App().keystring.split(".")
+                output = int(split[0])
+                universe = int(split[1])
+        else:
+            # Output in first universe
+            output = int(App().keystring)
+            universe = UNIVERSES[0]
         model, selected_channels = self.treeview.get_selection().get_selected_rows()
+        footprint = 0
+        ref = None
+        for path in selected_channels:
+            if not ref:
+                ref = model[path][2]
+            else:
+                if model[path][2] != ref:
+                    print("No multipatch with different fixtures")
+                    return
         for i, path in enumerate(selected_channels):
             if not model[path][2]:
+                # No fixture, use Dimmer
                 model[path][2] = "Dimmer"
-            model[path][1] = str(output + i)
+                fixture = App().fixtures[0]
+            else:
+                # Find fixture
+                for fixture in App().fixtures:
+                    fixture_model = fixture.model_name
+                    try:
+                        mode = fixture.modes[0].get("name")
+                    except IndexError:
+                        mode = ""
+                    if mode:
+                        name = f"{fixture_model} {mode}"
+                    else:
+                        name = f"{fixture_model}"
+                    if name == model[path][2]:
+                        break
+            channel = model[path][0]
+            if output:
+                real_output = output + (i * footprint)
+            else:
+                # Universe change, no Output in entry. So, try to find one
+                real_output = App().patch.channels[channel].output
+                if not real_output:
+                    App().keystring = ""
+                    App().playback.statusbar.remove_all(App().playback.context_id)
+                    return
+            footprint = App().patch.patch_channel(
+                channel, real_output, universe, fixture
+            )
+            # Update Channels list
+            univ = ""
+            if universe != UNIVERSES[0]:
+                univ = f".{universe}"
+            if footprint > 1:
+                text = f"{real_output}{univ}-{real_output + footprint - 1}{univ}"
+            else:
+                text = f"{real_output}{univ}"
+            model[path][1] = text
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
 
@@ -330,7 +436,9 @@ def focus(_widget, event):
         App().set_accels_for_action("app.eight(8)", [])
         App().set_accels_for_action("app.nine(9)", [])
         App().set_accels_for_action("app.zero(0)", [])
+        App().set_accels_for_action("app.dot", [])
         App().set_accels_for_action("app.channel", [])
+        App().set_accels_for_action("app.output", [])
     else:
         App().set_accels_for_action("app.one(1)", ["1", "KP_1"])
         App().set_accels_for_action("app.two(2)", ["2", "KP_2"])
@@ -342,4 +450,6 @@ def focus(_widget, event):
         App().set_accels_for_action("app.eight(8)", ["8", "KP_8"])
         App().set_accels_for_action("app.nine(9)", ["9", "KP_9"])
         App().set_accels_for_action("app.zero(0)", ["0", "KP_0"])
+        App().set_accels_for_action("app.dot", ["period"])
         App().set_accels_for_action("app.channel", ["c"])
+        App().set_accels_for_action("app.output", ["o"])

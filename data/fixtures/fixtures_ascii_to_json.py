@@ -163,7 +163,7 @@ for template in templates:
             data["parameters"][param]["table"] = values.table
     data["modes"].append(mode)
 
-    path = f"fixtures/{template.manufacturer}"
+    path = f"{template.manufacturer}"
     if not os.path.isdir(path):
         os.makedirs(path)
 
@@ -192,9 +192,9 @@ for template in templates:
 
 index = {}
 
-for root, dirs, files in os.walk("fixtures/"):
+for root, dirs, files in os.walk("."):
     for name in files:
-        if name != "index.json":
+        if name != "index.json" and name != "fixtures_ascii_to_json.py":
             file_name = os.path.join(root, name)
             with open(file_name, "r") as read_file:
                 d = json.load(read_file)
@@ -204,5 +204,5 @@ for root, dirs, files in os.walk("fixtures/"):
                 "mode": d["modes"][0]["name"],
             }
 
-with open("fixtures/index.json", "w") as index_file:
+with open("index.json", "w") as index_file:
     json.dump(index, index_file, indent=4, sort_keys=True)

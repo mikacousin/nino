@@ -11,6 +11,6 @@ $ meson builddir --prefix=/usr/local
 $ sudo ninja -C builddir install
 ```
 
-## tools/fixtures_ascii_to_json.py
+## data/fixtures/fixtures_ascii_to_json.py
 
 This script extract fixtures templates from your Congo ASCII files to use them with Niño.
