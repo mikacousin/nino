@@ -85,10 +85,19 @@ class Patch:
             if self.channels[channel].fixture is not fixture:
                 self.channels[channel].fixture = fixture
                 self.channels[channel].parameters = {}
+                self.channels[channel].footprint = 0
                 for param in fixture.parameters.values():
                     self.channels[channel].parameters[param.get("number")] = param.get(
                         "default"
                     )
+                    param_type = param.get("type")
+                    if param_type in ("HTP8", "LTP8"):
+                        self.channels[channel].footprint += 1
+                    elif param_type in ("HTP16", "LTP16"):
+                        self.channels[channel].footprint += 2
+                    else:
+                        print("Device parameter type '{param_type}' not supported")
+                        print("Supported types are : HTP8, LTP8, HTP16, LTP16")
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
@@ -103,6 +112,7 @@ class Console:
         # Dimmer fixture at index 0
         self.fixtures = []
         dimmer = Fixture("Dimmer")
+        dimmer.model_name = "Dimmer"
         self.fixtures.append(dimmer)
 
         self.patch = Patch()

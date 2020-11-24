@@ -234,13 +234,14 @@ class Fixtures(Gtk.ScrolledWindow):
         channels (Gtk.TreeView): Channels treeview
     """
 
-    def __init__(self, channels):
+    def __init__(self, channels, sacn):
         Gtk.ScrolledWindow.__init__(self)
 
         # Fixtures
         fixtures = App().fixtures
 
         self.channels = channels
+        self.sacn = sacn
 
         self.flowbox = Gtk.FlowBox()
         self.flowbox.set_valign(Gtk.Align.START)
@@ -261,9 +262,17 @@ class Fixtures(Gtk.ScrolledWindow):
         label = button.get_label()
         model, selected_channels = self.channels.get_selection().get_selected_rows()
         for path in selected_channels:
+            channel = model[path][0]
+            if App().patch.channels.get(channel):
+                # Update sACN view
+                universe = App().patch.channels[channel].universe
+                output = App().patch.channels[channel].output
+                footprint = App().patch.channels[channel].footprint
+                for offset in range(footprint):
+                    self.sacn.outputs[universe, output - 1 + offset].channel = 0
+                    self.sacn.outputs[universe, output - 1 + offset].queue_draw()
             model[path][2] = label
             model[path][1] = ""
-            channel = model[path][0]
             output = 0
             universe = 0
             fixture = button.fixture
@@ -279,7 +288,7 @@ class SacnWidget(Gtk.ScrolledWindow):
         self.set_hexpand(True)
         vbox = Gtk.VBox()
         flowbox = []
-        outputs = {}
+        self.outputs = {}
         for univ in UNIVERSES:
             vbox.pack_start(Gtk.Label(label=f"Universe {univ}"), True, True, 0)
             flowbox.append(Gtk.FlowBox())
@@ -287,9 +296,12 @@ class SacnWidget(Gtk.ScrolledWindow):
             flowbox[-1].set_max_children_per_line(512)
             flowbox[-1].set_selection_mode(Gtk.SelectionMode.NONE)
             for output in range(512):
-                outputs[univ, output] = OutputWidget(univ, output + 1)
-                flowbox[-1].add(outputs[univ, output])
+                self.outputs[univ, output] = OutputWidget(univ, output + 1)
+                flowbox[-1].add(self.outputs[univ, output])
             vbox.pack_start(flowbox[-1], True, True, 0)
+        for flow in flowbox:
+            for child in flow.get_children():
+                child.set_name("flowbox_outputs")
         self.add(vbox)
 
 
@@ -318,20 +330,23 @@ class TabPatch(Gtk.Box):
         paned.set_position(window_width / 2)
         self.add(paned)
 
+        # sACN view
+        self.sacn = SacnWidget()
+
         # Channels list and Templates
         scrollable = self.create_channels_list()
         paned2 = Gtk.Paned(orientation=Gtk.Orientation.VERTICAL)
         window_height = window.get_size()[1]
         paned2.set_position((window_height / 8) * 5)
         paned2.pack1(scrollable, resize=True, shrink=False)
-        fixtures = Fixtures(self.treeview)
+        fixtures = Fixtures(self.treeview, self.sacn)
         paned2.pack2(fixtures, resize=True, shrink=False)
         paned.pack1(paned2, resize=True, shrink=False)
 
-        # sACN universes / Fixtures library
+        # Stack with sACN universes and Fixtures library
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
-        stack.add_titled(SacnWidget(), "sacn", "sACN universes")
+        stack.add_titled(self.sacn, "sacn", "sACN universes")
         stack.add_titled(FixturesLibrary(fixtures), "fixtures", "Fixtures library")
         stack_switcher = Gtk.StackSwitcher()
         stack_switcher.set_stack(stack)
@@ -377,6 +392,8 @@ class TabPatch(Gtk.Box):
 
     def output(self, _widget):
         """Output signal"""
+        # TODO: Manage Outputs already used
+        # TODO: Send Home DMX when device is patched
         if not validate_entry(App().keystring):
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
@@ -415,6 +432,10 @@ class TabPatch(Gtk.Box):
             else:
                 text = f"{real_output}{univ}"
             model[path][1] = text
+            # Update sACN View
+            for offset in range(footprint):
+                self.sacn.outputs[universe, real_output - 1 + offset].channel = channel
+                self.sacn.outputs[universe, real_output - 1 + offset].queue_draw()
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
 

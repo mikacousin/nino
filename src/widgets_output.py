@@ -17,7 +17,9 @@ import cairo
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk  # noqa:E402
+from gi.repository import Gtk  # noqa: E402
+
+from nino.defines import App  # noqa: E402
 
 
 def rounded_rectangle_fill(cr, area, radius):
@@ -57,6 +59,7 @@ class OutputWidget(Gtk.Misc):
         self.universe = universe
         self.output = output
         self.level = 0
+        self.channel = 0
 
         self.scale = 1.0
         self.width = 32 * self.scale
@@ -72,15 +75,130 @@ class OutputWidget(Gtk.Misc):
         self.set_size_request(self.width, self.width)
         allocation = self.get_allocation()
         # Draw background
-        area = (1, allocation.width - 2, 1, allocation.height - 2)
-        cr.set_source_rgb(
-            0.3 + (0.2 / 255 * self.level), 0.3, 0.3 - (0.3 / 255 * self.level)
-        )
-        rounded_rectangle_fill(cr, area, 5)
+        if self.channel:
+            area = (1, allocation.width - 2, 1, allocation.height - 2)
+            cr.set_source_rgb(
+                0.3 + (0.2 / 255 * self.level), 0.3, 0.3 - (0.3 / 255 * self.level)
+            )
+            rounded_rectangle_fill(cr, area, 5)
         # Draw output number
         self._draw_output_number(cr, allocation)
         # Draw Output level
         self._draw_output_level(cr, allocation)
+        # Draw Channel number
+        if self.channel:
+            device = App().patch.channels.get(self.channel)
+            cr.select_font_face(
+                "Cantarell Regular", cairo.FontSlant.NORMAL, cairo.FontWeight.BOLD
+            )
+            cr.set_font_size(9 * self.scale)
+            (_x, _y, width, height, _dx, _dy) = cr.text_extents(str(self.channel))
+            if self.output == device.output:
+                self._draw_channel_number(cr, allocation, width, height)
+                if device.footprint > 1:
+                    self._draw_start_bar(cr, allocation, height)
+            elif self.output == device.output + device.footprint - 1:
+                self._draw_end_bar(cr, allocation, height)
+            else:
+                self._draw_device_bar(cr, allocation, height)
+
+    def _draw_start_bar(self, cr, allocation, height):
+        """Draw Start of device bar
+
+        Args:
+            cr (cairo.Context): Used to draw with cairo
+            allocation (Gdk.Rectangle): Widget's allocation
+            height: Text height
+        """
+        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.rectangle(
+            10,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+            allocation.width,
+            15 * self.scale,
+        )
+        cr.fill()
+        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_line_width(1)
+        cr.move_to(
+            allocation.width,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+        )
+        cr.line_to(10, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
+        cr.line_to(10, allocation.height)
+        cr.line_to(allocation.width, allocation.height)
+        cr.stroke()
+
+    def _draw_device_bar(self, cr, allocation, height):
+        """Draw Device Bar
+
+        Args:
+            cr (cairo.Context): Used to draw with cairo
+            allocation (Gdk.Rectangle): Widget's allocation
+            height: Text height
+        """
+        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.rectangle(
+            0,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+            allocation.width,
+            15 * self.scale,
+        )
+        cr.fill()
+        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_line_width(1)
+        cr.move_to(0, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
+        cr.line_to(
+            allocation.width,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+        )
+        cr.stroke()
+        cr.move_to(0, allocation.height)
+        cr.line_to(allocation.width, allocation.height)
+        cr.stroke()
+
+    def _draw_end_bar(self, cr, allocation, height):
+        """Draw End of device bar
+
+        Args:
+            cr (cairo.Context): Used to draw with cairo
+            allocation (Gdk.Rectangle): Widget's allocation
+            height: Text height
+        """
+        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.rectangle(
+            0,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+            allocation.width - 10,
+            15 * self.scale,
+        )
+        cr.fill()
+        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_line_width(1)
+        cr.move_to(0, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
+        cr.line_to(
+            allocation.width - 10,
+            3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
+        )
+        cr.line_to(allocation.width - 10, allocation.height)
+        cr.line_to(0, allocation.height)
+        cr.stroke()
+
+    def _draw_channel_number(self, cr, allocation, width, height):
+        """Draw Channel number
+
+        Args:
+            cr (cairo.Context): Used to draw with cairo
+            allocation (Gdk.Rectangle): Widget's allocation
+            width: text width
+            height: text height
+        """
+        cr.set_source_rgb(0.9, 0.6, 0.2)
+        cr.move_to(
+            allocation.width / 2 - width / 2,
+            3 * (allocation.height / 4 - (height - 10) / 4),
+        )
+        cr.show_text(str(self.channel))
 
     def _draw_output_number(self, cr, allocation):
         """Draw Output number
