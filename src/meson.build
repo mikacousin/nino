@@ -23,6 +23,7 @@ nino_sources = [
   'application.py',
   'console.py',
   'defines.py',
+  'shortcuts.py',
   'tab_live.py',
   'tab_patch.py',
   'widgets_output.py',

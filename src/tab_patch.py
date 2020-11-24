@@ -16,6 +16,7 @@ import os
 
 from gi.repository import GObject, Gtk
 
+import nino.shortcuts as shortcuts
 from nino.console import Fixture
 from nino.defines import App, MAX_CHANNELS, UNIVERSES
 from nino.paths import get_fixtures_dir
@@ -70,8 +71,8 @@ class FixturesLibrary(Gtk.VBox):
         self.search_entry = Gtk.SearchEntry()
         self.search_entry.set_placeholder_text("Enter fixture name")
         self.search_entry.connect("changed", self.refresh_results)
-        self.search_entry.connect("focus-in-event", focus)
-        self.search_entry.connect("focus-out-event", focus)
+        self.search_entry.connect("focus-in-event", shortcuts.editable_focus)
+        self.search_entry.connect("focus-out-event", shortcuts.editable_focus)
         self.filter = self.fixtures.filter_new()
         self.filter.set_visible_column(0)
         self.pack_start(self.search_entry, False, False, 0)
@@ -417,39 +418,3 @@ class TabPatch(Gtk.Box):
             model[path][1] = text
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
-
-
-def focus(_widget, event):
-    """Desactivate / Activate accelerators on Entry get focus
-
-    Args:
-        event (Gdk.EventFocus): Event focus
-    """
-    if event.in_:
-        App().set_accels_for_action("app.one(1)", [])
-        App().set_accels_for_action("app.two(2)", [])
-        App().set_accels_for_action("app.three(3)", [])
-        App().set_accels_for_action("app.four(4)", [])
-        App().set_accels_for_action("app.five(5)", [])
-        App().set_accels_for_action("app.six(6)", [])
-        App().set_accels_for_action("app.seven(7)", [])
-        App().set_accels_for_action("app.eight(8)", [])
-        App().set_accels_for_action("app.nine(9)", [])
-        App().set_accels_for_action("app.zero(0)", [])
-        App().set_accels_for_action("app.dot", [])
-        App().set_accels_for_action("app.channel", [])
-        App().set_accels_for_action("app.output", [])
-    else:
-        App().set_accels_for_action("app.one(1)", ["1", "KP_1"])
-        App().set_accels_for_action("app.two(2)", ["2", "KP_2"])
-        App().set_accels_for_action("app.three(3)", ["3", "KP_3"])
-        App().set_accels_for_action("app.four(4)", ["4", "KP_4"])
-        App().set_accels_for_action("app.five(5)", ["5", "KP_5"])
-        App().set_accels_for_action("app.six(6)", ["6", "KP_6"])
-        App().set_accels_for_action("app.seven(7)", ["7", "KP_7"])
-        App().set_accels_for_action("app.eight(8)", ["8", "KP_8"])
-        App().set_accels_for_action("app.nine(9)", ["9", "KP_9"])
-        App().set_accels_for_action("app.zero(0)", ["0", "KP_0"])
-        App().set_accels_for_action("app.dot", ["period"])
-        App().set_accels_for_action("app.channel", ["c"])
-        App().set_accels_for_action("app.output", ["o"])

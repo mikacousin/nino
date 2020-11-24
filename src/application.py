@@ -13,6 +13,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 from gi.repository import Gdk, Gio, GLib, Gtk
 
+import nino.shortcuts as shortcuts
 from nino.console import Console
 from nino.window_live import LiveWindow
 from nino.window_playback import PlaybackWindow
@@ -56,7 +57,7 @@ class Nino(Gtk.Application, Console):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
-        self.setup_shortcuts()
+        shortcuts.setup_shortcuts()
 
     def create_main_windows(self):
         """Create and activate main window."""
@@ -108,23 +109,6 @@ class Nino(Gtk.Application, Console):
             action.connect("activate", function)
             self.add_action(action)
         return menu
-
-    def setup_shortcuts(self):
-        """Application shortcuts"""
-        self.set_accels_for_action("app.quit", ["<Control>q"])
-        self.set_accels_for_action("app.one(1)", ["1", "KP_1"])
-        self.set_accels_for_action("app.two(2)", ["2", "KP_2"])
-        self.set_accels_for_action("app.three(3)", ["3", "KP_3"])
-        self.set_accels_for_action("app.four(4)", ["4", "KP_4"])
-        self.set_accels_for_action("app.five(5)", ["5", "KP_5"])
-        self.set_accels_for_action("app.six(6)", ["6", "KP_6"])
-        self.set_accels_for_action("app.seven(7)", ["7", "KP_7"])
-        self.set_accels_for_action("app.eight(8)", ["8", "KP_8"])
-        self.set_accels_for_action("app.nine(9)", ["9", "KP_9"])
-        self.set_accels_for_action("app.zero(0)", ["0", "KP_0"])
-        self.set_accels_for_action("app.dot", ["period"])
-        self.set_accels_for_action("app.channel", ["c"])
-        self.set_accels_for_action("app.output", ["o"])
 
     def _exit(self, _action, _parameter):
         self.sender.stop()
