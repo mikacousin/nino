@@ -34,7 +34,7 @@ def activate_shortcuts():
     App().set_accels_for_action("app.eight(8)", ["8", "KP_8"])
     App().set_accels_for_action("app.nine(9)", ["9", "KP_9"])
     App().set_accels_for_action("app.zero(0)", ["0", "KP_0"])
-    App().set_accels_for_action("app.dot", ["period"])
+    App().set_accels_for_action("app.dot", ["period", "KP_Decimal"])
     App().set_accels_for_action("app.channel", ["c"])
     App().set_accels_for_action("app.output", ["o"])
 
