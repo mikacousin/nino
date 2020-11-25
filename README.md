@@ -1,6 +1,6 @@
 # Niño
 
-[French](README.fr.md")
+[French](README.fr.md)
 
 This project follows [olc](https://mikacousin.github.io/olc) with better foundations.
 
