@@ -41,18 +41,45 @@ class Parameter:
         self.table = []
 
 
+def make_index(index):
+    for root, dirs, files in os.walk("."):
+        for name in files:
+            if name != "index.json" and name != "fixtures_ascii_to_json.py":
+                file_name = os.path.join(root, name)
+                with open(file_name, "r") as read_file:
+                    d = json.load(read_file)
+                index[file_name] = {
+                    "manufacturer": d["manufacturer"],
+                    "model_name": d["model_name"],
+                    "mode": d["modes"][0]["name"],
+                }
+
+    with open("index.json", "w") as index_file:
+        json.dump(index, index_file, indent=4, sort_keys=True)
+
+
 templates = []
 multi_parts = {}
+index = {}
 
-parser = argparse.ArgumentParser()
-parser.add_argument("filename", help="ASCII Cue file to parse")
+parser = argparse.ArgumentParser(
+    description="Extract fixtures from ASCII file and generate index.json."
+)
+parser.add_argument("-f", "--file", type=str, help="ASCII Cue file to parse")
+parser.add_argument(
+    "-i", "--index", help="Generate index.json and exit (default)", action="store_true"
+)
 args = parser.parse_args()
 
-if not os.path.isfile(args.filename):
-    print(f"{args.filename} not found.")
+if args.index or not args.file:
+    make_index(index)
+    sys.exit()
+
+if not os.path.isfile(args.file):
+    print(f"{args.file} not found.")
     sys.exit(1)
 
-with open(args.filename, "r", encoding="latin-1") as filename:
+with open(args.file, "r", encoding="latin-1") as filename:
     data = filename.read().splitlines()
 
 on_template = False
@@ -190,19 +217,4 @@ for template in templates:
         with open(file_name, "w") as write_file:
             json.dump(data, write_file, indent=4, sort_keys=False)
 
-index = {}
-
-for root, dirs, files in os.walk("."):
-    for name in files:
-        if name != "index.json" and name != "fixtures_ascii_to_json.py":
-            file_name = os.path.join(root, name)
-            with open(file_name, "r") as read_file:
-                d = json.load(read_file)
-            index[file_name] = {
-                "manufacturer": d["manufacturer"],
-                "model_name": d["model_name"],
-                "mode": d["modes"][0]["name"],
-            }
-
-with open("index.json", "w") as index_file:
-    json.dump(index, index_file, indent=4, sort_keys=True)
+make_index(index)
