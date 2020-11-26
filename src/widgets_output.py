@@ -39,6 +39,23 @@ def rounded_rectangle_fill(cr, area, radius):
     cr.fill()
 
 
+def rounded_rectangle(cr, area, radius):
+    """Draw a rounded box
+
+    Args:
+        cr: cairo context
+        area: coordinates (top, bottom, left, right)
+        radius: arc's radius
+    """
+    a, b, c, d = area
+    cr.arc(a + radius, c + radius, radius, 2 * (math.pi / 2), 3 * (math.pi / 2))
+    cr.arc(b - radius, c + radius, radius, 3 * (math.pi / 2), 4 * (math.pi / 2))
+    cr.arc(b - radius, d - radius, radius, 0 * (math.pi / 2), 1 * (math.pi / 2))
+    cr.arc(a + radius, d - radius, radius, 1 * (math.pi / 2), 2 * (math.pi / 2))
+    cr.close_path()
+    cr.stroke()
+
+
 class OutputWidget(Gtk.Misc):
     """Output widget
 
@@ -76,11 +93,15 @@ class OutputWidget(Gtk.Misc):
         allocation = self.get_allocation()
         # Draw background
         if self.channel:
-            area = (1, allocation.width - 2, 1, allocation.height - 2)
             cr.set_source_rgb(
                 0.3 + (0.2 / 255 * self.level), 0.3, 0.3 - (0.3 / 255 * self.level)
             )
+            area = (1, allocation.width - 2, 1, allocation.height - 2)
             rounded_rectangle_fill(cr, area, 5)
+        else:
+            cr.set_source_rgba(0.15, 0.15, 0.15, 1)
+            area = (1, allocation.width - 2, 1, allocation.height - 2)
+            rounded_rectangle(cr, area, 5)
         # Draw output number
         self._draw_output_number(cr, allocation)
         # Draw Output level
@@ -110,7 +131,7 @@ class OutputWidget(Gtk.Misc):
             allocation (Gdk.Rectangle): Widget's allocation
             height: Text height
         """
-        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.set_source_rgba(0, 0, 0, 0.4)
         cr.rectangle(
             10,
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
@@ -118,15 +139,15 @@ class OutputWidget(Gtk.Misc):
             15 * self.scale,
         )
         cr.fill()
-        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_source_rgba(0.9, 0.6, 0.2, 0.5)
         cr.set_line_width(1)
         cr.move_to(
             allocation.width,
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
         )
         cr.line_to(10, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
-        cr.line_to(10, allocation.height)
-        cr.line_to(allocation.width, allocation.height)
+        cr.line_to(10, allocation.height - 2)
+        cr.line_to(allocation.width, allocation.height - 2)
         cr.stroke()
 
     def _draw_device_bar(self, cr, allocation, height):
@@ -137,7 +158,7 @@ class OutputWidget(Gtk.Misc):
             allocation (Gdk.Rectangle): Widget's allocation
             height: Text height
         """
-        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.set_source_rgba(0, 0, 0, 0.4)
         cr.rectangle(
             0,
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
@@ -145,7 +166,7 @@ class OutputWidget(Gtk.Misc):
             15 * self.scale,
         )
         cr.fill()
-        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_source_rgba(0.9, 0.6, 0.2, 0.5)
         cr.set_line_width(1)
         cr.move_to(0, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
         cr.line_to(
@@ -153,8 +174,8 @@ class OutputWidget(Gtk.Misc):
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
         )
         cr.stroke()
-        cr.move_to(0, allocation.height)
-        cr.line_to(allocation.width, allocation.height)
+        cr.move_to(0, allocation.height - 2)
+        cr.line_to(allocation.width, allocation.height - 2)
         cr.stroke()
 
     def _draw_end_bar(self, cr, allocation, height):
@@ -165,7 +186,7 @@ class OutputWidget(Gtk.Misc):
             allocation (Gdk.Rectangle): Widget's allocation
             height: Text height
         """
-        cr.set_source_rgba(1, 0, 0, 0.3)
+        cr.set_source_rgba(0, 0, 0, 0.4)
         cr.rectangle(
             0,
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
@@ -173,15 +194,15 @@ class OutputWidget(Gtk.Misc):
             15 * self.scale,
         )
         cr.fill()
-        cr.set_source_rgba(1, 1, 1, 1)
+        cr.set_source_rgba(0.9, 0.6, 0.2, 0.5)
         cr.set_line_width(1)
         cr.move_to(0, 3 * (allocation.height / 4 - (height - 10) / 4) - height - 2)
         cr.line_to(
             allocation.width - 10,
             3 * (allocation.height / 4 - (height - 10) / 4) - height - 2,
         )
-        cr.line_to(allocation.width - 10, allocation.height)
-        cr.line_to(0, allocation.height)
+        cr.line_to(allocation.width - 10, allocation.height - 2)
+        cr.line_to(0, allocation.height - 2)
         cr.stroke()
 
     def _draw_channel_number(self, cr, allocation, width, height):
