@@ -161,7 +161,10 @@ class FixturesLibrary(Gtk.VBox):
             fixture_model = model[path][1]
             path.up()
             fixture_manufacturer = model[path][1]
-            label = f"{fixture_model} {fixture_mode}"
+            if fixture_mode:
+                label = f"{fixture_model} {fixture_mode}"
+            else:
+                label = f"{fixture_model}"
             # If fixture is already in show, doesn't add it
             found = False
             for child in self.show_fixtures.flowbox.get_children():
@@ -304,6 +307,21 @@ class SacnWidget(Gtk.ScrolledWindow):
                 child.set_name("flowbox_outputs")
         self.add(vbox)
 
+    def update_view(self):
+        """Update sACN view"""
+        for widget in self.outputs.values():
+            widget.channel = 0
+            widget.queue_draw()
+        for device in App().patch.channels.values():
+            if device.output:
+                for offset in range(device.footprint):
+                    self.outputs[
+                        device.universe, device.output - 1 + offset
+                    ].channel = device.channel
+                    self.outputs[
+                        device.universe, device.output - 1 + offset
+                    ].queue_draw()
+
 
 class TabPatch(Gtk.Box):
     """Tab Patch
@@ -392,8 +410,8 @@ class TabPatch(Gtk.Box):
 
     def output(self, _widget):
         """Output signal"""
-        # TODO: Manage Outputs already used
         # TODO: Send Home DMX when device is patched
+        # TODO: Several dimmers in one channel
         if not validate_entry(App().keystring):
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
@@ -410,9 +428,17 @@ class TabPatch(Gtk.Box):
             return
         for i, path in enumerate(selected_channels):
             fixture = get_fixture_by_name(model, path)
+            footprint = fixture.get_footprint()
             channel = model[path][0]
             if output:
                 real_output = output + (i * footprint)
+                # Test if device outputs are under 512
+                if real_output + footprint - 1 > 512:
+                    App().keystring = ""
+                    App().playback.statusbar.remove_all(App().playback.context_id)
+                    return
+                # Test if Output already used
+                self.test_outputs_collision(real_output, universe, footprint, model)
             else:
                 # Universe change, no Output in entry. So, try to find one
                 real_output = App().patch.channels[channel].output
@@ -420,9 +446,7 @@ class TabPatch(Gtk.Box):
                     App().keystring = ""
                     App().playback.statusbar.remove_all(App().playback.context_id)
                     return
-            footprint = App().patch.patch_channel(
-                channel, real_output, universe, fixture
-            )
+            App().patch.patch_channel(channel, real_output, universe, fixture)
             # Update Channels list
             univ = ""
             if universe != UNIVERSES[0]:
@@ -433,11 +457,37 @@ class TabPatch(Gtk.Box):
                 text = f"{real_output}{univ}"
             model[path][1] = text
             # Update sACN View
-            for offset in range(footprint):
-                self.sacn.outputs[universe, real_output - 1 + offset].channel = channel
-                self.sacn.outputs[universe, real_output - 1 + offset].queue_draw()
+            self.sacn.update_view()
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
+
+    def test_outputs_collision(self, output, universe, footprint, model):
+        """Test if outputs are already used
+
+        Args:
+            output (int): output asked
+            universe (int): universe asked
+            footprint (int): fixture footprint
+            model (Gtk.TreeModel): Channels list model
+        """
+        for device in App().patch.channels.values():
+            if device.output:
+                if (
+                    set(range(output, output + footprint))
+                    & set(range(device.output, device.output + device.footprint))
+                    and universe == device.universe
+                ):
+                    # Remove old patched devices
+                    path = Gtk.TreePath.new_from_indices([device.channel - 1])
+                    model[path][1] = ""
+                    for offset in range(device.footprint):
+                        self.sacn.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].channel = 0
+                        self.sacn.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].queue_draw()
+                    device.output = 0
 
 
 def get_fixture_by_name(model, path):

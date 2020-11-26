@@ -115,9 +115,9 @@ class OutputWidget(Gtk.Misc):
             cr.set_font_size(9 * self.scale)
             (_x, _y, width, height, _dx, _dy) = cr.text_extents(str(self.channel))
             if self.output == device.output:
-                self._draw_channel_number(cr, allocation, width, height)
                 if device.footprint > 1:
                     self._draw_start_bar(cr, allocation, height)
+                self._draw_channel_number(cr, allocation, width, height)
             elif self.output == device.output + device.footprint - 1:
                 self._draw_end_bar(cr, allocation, height)
             else:

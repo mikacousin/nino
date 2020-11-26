@@ -36,6 +36,24 @@ class Fixture:
         }
         self.modes = []
 
+    def get_footprint(self):
+        """Return footprint
+
+        Returns:
+            footprint (int)
+        """
+        footprint = 0
+        for param in self.parameters.values():
+            param_type = param.get("type")
+            if param_type in ("HTP8", "LTP8"):
+                footprint += 1
+            elif param_type in ("HTP16", "LTP16"):
+                footprint += 2
+            else:
+                print("Device parameter type '{param_type}' not supported")
+                print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+        return footprint
+
 
 class Device:
     """A device is a patched fixture"""
@@ -74,9 +92,6 @@ class Patch:
             output (int): Output [1-512]
             universe (int): Universe
             fixture (Fixture): fixture to use
-
-        Returns:
-            Device footprint (int)
         """
         if channel in self.channels:
             # Channel already patched
@@ -102,7 +117,6 @@ class Patch:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
             self.channels[channel] = device
-        return self.channels[channel].footprint
 
 
 class Console:
