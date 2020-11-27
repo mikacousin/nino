@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 import sacn
 
-from nino.defines import UNIVERSES
+from nino.defines import App, UNIVERSES
 
 
 class Fixture:
@@ -28,7 +28,7 @@ class Fixture:
             "Intensity": {
                 "number": 0,
                 "type": "HTP8",
-                "offset": {"Hight Byte": 0, "Low Byte": 0, "Step": 4},
+                "offset": {"High Byte": 0, "Low Byte": 0, "Step": 4},
                 "default": 0,
                 "highligt": 255,
                 "range": {"Minimum": 0, "Maximum": 0, "Percent": True},
@@ -73,8 +73,8 @@ class Device:
         self.fixture = fixture
         self.parameters = {}
         self.footprint = 0
-        for param in self.fixture.parameters.values():
-            self.parameters[param.get("number")] = param.get("default")
+        for name, param in self.fixture.parameters.items():
+            self.parameters[name] = param.get("default")
             param_type = param.get("type")
             if param_type in ("HTP8", "LTP8"):
                 self.footprint += 1
@@ -83,6 +83,26 @@ class Device:
             else:
                 print("Device parameter type '{param_type}' not supported")
                 print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+
+    def send_dmx(self):
+        for name, value in self.parameters.items():
+            param_type = self.fixture.parameters[name].get("type")
+            offset = self.fixture.parameters[name].get("offset")
+            if param_type in ("HTP8", "LTP8"):
+                out = self.output + offset.get("High Byte") - 1
+                if self.output:
+                    val = (value >> 8) & 0xFF
+                    App().dmx.levels[self.universe][out] = val
+            elif param_type in ("HTP16", "LTP16"):
+                out = self.output + offset.get("High Byte") - 1
+                val = (value >> 8) & 0xFF
+                out2 = self.output + offset.get("Low Byte") - 1
+                val2 = value & 0xFF
+                if self.output:
+                    App().dmx.levels[self.universe][out] = val
+                    App().dmx.levels[self.universe][out2] = val2
+        if self.output:
+            App().dmx.flush(self.universe)
 
 
 class Patch:
@@ -111,40 +131,35 @@ class Patch:
                 del self.channels[channel]
                 return
             if f"{output}.{universe}" in self.channels[channel]:
-                self.channels[channel][f"{output}.{universe}"].output = output
-                self.channels[channel][f"{output}.{universe}"].universe = universe
-                if (
-                    self.channels[channel][f"{output}.{universe}"].fixture
-                    is not fixture
-                ):
-                    self.channels[channel][f"{output}.{universe}"].fixture = fixture
-                    self.channels[channel][f"{output}.{universe}"].parameters = {}
-                    self.channels[channel][f"{output}.{universe}"].footprint = 0
+                device = self.channels[channel][f"{output}.{universe}"]
+                device.output = output
+                device.universe = universe
+                if device.fixture is not fixture:
+                    device.fixture = fixture
+                    device.parameters = {}
+                    device.footprint = 0
                     for param in fixture.parameters.values():
-                        self.channels[channel][f"{output}.{universe}"].parameters[
-                            param.get("number")
-                        ] = param.get("default")
+                        device.parameters[param.get("number")] = param.get("default")
                         param_type = param.get("type")
                         if param_type in ("HTP8", "LTP8"):
-                            self.channels[channel][
-                                f"{output}.{universe}"
-                            ].footprint += 1
+                            device.footprint += 1
                         elif param_type in ("HTP16", "LTP16"):
-                            self.channels[channel][
-                                f"{output}.{universe}"
-                            ].footprint += 2
+                            device.footprint += 2
                         else:
                             print("Device parameter type '{param_type}' not supported")
                             print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+                device.send_dmx()
             else:
                 device = Device(channel, output, universe, fixture)
                 self.channels[channel] = {}
                 self.channels[channel][f"{output}.{universe}"] = device
+                device.send_dmx()
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
             self.channels[channel] = {}
             self.channels[channel][f"{output}.{universe}"] = device
+            device.send_dmx()
 
     def insert_output(self, channel, output, universe, fixture):
         """Insert Output
@@ -193,6 +208,18 @@ class Patch:
             self.channels[channel][f"{output}.{universe}"] = device
 
 
+class DMX:
+    """DMX levels"""
+
+    def __init__(self):
+        self.levels = {}
+        for universe in UNIVERSES:
+            self.levels[universe] = [0] * 512
+
+    def flush(self, universe):
+        App().sender[universe].dmx_data = tuple(self.levels[universe])
+
+
 class Console:
     """Application's heart"""
 
@@ -204,6 +231,7 @@ class Console:
         self.fixtures.append(dimmer)
 
         self.patch = Patch()
+        self.dmx = DMX()
 
         # Start sACN sender
         self.sender = sacn.sACNsender()
