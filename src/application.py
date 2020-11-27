@@ -104,6 +104,7 @@ class Nino(Gtk.Application, Console):
             "dot": ("_dot", None),
             "channel": ("_channel", None),
             "output": ("_output", None),
+            "insert": ("_insert", None),
         }
         for name, func in actions.items():
             function = getattr(self, func[0], None)
@@ -132,6 +133,9 @@ class Nino(Gtk.Application, Console):
 
     def _output(self, _action, _parameter):
         self.send("output")
+
+    def _insert(self, _action, _parameter):
+        self.send("insert")
 
     def send(self, signal):
         """Send signal to the right place

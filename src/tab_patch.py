@@ -268,12 +268,16 @@ class Fixtures(Gtk.ScrolledWindow):
             channel = model[path][0]
             if App().patch.channels.get(channel):
                 # Update sACN view
-                universe = App().patch.channels[channel].universe
-                output = App().patch.channels[channel].output
-                footprint = App().patch.channels[channel].footprint
-                for offset in range(footprint):
-                    self.sacn.outputs[universe, output - 1 + offset].channel = 0
-                    self.sacn.outputs[universe, output - 1 + offset].queue_draw()
+                for device in App().patch.channels[channel].values():
+                    universe = device.universe
+                    output = device.output
+                    if output and universe:
+                        footprint = device.footprint
+                        for offset in range(footprint):
+                            self.sacn.outputs[universe, output - 1 + offset].channel = 0
+                            self.sacn.outputs[
+                                universe, output - 1 + offset
+                            ].queue_draw()
             model[path][2] = label
             model[path][1] = ""
             output = 0
@@ -312,15 +316,19 @@ class SacnWidget(Gtk.ScrolledWindow):
         for widget in self.outputs.values():
             widget.channel = 0
             widget.queue_draw()
-        for device in App().patch.channels.values():
-            if device.output:
-                for offset in range(device.footprint):
-                    self.outputs[
-                        device.universe, device.output - 1 + offset
-                    ].channel = device.channel
-                    self.outputs[
-                        device.universe, device.output - 1 + offset
-                    ].queue_draw()
+        for output in App().patch.channels.values():
+            for device in output.values():
+                if device.output:
+                    for offset in range(device.footprint):
+                        self.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].channel = device.channel
+                        self.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].key = f"{device.output}.{device.universe}"
+                        self.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].queue_draw()
 
 
 class TabPatch(Gtk.Box):
@@ -333,6 +341,7 @@ class TabPatch(Gtk.Box):
     __gsignals__ = {
         "channel": (GObject.SignalFlags.ACTION, None, ()),
         "output": (GObject.SignalFlags.ACTION, None, ()),
+        "insert": (GObject.SignalFlags.ACTION, None, ()),
     }
 
     def __init__(self, window):
@@ -341,6 +350,7 @@ class TabPatch(Gtk.Box):
         # Connect signals
         self.connect("channel", self.channel)
         self.connect("output", self.output)
+        self.connect("insert", self.insert)
 
         # Paned container
         paned = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
@@ -411,7 +421,6 @@ class TabPatch(Gtk.Box):
     def output(self, _widget):
         """Output signal"""
         # TODO: Send Home DMX when device is patched
-        # TODO: Several dimmers in one channel
         if not validate_entry(App().keystring):
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
@@ -439,23 +448,22 @@ class TabPatch(Gtk.Box):
                     return
                 # Test if Output already used
                 self.test_outputs_collision(real_output, universe, footprint, model)
-            else:
+            elif output is None:
                 # Universe change, no Output in entry. So, try to find one
-                real_output = App().patch.channels[channel].output
-                if not real_output:
-                    App().keystring = ""
-                    App().playback.statusbar.remove_all(App().playback.context_id)
-                    return
+                for out in App().patch.channels[channel].values():
+                    real_output = out.output
+                    if not real_output:
+                        App().keystring = ""
+                        App().playback.statusbar.remove_all(App().playback.context_id)
+                        return
+            else:
+                # Depatch
+                real_output = 0
             App().patch.patch_channel(channel, real_output, universe, fixture)
             # Update Channels list
-            univ = ""
-            if universe != UNIVERSES[0]:
-                univ = f".{universe}"
-            if footprint > 1:
-                text = f"{real_output}{univ}-{real_output + footprint - 1}{univ}"
-            else:
-                text = f"{real_output}{univ}"
-            model[path][1] = text
+            update_channels_list(
+                f"{real_output}.{universe}", footprint, channel, model, path
+            )
             # Update sACN View
             self.sacn.update_view()
         App().keystring = ""
@@ -470,24 +478,104 @@ class TabPatch(Gtk.Box):
             footprint (int): fixture footprint
             model (Gtk.TreeModel): Channels list model
         """
-        for device in App().patch.channels.values():
-            if device.output:
-                if (
-                    set(range(output, output + footprint))
-                    & set(range(device.output, device.output + device.footprint))
-                    and universe == device.universe
-                ):
-                    # Remove old patched devices
-                    path = Gtk.TreePath.new_from_indices([device.channel - 1])
-                    model[path][1] = ""
-                    for offset in range(device.footprint):
-                        self.sacn.outputs[
-                            device.universe, device.output - 1 + offset
-                        ].channel = 0
-                        self.sacn.outputs[
-                            device.universe, device.output - 1 + offset
-                        ].queue_draw()
-                    device.output = 0
+        depatch = []
+        device = None
+        for out in App().patch.channels.values():
+            for device in out.values():
+                if device.output:
+                    if (
+                        set(range(output, output + footprint))
+                        & set(range(device.output, device.output + device.footprint))
+                        and universe == device.universe
+                    ):
+                        # Remove old patched devices
+                        path = Gtk.TreePath.new_from_indices([device.channel - 1])
+                        for offset in range(device.footprint):
+                            self.sacn.outputs[
+                                device.universe, device.output - 1 + offset
+                            ].channel = 0
+                            self.sacn.outputs[
+                                device.universe, device.output - 1 + offset
+                            ].queue_draw()
+                        depatch.append(device.channel)
+        for channel in depatch:
+            App().patch.patch_channel(channel, 0, universe, None)
+            update_channels_list("0.0", footprint, device.channel, model, path)
+
+    def insert(self, _widget):
+        """Insert Output with channel's same fixture"""
+        if not validate_entry(App().keystring):
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        output, universe = parse_entry(App().keystring)
+        if not universe or not output:
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        model, selected_channels = self.treeview.get_selection().get_selected_rows()
+        if not selected_channels:
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        if len(selected_channels) > 1:
+            print("Can't insert output to different channels")
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        path = selected_channels[0]
+        fixture = get_fixture_by_name(model, path)
+        footprint = fixture.get_footprint()
+        channel = model[path][0]
+        if output + footprint - 1 > 512:
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        self.test_outputs_collision(output, universe, footprint, model)
+        App().patch.insert_output(channel, output, universe, fixture)
+        # Update Channels list
+        update_channels_list(f"{output}.{universe}", footprint, channel, model, path)
+        # Update sACN View
+        self.sacn.update_view()
+        App().keystring = ""
+        App().playback.statusbar.remove_all(App().playback.context_id)
+
+
+def update_channels_list(out, footprint, channel, model, path):
+    """Update Channels list
+
+    Args:
+        out (str): Output.Universe
+        footprint (int): Device footprint
+        channel (int): modified channel
+        model (Gtk.TreeModel): model
+        path (Gtk.TreePath): row
+    """
+    univ = ""
+    text = ""
+    output = int(out.split(".")[0])
+    universe = int(out.split(".")[1])
+    if not output or channel not in App().patch.channels:
+        text = ""
+        model[path][1] = text
+        return
+    if footprint > 1:
+        for device in App().patch.channels[channel].values():
+            if device.universe != UNIVERSES[0]:
+                univ = f".{universe}"
+            if not text:
+                text = f"{device.output}{univ}-{device.output + footprint - 1}{univ}"
+            else:
+                text += f", {device.output}{univ}-{device.output + footprint - 1}{univ}"
+    else:
+        for device in App().patch.channels[channel].values():
+            if device.universe != UNIVERSES[0]:
+                univ = f".{universe}"
+            if not text:
+                text = f"{device.output}{univ}"
+            else:
+                text += f", {device.output}{univ}"
+    model[path][1] = text
 
 
 def get_fixture_by_name(model, path):

@@ -77,6 +77,7 @@ class OutputWidget(Gtk.Misc):
         self.output = output
         self.level = 0
         self.channel = 0
+        self.key = ""
 
         self.scale = 1.0
         self.width = 32 * self.scale
@@ -107,8 +108,8 @@ class OutputWidget(Gtk.Misc):
         # Draw Output level
         self._draw_output_level(cr, allocation)
         # Draw Channel number
-        if self.channel:
-            device = App().patch.channels.get(self.channel)
+        if self.channel and self.key:
+            device = App().patch.channels.get(self.channel).get(self.key)
             cr.select_font_face(
                 "Cantarell Regular", cairo.FontSlant.NORMAL, cairo.FontWeight.BOLD
             )

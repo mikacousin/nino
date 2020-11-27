@@ -56,7 +56,14 @@ class Fixture:
 
 
 class Device:
-    """A device is a patched fixture"""
+    """A device is a patched fixture
+
+    Attributes:
+        channel (int): [1 - MAX_CHANNELS]
+        output (int): [1 - 512]
+        universe (int): universe
+        fixture (Fixture): fixture
+    """
 
     def __init__(self, channel, output, universe, fixture):
         self.channel = channel
@@ -79,7 +86,11 @@ class Device:
 
 
 class Patch:
-    """Channels associate with devices"""
+    """Channels associate with devices
+
+    Attributes:
+        channels (dic): each channel can have multiple devices with same fixture
+    """
 
     def __init__(self):
         self.channels = {}
@@ -88,35 +99,98 @@ class Patch:
         """Patch channel
 
         Args:
-            channel (int): Channel [1-MAX_CHANNELS]
-            output (int): Output [1-512]
+            channel (int): Channel [1 - MAX_CHANNELS]
+            output (int): Output [1 - 512]
             universe (int): Universe
             fixture (Fixture): fixture to use
         """
         if channel in self.channels:
             # Channel already patched
-            self.channels[channel].output = output
-            self.channels[channel].universe = universe
-            if self.channels[channel].fixture is not fixture:
-                self.channels[channel].fixture = fixture
-                self.channels[channel].parameters = {}
-                self.channels[channel].footprint = 0
-                for param in fixture.parameters.values():
-                    self.channels[channel].parameters[param.get("number")] = param.get(
-                        "default"
-                    )
-                    param_type = param.get("type")
-                    if param_type in ("HTP8", "LTP8"):
-                        self.channels[channel].footprint += 1
-                    elif param_type in ("HTP16", "LTP16"):
-                        self.channels[channel].footprint += 2
-                    else:
-                        print("Device parameter type '{param_type}' not supported")
-                        print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+            if output == 0:
+                # Depatch
+                del self.channels[channel]
+                return
+            if f"{output}.{universe}" in self.channels[channel]:
+                self.channels[channel][f"{output}.{universe}"].output = output
+                self.channels[channel][f"{output}.{universe}"].universe = universe
+                if (
+                    self.channels[channel][f"{output}.{universe}"].fixture
+                    is not fixture
+                ):
+                    self.channels[channel][f"{output}.{universe}"].fixture = fixture
+                    self.channels[channel][f"{output}.{universe}"].parameters = {}
+                    self.channels[channel][f"{output}.{universe}"].footprint = 0
+                    for param in fixture.parameters.values():
+                        self.channels[channel][f"{output}.{universe}"].parameters[
+                            param.get("number")
+                        ] = param.get("default")
+                        param_type = param.get("type")
+                        if param_type in ("HTP8", "LTP8"):
+                            self.channels[channel][
+                                f"{output}.{universe}"
+                            ].footprint += 1
+                        elif param_type in ("HTP16", "LTP16"):
+                            self.channels[channel][
+                                f"{output}.{universe}"
+                            ].footprint += 2
+                        else:
+                            print("Device parameter type '{param_type}' not supported")
+                            print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+            else:
+                device = Device(channel, output, universe, fixture)
+                self.channels[channel] = {}
+                self.channels[channel][f"{output}.{universe}"] = device
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
-            self.channels[channel] = device
+            self.channels[channel] = {}
+            self.channels[channel][f"{output}.{universe}"] = device
+
+    def insert_output(self, channel, output, universe, fixture):
+        """Insert Output
+
+        Args:
+            channel (int): Channel [1 - MAX_CHANNELS]
+            output (int): Output [1 - 512]
+            universe (int): Universe
+            fixture (Fixture): fixture to use
+        """
+        if channel in self.channels:
+            # Channel already patched
+            if f"{output}.{universe}" in self.channels[channel]:
+                self.channels[channel][f"{output}.{universe}"].output = output
+                self.channels[channel][f"{output}.{universe}"].universe = universe
+                if (
+                    self.channels[channel][f"{output}.{universe}"].fixture
+                    is not fixture
+                ):
+                    self.channels[channel][f"{output}.{universe}"].fixture = fixture
+                    self.channels[channel][f"{output}.{universe}"].parameters = {}
+                    self.channels[channel][f"{output}.{universe}"].footprint = 0
+                    for param in fixture.parameters.values():
+                        self.channels[channel][f"{output}.{universe}"].parameters[
+                            param.get("number")
+                        ] = param.get("default")
+                        param_type = param.get("type")
+                        if param_type in ("HTP8", "LTP8"):
+                            self.channels[channel][
+                                f"{output}.{universe}"
+                            ].footprint += 1
+                        elif param_type in ("HTP16", "LTP16"):
+                            self.channels[channel][
+                                f"{output}.{universe}"
+                            ].footprint += 2
+                        else:
+                            print("Device parameter type '{param_type}' not supported")
+                            print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+            else:
+                device = Device(channel, output, universe, fixture)
+                self.channels[channel][f"{output}.{universe}"] = device
+        else:
+            # New patch, create device
+            device = Device(channel, output, universe, fixture)
+            self.channels[channel] = {}
+            self.channels[channel][f"{output}.{universe}"] = device
 
 
 class Console:
