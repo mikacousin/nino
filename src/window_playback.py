@@ -29,13 +29,13 @@ class PlaybackWindow(Gtk.ApplicationWindow):
 
         vbox = Gtk.VBox()
 
-        notebook = Gtk.Notebook()
+        self.notebook = Gtk.Notebook()
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         label = Gtk.Label("Main Playback")
         scrolled.add(label)
-        notebook.append_page(scrolled, Gtk.Label("Playback"))
-        vbox.pack_start(notebook, True, True, 0)
+        self.notebook.append_page(scrolled, Gtk.Label("Playback"))
+        vbox.pack_start(self.notebook, True, True, 0)
 
         self.statusbar = Gtk.Statusbar()
         self.context_id = self.statusbar.get_context_id("keypress")

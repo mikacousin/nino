@@ -15,6 +15,7 @@ from gi.repository import Gdk, Gio, GLib, Gtk
 
 import nino.shortcuts as shortcuts
 from nino.console import Console
+from nino.tab_patch import TabPatch
 from nino.window_live import LiveWindow
 from nino.window_playback import PlaybackWindow
 
@@ -38,6 +39,8 @@ class Nino(Gtk.Application, Console):
         self.playback = None
         # String for command
         self.keystring = ""
+
+        self.init_notebooks()
 
     def do_activate(self):
         css_provider_file = Gio.File.new_for_uri(
@@ -80,6 +83,11 @@ class Nino(Gtk.Application, Console):
         self.live.show_all()
         self.playback.show_all()
 
+    def init_notebooks(self):
+        self.tabs = {
+            "patch": None
+        }
+
     def setup_app_menu(self):
         """Setup application menu.
 
@@ -91,6 +99,8 @@ class Nino(Gtk.Application, Console):
         menu = builder.get_object("app-menu")
         actions = {
             "quit": ("_exit", None),
+            "patch": ("_patch", None),
+            "close_tab": ("_close_tab", None),
             "one": ("_number", "i"),
             "two": ("_number", "i"),
             "three": ("_number", "i"),
@@ -115,6 +125,28 @@ class Nino(Gtk.Application, Console):
             action.connect("activate", function)
             self.add_action(action)
         return menu
+
+    def _patch(self, _action, _parameter):
+        active = self.get_active_window()
+        if self.tabs["patch"] is None:
+            self.tabs["patch"] = TabPatch(active)
+            active.notebook.append_page(self.tabs["patch"], Gtk.Label("Patch"))
+            active.notebook.show_all()
+            active.notebook.set_current_page(-1)
+        else:
+            win = self.tabs["patch"].window
+            page = win.notebook.page_num(self.tabs["patch"])
+            win.notebook.set_current_page(page)
+
+    def _close_tab(self, _action, _parameter):
+        active = self.get_active_window()
+        page = active.notebook.get_current_page()
+        if page:
+            widget = active.notebook.get_nth_page(page)
+            active.notebook.remove_page(page)
+            for name, tab in self.tabs.items():
+                if widget == tab:
+                    self.tabs[name] = None
 
     def _exit(self, _action, _parameter):
         self.console_exit()

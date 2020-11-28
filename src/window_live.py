@@ -13,7 +13,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 from gi.repository import Gio, Gtk
 
-from nino.tab_patch import TabPatch
 from nino.tab_live import TabLive
 
 
@@ -45,9 +44,5 @@ class LiveWindow(Gtk.ApplicationWindow):
         self.notebook = Gtk.Notebook()
         self.notebook.append_page(TabLive(), Gtk.Label("Live"))
         self.add(self.notebook)
-
-        self.notebook.append_page(TabPatch(self), Gtk.Label("Patch"))
-        self.notebook.show_all()
-        self.notebook.set_current_page(-1)
 
         self.connect("destroy", app._exit, None)

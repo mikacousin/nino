@@ -348,6 +348,7 @@ class TabPatch(Gtk.Box):
 
     def __init__(self, window):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        self.window = window
 
         # Connect signals
         self.connect("channel", self.channel)
