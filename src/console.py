@@ -131,12 +131,18 @@ class Patch:
             universe (int): Universe
             fixture (Fixture): fixture to use
         """
+        # Channel already patched
         if channel in self.channels:
-            # Channel already patched
+            # Depatch
             if output == 0:
-                # Depatch
+                # Reset device's dmx output
+                for device in self.channels[channel].values():
+                    for name in device.parameters.keys():
+                        device.parameters[name] = 0
+                    device.send_dmx()
                 del self.channels[channel]
                 return
+            # Patch new device
             device = Device(channel, output, universe, fixture)
             self.channels[channel] = {}
             self.channels[channel][f"{output}.{universe}"] = device
