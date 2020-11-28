@@ -85,24 +85,24 @@ class Device:
                 print("Supported types are : HTP8, LTP8, HTP16, LTP16")
 
     def send_dmx(self):
+        """Send device parameters"""
+        if not self.output:
+            return
         for name, value in self.parameters.items():
             param_type = self.fixture.parameters[name].get("type")
             offset = self.fixture.parameters[name].get("offset")
             if param_type in ("HTP8", "LTP8"):
                 out = self.output + offset.get("High Byte") - 1
-                if self.output:
-                    val = (value >> 8) & 0xFF
-                    App().dmx.levels[self.universe][out] = val
+                val = (value >> 8) & 0xFF
+                App().dmx.levels[self.universe][out] = val
             elif param_type in ("HTP16", "LTP16"):
                 out = self.output + offset.get("High Byte") - 1
                 val = (value >> 8) & 0xFF
                 out2 = self.output + offset.get("Low Byte") - 1
                 val2 = value & 0xFF
-                if self.output:
-                    App().dmx.levels[self.universe][out] = val
-                    App().dmx.levels[self.universe][out2] = val2
-        if self.output:
-            App().dmx.flush(self.universe)
+                App().dmx.levels[self.universe][out] = val
+                App().dmx.levels[self.universe][out2] = val2
+        App().dmx.flush(self.universe)
 
 
 class Patch:
@@ -217,6 +217,11 @@ class DMX:
             self.levels[universe] = [0] * 512
 
     def flush(self, universe):
+        """Flush levels to sACN
+
+        Args:
+            universe (int): one in UNIVERSES
+        """
         App().sender[universe].dmx_data = tuple(self.levels[universe])
 
 
@@ -239,3 +244,7 @@ class Console:
         for universe in UNIVERSES:
             self.sender.activate_output(universe)
             self.sender[universe].multicast = True
+
+    def console_exit(self):
+        """Stop console"""
+        self.sender.stop()

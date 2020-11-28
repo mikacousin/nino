@@ -420,7 +420,6 @@ class TabPatch(Gtk.Box):
 
     def output(self, _widget):
         """Output signal"""
-        # TODO: Send Home DMX when device is patched
         if not validate_entry(App().keystring):
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)

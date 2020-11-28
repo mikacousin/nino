@@ -117,7 +117,7 @@ class Nino(Gtk.Application, Console):
         return menu
 
     def _exit(self, _action, _parameter):
-        self.sender.stop()
+        self.console_exit()
         self.quit()
 
     def _number(self, _action, param):
