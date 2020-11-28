@@ -165,40 +165,15 @@ class Patch:
         """
         if channel in self.channels:
             # Channel already patched
-            if f"{output}.{universe}" in self.channels[channel]:
-                self.channels[channel][f"{output}.{universe}"].output = output
-                self.channels[channel][f"{output}.{universe}"].universe = universe
-                if (
-                    self.channels[channel][f"{output}.{universe}"].fixture
-                    is not fixture
-                ):
-                    self.channels[channel][f"{output}.{universe}"].fixture = fixture
-                    self.channels[channel][f"{output}.{universe}"].parameters = {}
-                    self.channels[channel][f"{output}.{universe}"].footprint = 0
-                    for param in fixture.parameters.values():
-                        self.channels[channel][f"{output}.{universe}"].parameters[
-                            param.get("number")
-                        ] = param.get("default")
-                        param_type = param.get("type")
-                        if param_type in ("HTP8", "LTP8"):
-                            self.channels[channel][
-                                f"{output}.{universe}"
-                            ].footprint += 1
-                        elif param_type in ("HTP16", "LTP16"):
-                            self.channels[channel][
-                                f"{output}.{universe}"
-                            ].footprint += 2
-                        else:
-                            print("Device parameter type '{param_type}' not supported")
-                            print("Supported types are : HTP8, LTP8, HTP16, LTP16")
-            else:
-                device = Device(channel, output, universe, fixture)
-                self.channels[channel][f"{output}.{universe}"] = device
+            device = Device(channel, output, universe, fixture)
+            self.channels[channel][f"{output}.{universe}"] = device
+            device.send_dmx()
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
             self.channels[channel] = {}
             self.channels[channel][f"{output}.{universe}"] = device
+            device.send_dmx()
 
 
 class DMX:
