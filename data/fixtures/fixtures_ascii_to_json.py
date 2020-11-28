@@ -51,8 +51,10 @@ def make_index(index):
                 index[file_name] = {
                     "manufacturer": d["manufacturer"],
                     "model_name": d["model_name"],
-                    "mode": d["modes"][0]["name"],
+                    "modes": [],
                 }
+                for m in d["modes"]:
+                    index[file_name]["modes"].append(m["name"])
 
     with open("index.json", "w") as index_file:
         json.dump(index, index_file, indent=4, sort_keys=True)

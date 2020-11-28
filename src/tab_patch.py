@@ -50,12 +50,11 @@ class FixturesLibrary(Gtk.VBox):
         for files in data.values():
             manu = files.get("manufacturer")
             model = files.get("model_name")
-            manufacturers[manu][model] = []
         for files in data.values():
             manu = files.get("manufacturer")
             model = files.get("model_name")
-            mode = files.get("mode")
-            manufacturers[manu][model].append(mode)
+            modes = files.get("modes")
+            manufacturers[manu][model] = modes
 
         # Fixtures treestore
         self.fixtures = Gtk.TreeStore(bool, str)
@@ -205,7 +204,7 @@ def get_fixture(manufacturer=None, model=None, mode=None):
         if (
             fixture.get("manufacturer") == manufacturer
             and fixture.get("model_name") == model
-            and fixture.get("mode") == mode
+            and mode in fixture.get("modes")
         ):
             break
     with open(os.path.join(path, file_name), "r") as fixture_file:
@@ -214,7 +213,10 @@ def get_fixture(manufacturer=None, model=None, mode=None):
     fixture.manufacturer = fixture_json.get("manufacturer")
     fixture.model_name = fixture_json.get("model_name")
     fixture.parameters = fixture_json.get("parameters")
-    fixture.modes = fixture_json.get("modes")
+    for mode_name in fixture_json.get("modes"):
+        if mode_name.get("name") == mode:
+            fixture.mode = mode_name
+            break
     return fixture
 
 
@@ -596,7 +598,7 @@ def get_fixture_by_name(model, path):
         for fixture in App().fixtures:
             fixture_model = fixture.model_name
             try:
-                mode = fixture.modes[0].get("name")
+                mode = fixture.mode.get("name")
             except IndexError:
                 mode = ""
             if mode:

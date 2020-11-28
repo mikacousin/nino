@@ -34,7 +34,7 @@ class Fixture:
                 "range": {"Minimum": 0, "Maximum": 0, "Percent": True},
             }
         }
-        self.modes = []
+        self.mode = {"name": "", "parameters": ["Intensity"]}
 
     def get_footprint(self):
         """Return footprint
@@ -43,15 +43,17 @@ class Fixture:
             footprint (int)
         """
         footprint = 0
-        for param in self.parameters.values():
-            param_type = param.get("type")
-            if param_type in ("HTP8", "LTP8"):
-                footprint += 1
-            elif param_type in ("HTP16", "LTP16"):
-                footprint += 2
-            else:
-                print("Device parameter type '{param_type}' not supported")
-                print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+        list_param = self.mode.get("parameters")
+        for name, param in self.parameters.items():
+            if name in list_param:
+                param_type = param.get("type")
+                if param_type in ("HTP8", "LTP8"):
+                    footprint += 1
+                elif param_type in ("HTP16", "LTP16"):
+                    footprint += 2
+                else:
+                    print("Device parameter type '{param_type}' not supported")
+                    print("Supported types are : HTP8, LTP8, HTP16, LTP16")
         return footprint
 
 
@@ -73,16 +75,18 @@ class Device:
         self.fixture = fixture
         self.parameters = {}
         self.footprint = 0
+        list_param = self.fixture.mode.get("parameters")
         for name, param in self.fixture.parameters.items():
-            self.parameters[name] = param.get("default")
-            param_type = param.get("type")
-            if param_type in ("HTP8", "LTP8"):
-                self.footprint += 1
-            elif param_type in ("HTP16", "LTP16"):
-                self.footprint += 2
-            else:
-                print("Device parameter type '{param_type}' not supported")
-                print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+            if name in list_param:
+                self.parameters[name] = param.get("default")
+                param_type = param.get("type")
+                if param_type in ("HTP8", "LTP8"):
+                    self.footprint += 1
+                elif param_type in ("HTP16", "LTP16"):
+                    self.footprint += 2
+                else:
+                    print("Device parameter type '{param_type}' not supported")
+                    print("Supported types are : HTP8, LTP8, HTP16, LTP16")
 
     def send_dmx(self):
         """Send device parameters"""
@@ -93,7 +97,10 @@ class Device:
             offset = self.fixture.parameters[name].get("offset")
             if param_type in ("HTP8", "LTP8"):
                 out = self.output + offset.get("High Byte") - 1
-                val = (value >> 8) & 0xFF
+                if value > 255:
+                    val = (value >> 8) & 0xFF
+                else:
+                    val = value
                 App().dmx.levels[self.universe][out] = val
             elif param_type in ("HTP16", "LTP16"):
                 out = self.output + offset.get("High Byte") - 1
@@ -130,30 +137,10 @@ class Patch:
                 # Depatch
                 del self.channels[channel]
                 return
-            if f"{output}.{universe}" in self.channels[channel]:
-                device = self.channels[channel][f"{output}.{universe}"]
-                device.output = output
-                device.universe = universe
-                if device.fixture is not fixture:
-                    device.fixture = fixture
-                    device.parameters = {}
-                    device.footprint = 0
-                    for param in fixture.parameters.values():
-                        device.parameters[param.get("number")] = param.get("default")
-                        param_type = param.get("type")
-                        if param_type in ("HTP8", "LTP8"):
-                            device.footprint += 1
-                        elif param_type in ("HTP16", "LTP16"):
-                            device.footprint += 2
-                        else:
-                            print("Device parameter type '{param_type}' not supported")
-                            print("Supported types are : HTP8, LTP8, HTP16, LTP16")
-                device.send_dmx()
-            else:
-                device = Device(channel, output, universe, fixture)
-                self.channels[channel] = {}
-                self.channels[channel][f"{output}.{universe}"] = device
-                device.send_dmx()
+            device = Device(channel, output, universe, fixture)
+            self.channels[channel] = {}
+            self.channels[channel][f"{output}.{universe}"] = device
+            device.send_dmx()
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)

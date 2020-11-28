@@ -1,0 +1,10 @@
+{
+    "./Martin/Mac Aura.json": {
+        "manufacturer": "Martin",
+        "model_name": "Mac Aura",
+        "modes": [
+            "Standard",
+            "Extended"
+        ]
+    }
+}
