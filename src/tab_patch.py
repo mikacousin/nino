@@ -287,6 +287,7 @@ class Fixtures(Gtk.ScrolledWindow):
             universe = 0
             fixture = button.fixture
             App().patch.patch_channel(channel, output, universe, fixture)
+        App().tabs.get("live").flowbox.invalidate_filter()
 
 
 class SacnWidget(Gtk.ScrolledWindow):
@@ -440,12 +441,10 @@ class TabPatch(Gtk.Box):
             channel = model[path][0]
             if output:
                 real_output = output + (i * footprint)
-                # Test if device outputs are under 512
                 if real_output + footprint - 1 > 512:
-                    App().keystring = ""
-                    App().playback.statusbar.remove_all(App().playback.context_id)
-                    return
-                # Test if Output already used
+                    # If device outputs over 512, stop patching
+                    break
+                # Test if output already used
                 self.test_outputs_collision(real_output, universe, footprint, model)
             elif output is None:
                 # Universe change, no Output in entry. So, try to find one
@@ -463,8 +462,9 @@ class TabPatch(Gtk.Box):
             update_channels_list(
                 f"{real_output}.{universe}", footprint, channel, model, path
             )
-            # Update sACN View
-            self.sacn.update_view()
+        # Update sACN View
+        self.sacn.update_view()
+        App().tabs.get("live").flowbox.invalidate_filter()
         App().keystring = ""
         App().playback.statusbar.remove_all(App().playback.context_id)
 
@@ -497,10 +497,12 @@ class TabPatch(Gtk.Box):
                                 device.universe, device.output - 1 + offset
                             ].queue_draw()
                         depatch.append(device.channel)
-        for channel in depatch:
-            App().patch.patch_channel(channel, 0, universe, None)
-            path = Gtk.TreePath.new_from_indices([channel - 1])
-            update_channels_list("0.0", footprint, channel, model, path)
+        if depatch:
+            for channel in depatch:
+                App().patch.patch_channel(channel, 0, universe, None)
+                path = Gtk.TreePath.new_from_indices([channel - 1])
+                update_channels_list("0.0", footprint, channel, model, path)
+            App().tabs.get("live").flowbox.invalidate_filter()
 
     def insert(self, _widget):
         """Insert Output with channel's same fixture"""
@@ -665,6 +667,10 @@ def verify_fixture(model, selected_channels):
         if not ref:
             ref = model[path][2]
         else:
-            if model[path][2] != ref:
+            if ref in ("Dimmer", ""):
+                # Default type and Dimmer are the same
+                if model[path][2] != "Dimmer" and model[path][2] != "":
+                    return False
+            elif model[path][2] != ref:
                 return False
     return True

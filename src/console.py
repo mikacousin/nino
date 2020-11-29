@@ -142,7 +142,6 @@ class Patch:
                     device.send_dmx()
                 del self.channels[channel]
                 App().tabs.get("live").channels[channel - 1].device = None
-                App().tabs.get("live").flowbox.invalidate_filter()
                 return
             # Patch new device
             device = Device(channel, output, universe, fixture)
@@ -156,7 +155,6 @@ class Patch:
             self.channels[channel][f"{output}.{universe}"] = device
             device.send_dmx()
         App().tabs.get("live").channels[channel - 1].device = device
-        App().tabs.get("live").flowbox.invalidate_filter()
 
     def insert_output(self, channel, output, universe, fixture):
         """Insert Output
