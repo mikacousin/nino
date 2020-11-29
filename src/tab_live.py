@@ -13,6 +13,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 from gi.repository import GObject, Gtk
 
+from nino.defines import App, MAX_CHANNELS
+from nino.widgets_channel import ChannelWidget
+
 
 class TabLive(Gtk.ScrolledWindow):
     """Live view"""
@@ -29,9 +32,37 @@ class TabLive(Gtk.ScrolledWindow):
         self.connect("channel", self.channel)
 
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.label = Gtk.Label("Live view")
-        self.add(self.label)
+
+        self.flowbox = Gtk.FlowBox()
+        self.flowbox.set_valign(Gtk.Align.START)
+        self.flowbox.set_max_children_per_line(MAX_CHANNELS)
+        self.flowbox.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
+        self.flowbox.set_filter_func(filter_channels, None)
+        self.channels = []
+        for channel in range(MAX_CHANNELS):
+            self.channels.append(ChannelWidget(channel + 1))
+            self.flowbox.add(self.channels[channel])
+
+        self.add(self.flowbox)
 
     def channel(self, _widget):
         """channel signal received"""
-        print(f"{self.label.get_label()}: channel signal")
+        print("channel signal")
+
+
+def filter_channels(child, _user_data):
+    """Display only patched channels
+
+    Args:
+        child (Gtk.FlowBoxChild): widget filtered
+
+    Returns:
+        (bool)
+    """
+    channel = child.get_index() + 1
+    devices = App().patch.channels.get(channel)
+    if devices:
+        for device in devices.values():
+            if device.output:
+                return True
+    return False

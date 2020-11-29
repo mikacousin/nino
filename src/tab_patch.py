@@ -502,7 +502,8 @@ class TabPatch(Gtk.Box):
                         depatch.append(device.channel)
         for channel in depatch:
             App().patch.patch_channel(channel, 0, universe, None)
-            update_channels_list("0.0", footprint, device.channel, model, path)
+            path = Gtk.TreePath.new_from_indices([channel - 1])
+            update_channels_list("0.0", footprint, channel, model, path)
 
     def insert(self, _widget):
         """Insert Output with channel's same fixture"""
@@ -558,8 +559,7 @@ def update_channels_list(out, footprint, channel, model, path):
     output = int(out.split(".")[0])
     universe = int(out.split(".")[1])
     if not output or channel not in App().patch.channels:
-        text = ""
-        model[path][1] = text
+        model[path][1] = ""
         return
     if footprint > 1:
         for device in App().patch.channels[channel].values():

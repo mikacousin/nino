@@ -84,9 +84,8 @@ class Nino(Gtk.Application, Console):
         self.playback.show_all()
 
     def init_notebooks(self):
-        self.tabs = {
-            "patch": None
-        }
+        """Notebooks initialization"""
+        self.tabs = {"live": None, "patch": None}
 
     def setup_app_menu(self):
         """Setup application menu.
@@ -181,6 +180,8 @@ class Nino(Gtk.Application, Console):
             child = active.notebook.get_nth_page(page)
             child.emit(signal)
         elif active == self.playback:
-            print("PLayback window")
+            page = active.notebook.get_current_page()
+            child = active.notebook.get_nth_page(page)
+            child.emit(signal)
         else:
             print("Another window")

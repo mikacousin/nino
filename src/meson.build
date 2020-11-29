@@ -26,6 +26,7 @@ nino_sources = [
   'shortcuts.py',
   'tab_live.py',
   'tab_patch.py',
+  'widgets_channel.py',
   'widgets_output.py',
   'window_live.py',
   'window_playback.py',

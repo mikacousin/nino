@@ -42,7 +42,8 @@ class LiveWindow(Gtk.ApplicationWindow):
         self.set_titlebar(header)
 
         self.notebook = Gtk.Notebook()
-        self.notebook.append_page(TabLive(), Gtk.Label("Live"))
+        app.tabs["live"] = TabLive()
+        self.notebook.append_page(app.tabs.get("live"), Gtk.Label("Live"))
         self.add(self.notebook)
 
         self.connect("destroy", app._exit, None)

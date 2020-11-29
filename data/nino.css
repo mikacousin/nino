@@ -1,3 +1,8 @@
+flowboxchild:selected {
+  outline-width: 0px;
+  background-color: alpha(@theme_bg_color, 0);
+}
+
 treeview:selected:hover {
   background-color: alpha(@theme_selected_bg_color, 0.5);
   color: @theme_selected_fg_color;
