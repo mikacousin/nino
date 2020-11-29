@@ -24,6 +24,7 @@ nino_sources = [
   'console.py',
   'defines.py',
   'shortcuts.py',
+  'signals.py',
   'tab_live.py',
   'tab_patch.py',
   'widgets_channel.py',

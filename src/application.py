@@ -112,6 +112,7 @@ class Nino(Gtk.Application, Console):
             "zero": ("_number", "i"),
             "dot": ("_dot", None),
             "channel": ("_channel", None),
+            "thru": ("_thru", None),
             "output": ("_output", None),
             "insert": ("_insert", None),
         }
@@ -161,6 +162,9 @@ class Nino(Gtk.Application, Console):
 
     def _channel(self, _action, _parameter):
         self.send("channel")
+
+    def _thru(self, _action, _parameter):
+        self.send("thru")
 
     def _output(self, _action, _parameter):
         self.send("output")

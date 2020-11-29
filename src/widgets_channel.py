@@ -16,6 +16,8 @@ import cairo
 
 from gi.repository import Gdk, Gtk  # noqa: E402
 
+from nino.defines import App
+
 
 class ChannelWidget(Gtk.Misc):
     """Channel widget"""
@@ -42,12 +44,23 @@ class ChannelWidget(Gtk.Misc):
             widget (ChannelWidget): widget
             event (Gdk.EventButton): event
         """
+        accel_mask = Gtk.accelerator_get_default_mod_mask()
         flowboxchild = widget.get_parent()
         flowbox = flowboxchild.get_parent()
+        flowboxchild.grab_focus()
+        active = App().get_active_window()
+        page = active.notebook.get_current_page()
+        tab = active.notebook.get_nth_page(page)
+        if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
+            # Shift + Click : Thru
+            App().keystring = str(self.channel)
+            tab.emit("thru")
+            return
         if flowboxchild.is_selected():
             flowbox.unselect_child(flowboxchild)
         else:
             flowbox.select_child(flowboxchild)
+        tab.last_chan = self.channel - 1
 
     def do_draw(self, cr):
         """Draw widget

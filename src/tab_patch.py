@@ -14,12 +14,13 @@
 import json
 import os
 
-from gi.repository import GObject, Gtk
+from gi.repository import Gtk
 
 import nino.shortcuts as shortcuts
 from nino.console import Fixture
 from nino.defines import App, MAX_CHANNELS, UNIVERSES
 from nino.paths import get_fixtures_dir
+from nino.signals import gsignals
 from nino.widgets_output import OutputWidget
 
 
@@ -340,11 +341,7 @@ class TabPatch(Gtk.Box):
         keystring (str): String of command
     """
 
-    __gsignals__ = {
-        "channel": (GObject.SignalFlags.ACTION, None, ()),
-        "output": (GObject.SignalFlags.ACTION, None, ()),
-        "insert": (GObject.SignalFlags.ACTION, None, ()),
-    }
+    __gsignals__ = gsignals
 
     def __init__(self, window):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)

@@ -11,25 +11,24 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-from gi.repository import GObject, Gtk
+from gi.repository import Gtk
 
 from nino.defines import App, MAX_CHANNELS
+from nino.signals import gsignals
 from nino.widgets_channel import ChannelWidget
 
 
 class TabLive(Gtk.ScrolledWindow):
     """Live view"""
 
-    __gsignals__ = {
-        "one": (GObject.SignalFlags.ACTION, None, ()),
-        "channel": (GObject.SignalFlags.ACTION, None, ()),
-    }
+    __gsignals__ = gsignals
 
     def __init__(self):
         Gtk.ScrolledWindow.__init__(self)
-
+        self.last_chan = None
         # Connect signals
         self.connect("channel", self.channel)
+        self.connect("thru", self.thru)
 
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
@@ -47,7 +46,47 @@ class TabLive(Gtk.ScrolledWindow):
 
     def channel(self, _widget):
         """channel signal received"""
-        print("channel signal")
+        if not App().keystring or not App().keystring.isdigit():
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        self.flowbox.unselect_all()
+        if App().keystring != "0":
+            channel = int(App().keystring) - 1
+            if 0 <= channel < MAX_CHANNELS:
+                child = self.flowbox.get_child_at_index(channel)
+                self.flowbox.select_child(child)
+                child.grab_focus()
+                self.last_chan = channel
+        App().keystring = ""
+        App().playback.statusbar.remove_all(App().playback.context_id)
+
+    def thru(self, _widget):
+        """Thru signal received"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().keystring = ""
+            App().playback.statusbar.remove_all(App().playback.context_id)
+            return
+        select = self.flowbox.get_selected_children()
+        if len(select) == 1:
+            flowboxchild = select[0]
+            channelwidget = flowboxchild.get_children()[0]
+            self.last_chan = channelwidget.channel
+        if self.last_chan:
+            channel = int(App().keystring) - 1
+            if channel > self.last_chan:
+                for chan in range(self.last_chan, channel + 1):
+                    child = self.flowbox.get_child_at_index(chan)
+                    self.flowbox.select_child(child)
+            else:
+                for chan in range(channel, self.last_chan):
+                    child = self.flowbox.get_child_at_index(chan)
+                    self.flowbox.select_child(child)
+            child = self.flowbox.get_child_at_index(channel)
+            child.grab_focus()
+            self.last_chan = channel
+        App().keystring = ""
+        App().playback.statusbar.remove_all(App().playback.context_id)
 
 
 def filter_channels(child, _user_data):
