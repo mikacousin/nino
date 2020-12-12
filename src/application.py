@@ -39,6 +39,8 @@ class Nino(Gtk.Application, Console):
         self.playback = None
         # String for command
         self.keystring = ""
+        # About window
+        self.about = None
 
         self.init_notebooks()
 
@@ -97,6 +99,8 @@ class Nino(Gtk.Application, Console):
         builder.add_from_resource("/com/github/mikacousin/nino/menu.ui")
         menu = builder.get_object("app-menu")
         actions = {
+            "shortcuts": ("_shortcuts", None),
+            "about": ("_about", None),
             "quit": ("_exit", None),
             "undo": ("_undo", None),
             "redo": ("_redo", None),
@@ -149,6 +153,36 @@ class Nino(Gtk.Application, Console):
             for name, tab in self.tabs.items():
                 if widget == tab:
                     self.tabs[name] = None
+
+    def _shortcuts(self, _action, _parameter):
+        builder = Gtk.Builder()
+        builder.add_from_resource("/com/github/mikacousin/nino/shortcuts.ui")
+        shortcut = builder.get_object("shortcuts")
+        window = self.get_active_window()
+        shortcut.set_transient_for(window)
+        shortcut.show()
+
+    def _about(self, _action, _parameter):
+        if not self.about:
+            builder = Gtk.Builder()
+            builder.add_from_resource("/com/github/mikacousin/nino/about.ui")
+            self.about = builder.get_object("about_dialog")
+            window = self.get_active_window()
+            self.about.set_transient_for(window)
+            self.about.connect("response", self._about_response)
+            self.about.show()
+        else:
+            self.about.present()
+
+    def _about_response(self, dialog, _response):
+        """Destroy about dialog when closed
+
+        Args:
+            dialog: Gtk.Dialog
+            _response: int
+        """
+        dialog.destroy()
+        self.about = None
 
     def _exit(self, _action, _parameter):
         self.console_exit()

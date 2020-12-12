@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkShortcutsWindow" id="shortcuts">
+    <property name="modal">True</property>
+    <child>
+      <object class="GtkShortcutsSection">
+        <property name="visible">True</property>
+        <property name="section-name">shortcuts</property>
+        <property name="max-height">10</property>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">True</property>
+            <property name="title" translatable="yes" context="shortcut window">General</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">&lt;ctrl&gt;Z</property>
+                <property name="title" translatable="yes" context="shortcut window">Undo</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">&lt;shift&gt;&lt;ctrl&gt;Z</property>
+                <property name="title" translatable="yes" context="shortcut window">Redo</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">&lt;ctrl&gt;P</property>
+                <property name="title" translatable="yes" context="shortcut window">Patch</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="about">
+                <property name="visible">True</property>
+                <property name="accelerator">F3</property>
+                <property name="title" translatable="yes" context="shortcut window">About</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="quit">
+                <property name="visible">True</property>
+                <property name="accelerator">&lt;ctrl&gt;Q</property>
+                <property name="title" translatable="yes" context="shortcut window">Quit</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">&lt;ctrl&gt;W</property>
+                <property name="title" translatable="yes" context="shortcut window">Close Tab</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -15,3 +15,5 @@ gnome.compile_resources('nino',
 )
 
 install_subdir('fixtures', install_dir: pkgdatadir)
+
+subdir('icons')

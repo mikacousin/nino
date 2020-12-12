@@ -2,7 +2,8 @@
 <gresources>
   <gresource prefix="/com/github/mikacousin/nino">
     <file preprocess="xml-stripblanks">about.ui</file>
+    <file preprocess="xml-stripblanks">shortcuts.ui</file>
     <file>nino.css</file>
-    <file alias="menu.ui" preprocess="xml-stripblanks">menu.ui</file>
+    <file preprocess="xml-stripblanks">menu.ui</file>
   </gresource>
 </gresources>
