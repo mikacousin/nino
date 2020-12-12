@@ -559,6 +559,8 @@ def update_channels_list(out, footprint, channel, model, path):
     universe = int(out.split(".")[1])
     if not output or channel not in App().patch.channels:
         model[path][1] = ""
+        for device in App().patch.channels[channel].values():
+            model[path][2] = _get_fixture_name(device)
         return
     if footprint > 1:
         for device in App().patch.channels[channel].values():
@@ -577,6 +579,23 @@ def update_channels_list(out, footprint, channel, model, path):
             else:
                 text += f", {device.output}{univ}"
     model[path][1] = text
+    model[path][2] = _get_fixture_name(device)
+
+
+def _get_fixture_name(device):
+    """Get fixture name for Channels list.
+
+    Args:
+        device: Device
+
+    Returns:
+        str
+    """
+    model_name = device.fixture.model_name
+    mode = device.fixture.mode.get("name")
+    if mode:
+        return f"{model_name} {mode}"
+    return f"{model_name}"
 
 
 def get_fixture_by_name(model, path):

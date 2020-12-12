@@ -1518,12 +1518,12 @@
                 "FX Macros 2",
                 "FX Macro 2 Rate",
                 "FX Macros 3",
-                "Strobe PART 2",
-                "Intensity PART 2",
-                "Color PART 2",
-                "Red PART 2",
-                "Green PART 2",
-                "Blue PART 2"
+                "Aura Strobe",
+                "Aura Intensity",
+                "Aura Color",
+                "Aura Red",
+                "Aura Green",
+                "Aura Blue"
             ]
         }
     ]

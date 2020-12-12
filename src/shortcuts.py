@@ -20,6 +20,8 @@ def setup_shortcuts():
     App().set_accels_for_action("app.quit", ["<Control>q"])
     App().set_accels_for_action("app.patch", ["<Control>p"])
     App().set_accels_for_action("app.close_tab", ["<Control>w"])
+    App().set_accels_for_action("app.undo", ["<Control>z"])
+    App().set_accels_for_action("app.redo", ["<Shift><Control>z"])
     # Shortcuts desactivate when editable widget is focused
     activate_shortcuts()
 

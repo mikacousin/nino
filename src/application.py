@@ -98,6 +98,8 @@ class Nino(Gtk.Application, Console):
         menu = builder.get_object("app-menu")
         actions = {
             "quit": ("_exit", None),
+            "undo": ("_undo", None),
+            "redo": ("_redo", None),
             "patch": ("_patch", None),
             "close_tab": ("_close_tab", None),
             "one": ("_number", "i"),
@@ -151,6 +153,14 @@ class Nino(Gtk.Application, Console):
     def _exit(self, _action, _parameter):
         self.console_exit()
         self.quit()
+
+    def _undo(self, _action, _parameter):
+        if self.undo_manager.can_undo():
+            self.undo_manager.undo()
+
+    def _redo(self, _action, _parameter):
+        if self.undo_manager.can_redo():
+            self.undo_manager.redo()
 
     def _number(self, _action, param):
         self.keystring += str(param)
