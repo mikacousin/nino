@@ -44,7 +44,7 @@ class Parameter:
 def make_index(index):
     for root, dirs, files in os.walk("."):
         for name in files:
-            if name != "index.json" and name != "fixtures_ascii_to_json.py":
+            if name not in ["index.json", "fixtures_ascii_to_json.py"]:
                 file_name = os.path.join(root, name)
                 with open(file_name, "r") as read_file:
                     d = json.load(read_file)
@@ -103,12 +103,11 @@ for line in data:
             template.model_name = line[12:]
         if line[:11].upper() == "$$MODENAME ":
             template.mode_name = line[11:]
-        if line[:7].upper() == "$$DCID ":
-            if line[7:] in multi_parts.keys():
-                # This is another part of a template
-                template = multi_parts.get(line[7:])[0]
-                text_part = f" PART {multi_parts.get(line[7:])[1]}"
-                del templates[-1]
+        if line[:7].upper() == "$$DCID " and line[7:] in multi_parts:
+            # This is another part of a template
+            template = multi_parts.get(line[7:])[0]
+            text_part = f" PART {multi_parts.get(line[7:])[1]}"
+            del templates[-1]
         if line[:15].upper() == "$$TEMPLATEPART ":
             # template with several parts
             items = line[15:].split(" ")

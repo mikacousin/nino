@@ -47,8 +47,7 @@ class UndoManager:
         """
         self._redo_stack.clear()
         self._undo_stack.append(command)
-        result = command.do()
-        return result
+        return command.do()
 
     def can_undo(self):
         """Is undo possible ?
