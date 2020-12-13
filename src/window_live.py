@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Niño
+# niño
 # Copyright (c) 2020 Mika Cousin <mika.cousin@gmail.com>
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,18 +17,18 @@ from nino.tab_live import TabLive
 
 
 class LiveWindow(Gtk.ApplicationWindow):
-    """Niño's live window.
+    """niño's live window.
 
     Attributes:
         app (Nino): Application
     """
 
     def __init__(self, app):
-        Gtk.ApplicationWindow.__init__(self, title="Niño", application=app)
+        Gtk.ApplicationWindow.__init__(self, title="niño", application=app)
 
         self.set_default_size(1440, 900)
 
-        header = Gtk.HeaderBar(title="Niño")
+        header = Gtk.HeaderBar(title="niño")
         header.set_show_close_button(True)
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         button = Gtk.MenuButton()

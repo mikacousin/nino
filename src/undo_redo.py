@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Niño
+# niño
 # Copyright (c) 2016 Ross Anderson <ross.anderson@ualberta.ca>
 # Copyright (c) 2020 Mika Cousin <mika.cousin@gmail.com>
 # This program is free software: you can redistribute it and/or modify

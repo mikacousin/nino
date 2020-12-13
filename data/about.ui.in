@@ -5,12 +5,12 @@
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">normal</property>
-    <property name="program_name">Niño</property>
+    <property name="program_name">niño</property>
     <property name="version">@REVISION@</property>
     <property name="copyright">Copyright © 2020 Mika Cousin</property>
     <property name="comments" translatable="yes">A Lighting Console.</property>
     <property name="website">@PACKAGE_URL@</property>
-    <property name="website_label" translatable="yes">Visit Niño website</property>
+    <property name="website_label" translatable="yes">Visit Nino website</property>
     <property name="authors">Mika Cousin &lt;mika.cousin@gmail.com&gt;</property>
     <property name="logo_icon_name">com.github.mikacousin.nino</property>
     <property name="license_type">gpl-3-0</property>

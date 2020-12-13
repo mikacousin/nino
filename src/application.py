@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Niño
+# niño
 # Copyright (c) 2020 Mika Cousin <mika.cousin@gmail.com>
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ from nino.window_playback import PlaybackWindow
 
 
 class Nino(Gtk.Application, Console):
-    """Niño is a Gtk application
+    """niño is a Gtk application
 
     Attributes:
         gui (MainWindow): Application's main window

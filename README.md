@@ -1,4 +1,4 @@
-# Niño
+# niño
 
 [French](README.fr.md)
 
@@ -17,7 +17,7 @@ $ sudo ninja -C builddir install
 
 ## fixtures_ascii_to_json.py
 
-This script extract fixtures templates from your Congo ASCII files and generate json files used by Niño.
+This script extract fixtures templates from your Congo ASCII files and generate json files used by niño.
 
 To get help:
 

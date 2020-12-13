@@ -1,4 +1,4 @@
-# Niño
+# niño
 
 Ce programme fait suite à [olc](https://mikacousin.github.io/olc) avec de meilleurs fondations.
 
@@ -17,7 +17,7 @@ $ sudo ninja -C builddir install
 
 ## fixtures_ascii_to_json.py
 
-Ce script extrait les modèles de projecteurs asservis de vos fichiers Cobalt/Congo (ASCII) et génère des fichiers json utilisés par Niño.
+Ce script extrait les modèles de projecteurs asservis de vos fichiers Cobalt/Congo (ASCII) et génère des fichiers json utilisés par niño.
 
 ### Utilisation:
 
