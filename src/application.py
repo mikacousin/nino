@@ -223,11 +223,7 @@ class Nino(Gtk.Application, Console):
             signal (str): signal to send
         """
         active = self.get_active_window()
-        if active == self.live:
-            page = active.notebook.get_current_page()
-            child = active.notebook.get_nth_page(page)
-            child.emit(signal)
-        elif active == self.playback:
+        if active in [self.live, self.playback]:
             page = active.notebook.get_current_page()
             child = active.notebook.get_nth_page(page)
             child.emit(signal)

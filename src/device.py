@@ -54,10 +54,7 @@ class Device:
             offset = self.fixture.parameters[name].get("offset")
             if param_type in ("HTP8", "LTP8"):
                 out = self.output + offset.get("High Byte") - 1
-                if value > 255:
-                    val = (value >> 8) & 0xFF
-                else:
-                    val = value
+                val = (value >> 8) & 0xFF if value > 255 else value
                 App().dmx.levels[self.universe][out] = val
             elif param_type in ("HTP16", "LTP16"):
                 out = self.output + offset.get("High Byte") - 1

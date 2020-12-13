@@ -78,14 +78,13 @@ class Patch:
         if channel in self.channels:
             # Channel already patched
             device = Device(channel, output, universe, fixture)
-            self.channels[channel][f"{output}.{universe}"] = device
-            device.send_dmx()
         else:
             # New patch, create device
             device = Device(channel, output, universe, fixture)
             self.channels[channel] = {}
-            self.channels[channel][f"{output}.{universe}"] = device
-            device.send_dmx()
+
+        self.channels[channel][f"{output}.{universe}"] = device
+        device.send_dmx()
 
     # pylint: disable=no-self-use
     def do(self, command):

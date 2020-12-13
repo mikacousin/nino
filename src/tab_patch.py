@@ -441,7 +441,7 @@ class TabPatch(Gtk.Box):
             channel = model[path][0]
             if output:
                 real_output = output + (i * footprint)
-                if real_output + footprint - 1 > 512:
+                if real_output + footprint > 513:
                     # If device outputs over 512, stop patching
                     break
                 # Test if output already used
@@ -481,22 +481,21 @@ class TabPatch(Gtk.Box):
         device = None
         for out in App().patch.channels.values():
             for device in out.values():
-                if device.output:
-                    if (
-                        set(range(output, output + footprint))
-                        & set(range(device.output, device.output + device.footprint))
-                        and universe == device.universe
-                    ):
-                        # Remove old patched devices
-                        path = Gtk.TreePath.new_from_indices([device.channel - 1])
-                        for offset in range(device.footprint):
-                            self.sacn.outputs[
-                                device.universe, device.output - 1 + offset
-                            ].channel = 0
-                            self.sacn.outputs[
-                                device.universe, device.output - 1 + offset
-                            ].queue_draw()
-                        depatch.append(device.channel)
+                if device.output and (
+                    set(range(output, output + footprint))
+                    & set(range(device.output, device.output + device.footprint))
+                    and universe == device.universe
+                ):
+                    # Remove old patched devices
+                    path = Gtk.TreePath.new_from_indices([device.channel - 1])
+                    for offset in range(device.footprint):
+                        self.sacn.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].channel = 0
+                        self.sacn.outputs[
+                            device.universe, device.output - 1 + offset
+                        ].queue_draw()
+                    depatch.append(device.channel)
         if depatch:
             for channel in depatch:
                 App().patch.patch_channel(channel, 0, universe, None)
@@ -529,7 +528,7 @@ class TabPatch(Gtk.Box):
         fixture = get_fixture_by_name(model, path)
         footprint = fixture.get_footprint()
         channel = model[path][0]
-        if output + footprint - 1 > 512:
+        if output + footprint > 513:
             App().keystring = ""
             App().playback.statusbar.remove_all(App().playback.context_id)
             return
@@ -562,22 +561,19 @@ def update_channels_list(out, footprint, channel, model, path):
         for device in App().patch.channels[channel].values():
             model[path][2] = _get_fixture_name(device)
         return
-    if footprint > 1:
-        for device in App().patch.channels[channel].values():
-            if device.universe != UNIVERSES[0]:
-                univ = f".{universe}"
-            if not text:
-                text = f"{device.output}{univ}-{device.output + footprint - 1}{univ}"
-            else:
+    for device in App().patch.channels[channel].values():
+        if device.universe != UNIVERSES[0]:
+            univ = f".{universe}"
+        if footprint > 1:
+            if text:
                 text += f", {device.output}{univ}-{device.output + footprint - 1}{univ}"
-    else:
-        for device in App().patch.channels[channel].values():
-            if device.universe != UNIVERSES[0]:
-                univ = f".{universe}"
-            if not text:
-                text = f"{device.output}{univ}"
             else:
+                text = f"{device.output}{univ}-{device.output + footprint - 1}{univ}"
+        else:
+            if text:
                 text += f", {device.output}{univ}"
+            else:
+                text = f"{device.output}{univ}"
     model[path][1] = text
     model[path][2] = _get_fixture_name(device)
 
@@ -620,10 +616,7 @@ def get_fixture_by_name(model, path):
                 mode = fixture.mode.get("name")
             except IndexError:
                 mode = ""
-            if mode:
-                name = f"{fixture_model} {mode}"
-            else:
-                name = f"{fixture_model}"
+            name = f"{fixture_model} {mode}" if mode else f"{fixture_model}"
             if name == model[path][2]:
                 break
     return fixture
@@ -638,9 +631,7 @@ def validate_entry(text):
     Returns:
         (bool)
     """
-    if not text or not text.replace(".", "", 1).isdigit():
-        return False
-    return True
+    return bool(text and text.replace(".", "", 1).isdigit())
 
 
 def parse_entry(text):
@@ -688,7 +679,7 @@ def verify_fixture(model, selected_channels):
         else:
             if ref in ("Dimmer", ""):
                 # Default type and Dimmer are the same
-                if model[path][2] != "Dimmer" and model[path][2] != "":
+                if model[path][2] not in ["Dimmer", ""]:
                     return False
             elif model[path][2] != ref:
                 return False
