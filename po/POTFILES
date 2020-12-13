@@ -1,5 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 data/about.ui.in
+data/com.github.mikacousin.nino.desktop.in
 data/menu.ui
 data/shortcuts.ui
