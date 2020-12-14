@@ -89,6 +89,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">True</property>
+                <property name="accelerator">greater</property>
+                <property name="title" translatable="yes" context="shortcut window">Thru</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
                 <property name="accelerator">o</property>
                 <property name="title" translatable="yes" context="shortcut window">Patch output</property>
               </object>

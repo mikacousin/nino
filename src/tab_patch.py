@@ -352,6 +352,7 @@ class TabPatch(Gtk.Box):
         self.connect("channel", self.channel)
         self.connect("output", self.output)
         self.connect("insert", self.insert)
+        self.connect("thru", self.thru)
 
         # Paned container
         paned = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
@@ -415,6 +416,21 @@ class TabPatch(Gtk.Box):
         channel = int(App().keystring)
         path = Gtk.TreePath.new_from_indices([channel - 1])
         self.treeview.set_cursor(path, None, False)
+        App().statusbar_remove_all()
+
+    def thru(self, _widget):
+        """Thru signal"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().statusbar_remove_all()
+            return
+        _, selected_channels = self.treeview.get_selection().get_selected_rows()
+        if not selected_channels:
+            App().statusbar_remove_all()
+            return
+        start = selected_channels[-1]
+        channel = int(App().keystring)
+        end = Gtk.TreePath.new_from_indices([channel - 1])
+        self.treeview.get_selection().select_range(start, end)
         App().statusbar_remove_all()
 
     def output(self, _widget):

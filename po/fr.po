@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 12:00+0100\n"
+"POT-Creation-Date: 2020-12-14 19:57+0100\n"
 "PO-Revision-Date: 2020-12-14 12:03+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
@@ -102,17 +102,17 @@ msgctxt "shortcut window"
 msgid "Select channel"
 msgstr "Sélection d'un circuit"
 
-#: data/shortcuts.ui:73
+#: data/shortcuts.ui:73 data/shortcuts.ui:93
 msgctxt "shortcut window"
 msgid "Thru"
 msgstr "Thru"
 
-#: data/shortcuts.ui:93
+#: data/shortcuts.ui:100
 msgctxt "shortcut window"
 msgid "Patch output"
 msgstr "Patch d'une adresse"
 
-#: data/shortcuts.ui:100
+#: data/shortcuts.ui:107
 msgctxt "shortcut window"
 msgid "Insert output"
 msgstr "Insérer une adresse"
