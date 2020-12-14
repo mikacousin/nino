@@ -29,6 +29,8 @@ class TabLive(Gtk.ScrolledWindow):
         # Connect signals
         self.connect("channel", self.channel)
         self.connect("thru", self.thru)
+        self.connect("plus", self.plus)
+        self.connect("minus", self.minus)
 
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
@@ -52,7 +54,7 @@ class TabLive(Gtk.ScrolledWindow):
         self.flowbox.unselect_all()
         if App().keystring != "0":
             channel = int(App().keystring) - 1
-            if 0 <= channel < MAX_CHANNELS:
+            if 0 <= channel < MAX_CHANNELS and (channel + 1) in App().patch.channels:
                 child = self.flowbox.get_child_at_index(channel)
                 self.flowbox.select_child(child)
                 child.grab_focus()
@@ -80,6 +82,32 @@ class TabLive(Gtk.ScrolledWindow):
                     child = self.flowbox.get_child_at_index(chan)
                     self.flowbox.select_child(child)
             child = self.flowbox.get_child_at_index(channel)
+            child.grab_focus()
+            self.last_chan = channel
+        App().statusbar_remove_all()
+
+    def plus(self, _widget):
+        """+ signal"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().statusbar_remove_all()
+            return
+        channel = int(App().keystring) - 1
+        if 0 <= channel < MAX_CHANNELS and (channel + 1) in App().patch.channels:
+            child = self.flowbox.get_child_at_index(channel)
+            self.flowbox.select_child(child)
+            child.grab_focus()
+            self.last_chan = channel
+        App().statusbar_remove_all()
+
+    def minus(self, _widget):
+        """- signal"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().statusbar_remove_all()
+            return
+        channel = int(App().keystring) - 1
+        if 0 <= channel < MAX_CHANNELS and (channel + 1) in App().patch.channels:
+            child = self.flowbox.get_child_at_index(channel)
+            self.flowbox.unselect_child(child)
             child.grab_focus()
             self.last_chan = channel
         App().statusbar_remove_all()

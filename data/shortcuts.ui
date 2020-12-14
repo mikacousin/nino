@@ -70,7 +70,21 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">True</property>
                 <property name="accelerator">greater</property>
-                <property name="title" translatable="yes" context="shortcut window">Thru</property>
+                <property name="title" translatable="yes" context="shortcut window">Channel Thru</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">plus</property>
+                <property name="title" translatable="yes" context="shortcut window">Add channel</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">minus</property>
+                <property name="title" translatable="yes" context="shortcut window">Remove channel</property>
               </object>
             </child>
           </object>

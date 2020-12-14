@@ -41,6 +41,8 @@ def activate_shortcuts():
     App().set_accels_for_action("app.dot", ["period", "KP_Decimal"])
     App().set_accels_for_action("app.channel", ["c"])
     App().set_accels_for_action("app.thru", ["greater", "KP_Divide"])
+    App().set_accels_for_action("app.plus", ["plus", "KP_Add"])
+    App().set_accels_for_action("app.minus", ["minus", "KP_Subtract"])
     App().set_accels_for_action("app.output", ["o"])
     App().set_accels_for_action("app.insert", ["Insert"])
 
@@ -60,6 +62,8 @@ def desactivate_shortcuts():
     App().set_accels_for_action("app.dot", [])
     App().set_accels_for_action("app.channel", [])
     App().set_accels_for_action("app.thru", [])
+    App().set_accels_for_action("app.plus", [])
+    App().set_accels_for_action("app.minus", [])
     App().set_accels_for_action("app.output", [])
     App().set_accels_for_action("app.insert", [])
 

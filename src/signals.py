@@ -18,4 +18,6 @@ gsignals = {
     "insert": (GObject.SignalFlags.ACTION, None, ()),
     "output": (GObject.SignalFlags.ACTION, None, ()),
     "thru": (GObject.SignalFlags.ACTION, None, ()),
+    "plus": (GObject.SignalFlags.ACTION, None, ()),
+    "minus": (GObject.SignalFlags.ACTION, None, ()),
 }

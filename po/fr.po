@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 19:57+0100\n"
-"PO-Revision-Date: 2020-12-14 12:03+0100\n"
+"POT-Creation-Date: 2020-12-14 21:29+0100\n"
+"PO-Revision-Date: 2020-12-14 21:32+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
 "Language: fr\n"
@@ -72,7 +72,7 @@ msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Rétablit l'action la plus récente"
 
-#: data/shortcuts.ui:32 data/shortcuts.ui:81
+#: data/shortcuts.ui:32 data/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Patch"
 msgstr "Patch"
@@ -97,22 +97,37 @@ msgctxt "shortcut window"
 msgid "Live"
 msgstr "Live"
 
-#: data/shortcuts.ui:66 data/shortcuts.ui:86
+#: data/shortcuts.ui:66 data/shortcuts.ui:100
 msgctxt "shortcut window"
 msgid "Select channel"
 msgstr "Sélection d'un circuit"
 
-#: data/shortcuts.ui:73 data/shortcuts.ui:93
+#: data/shortcuts.ui:73
+msgctxt "shortcut window"
+msgid "Channel Thru"
+msgstr "Thru"
+
+#: data/shortcuts.ui:80
+msgctxt "shortcut window"
+msgid "Add channel"
+msgstr "Ajouter le circuit"
+
+#: data/shortcuts.ui:87
+msgctxt "shortcut window"
+msgid "Remove channel"
+msgstr "Retirer le circuit"
+
+#: data/shortcuts.ui:107
 msgctxt "shortcut window"
 msgid "Thru"
 msgstr "Thru"
 
-#: data/shortcuts.ui:100
+#: data/shortcuts.ui:114
 msgctxt "shortcut window"
 msgid "Patch output"
 msgstr "Patch d'une adresse"
 
-#: data/shortcuts.ui:107
+#: data/shortcuts.ui:121
 msgctxt "shortcut window"
 msgid "Insert output"
 msgstr "Insérer une adresse"

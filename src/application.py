@@ -119,6 +119,8 @@ class Nino(Gtk.Application, Console):
             "dot": ("_dot", None),
             "channel": ("_channel", None),
             "thru": ("_thru", None),
+            "plus": ("_plus", None),
+            "minus": ("_minus", None),
             "output": ("_output", None),
             "insert": ("_insert", None),
         }
@@ -209,6 +211,12 @@ class Nino(Gtk.Application, Console):
 
     def _thru(self, _action, _parameter):
         self.send("thru")
+
+    def _plus(self, _action, _parameter):
+        self.send("plus")
+
+    def _minus(self, _action, _parameter):
+        self.send("minus")
 
     def _output(self, _action, _parameter):
         self.send("output")
