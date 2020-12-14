@@ -47,8 +47,7 @@ class TabLive(Gtk.ScrolledWindow):
     def channel(self, _widget):
         """channel signal received"""
         if not App().keystring or not App().keystring.isdigit():
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         self.flowbox.unselect_all()
         if App().keystring != "0":
@@ -58,14 +57,12 @@ class TabLive(Gtk.ScrolledWindow):
                 self.flowbox.select_child(child)
                 child.grab_focus()
                 self.last_chan = channel
-        App().keystring = ""
-        App().playback.statusbar.remove_all(App().playback.context_id)
+        App().statusbar_remove_all()
 
     def thru(self, _widget):
         """Thru signal received"""
         if not App().keystring or not App().keystring.isdigit():
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         select = self.flowbox.get_selected_children()
         if len(select) == 1:
@@ -85,8 +82,7 @@ class TabLive(Gtk.ScrolledWindow):
             child = self.flowbox.get_child_at_index(channel)
             child.grab_focus()
             self.last_chan = channel
-        App().keystring = ""
-        App().playback.statusbar.remove_all(App().playback.context_id)
+        App().statusbar_remove_all()
 
 
 def filter_channels(child, _user_data):

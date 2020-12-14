@@ -198,11 +198,11 @@ class Nino(Gtk.Application, Console):
 
     def _number(self, _action, param):
         self.keystring += str(param)
-        self.playback.statusbar.push(self.playback.context_id, self.keystring)
+        self.statusbar_push()
 
     def _dot(self, _action, _parameter):
         self.keystring += "."
-        self.playback.statusbar.push(self.playback.context_id, self.keystring)
+        self.statusbar_push()
 
     def _channel(self, _action, _parameter):
         self.send("channel")
@@ -229,3 +229,12 @@ class Nino(Gtk.Application, Console):
             child.emit(signal)
         else:
             print("Another window")
+
+    def statusbar_push(self):
+        self.live.statusbar.push(self.playback.context_id, self.keystring)
+        self.playback.statusbar.push(self.playback.context_id, self.keystring)
+
+    def statusbar_remove_all(self):
+        self.keystring = ""
+        self.live.statusbar.remove_all(self.playback.context_id)
+        self.playback.statusbar.remove_all(self.playback.context_id)

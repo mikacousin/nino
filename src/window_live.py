@@ -28,7 +28,7 @@ class LiveWindow(Gtk.ApplicationWindow):
 
         self.set_default_size(1440, 900)
 
-        header = Gtk.HeaderBar(title="niño")
+        header = Gtk.HeaderBar(title="Live")
         header.set_show_close_button(True)
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         button = Gtk.MenuButton()
@@ -41,9 +41,17 @@ class LiveWindow(Gtk.ApplicationWindow):
         header.pack_end(box)
         self.set_titlebar(header)
 
+        vbox = Gtk.VBox()
+
         self.notebook = Gtk.Notebook()
         app.tabs["live"] = TabLive()
         self.notebook.append_page(app.tabs.get("live"), Gtk.Label("Live"))
-        self.add(self.notebook)
+        vbox.pack_start(self.notebook, True, True, 0)
+
+        self.statusbar = Gtk.Statusbar()
+        self.context_id = self.statusbar.get_context_id("keypress")
+        vbox.pack_end(self.statusbar, False, False, 0)
+
+        self.add(vbox)
 
         self.connect("destroy", app._exit, None)

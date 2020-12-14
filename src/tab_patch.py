@@ -410,25 +410,21 @@ class TabPatch(Gtk.Box):
     def channel(self, _widget):
         """Channel signal"""
         if not App().keystring or not App().keystring.isdigit():
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         channel = int(App().keystring)
         path = Gtk.TreePath.new_from_indices([channel - 1])
         self.treeview.set_cursor(path, None, False)
-        App().keystring = ""
-        App().playback.statusbar.remove_all(App().playback.context_id)
+        App().statusbar_remove_all()
 
     def output(self, _widget):
         """Output signal"""
         if not validate_entry(App().keystring):
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         output, universe = parse_entry(App().keystring)
         if not universe:
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         model, selected_channels = self.treeview.get_selection().get_selected_rows()
         footprint = 0
@@ -451,8 +447,7 @@ class TabPatch(Gtk.Box):
                 for out in App().patch.channels[channel].values():
                     real_output = out.output
                     if not real_output:
-                        App().keystring = ""
-                        App().playback.statusbar.remove_all(App().playback.context_id)
+                        App().statusbar_remove_all()
                         return
             else:
                 # Depatch
@@ -465,8 +460,7 @@ class TabPatch(Gtk.Box):
         # Update sACN View
         self.sacn.update_view()
         App().tabs.get("live").flowbox.invalidate_filter()
-        App().keystring = ""
-        App().playback.statusbar.remove_all(App().playback.context_id)
+        App().statusbar_remove_all()
 
     def test_outputs_collision(self, output, universe, footprint, model):
         """Test if outputs are already used
@@ -506,31 +500,26 @@ class TabPatch(Gtk.Box):
     def insert(self, _widget):
         """Insert Output with channel's same fixture"""
         if not validate_entry(App().keystring):
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         output, universe = parse_entry(App().keystring)
         if not universe or not output:
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         model, selected_channels = self.treeview.get_selection().get_selected_rows()
         if not selected_channels:
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         if len(selected_channels) > 1:
             print("Can't insert output to different channels")
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         path = selected_channels[0]
         fixture = get_fixture_by_name(model, path)
         footprint = fixture.get_footprint()
         channel = model[path][0]
         if output + footprint > 513:
-            App().keystring = ""
-            App().playback.statusbar.remove_all(App().playback.context_id)
+            App().statusbar_remove_all()
             return
         self.test_outputs_collision(output, universe, footprint, model)
         App().patch.insert_output(channel, output, universe, fixture)
@@ -538,8 +527,7 @@ class TabPatch(Gtk.Box):
         update_channels_list(f"{output}.{universe}", footprint, channel, model, path)
         # Update sACN View
         self.sacn.update_view()
-        App().keystring = ""
-        App().playback.statusbar.remove_all(App().playback.context_id)
+        App().statusbar_remove_all()
 
 
 def update_channels_list(out, footprint, channel, model, path):
