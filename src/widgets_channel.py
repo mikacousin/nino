@@ -110,9 +110,34 @@ class ChannelWidget(Gtk.Misc):
         (_, _, text_width, _, _, _) = cr.text_extents(text)
         cr.move_to(allocation.width / 2 - text_width / 2, 15 * self.scale)
         cr.show_text(str(self.channel))
+        # Level
+        self._draw_intensity(cr)
         # Device informations if not a dimmer
         if self.device and self.device.fixture.name != "Dimmer" and self.device.output:
             self._draw_device(cr, width, allocation)
+
+    def _draw_intensity(self, cr):
+        """Draw Intensity level
+
+        Args:
+            cr (cairo.Context): Used to draw with cairo
+        """
+        cr.set_source_rgb(
+            self.color_level.get("red"),
+            self.color_level.get("green"),
+            self.color_level.get("blue"),
+        )
+        cr.select_font_face(
+            "Cantarell Regular", cairo.FontSlant.NORMAL, cairo.FontWeight.BOLD
+        )
+        cr.set_font_size(9 * self.scale)
+        cr.move_to(6 * self.scale, 48 * self.scale)
+        level = self.device.parameters.get("Intensity")
+        if level:
+            if level == 255:
+                cr.show_text("F")
+            else:
+                cr.show_text(str(level))
 
     def _draw_device(self, cr, width, allocation):
         """Draw device informations

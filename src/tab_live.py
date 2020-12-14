@@ -31,6 +31,7 @@ class TabLive(Gtk.ScrolledWindow):
         self.connect("thru", self.thru)
         self.connect("plus", self.plus)
         self.connect("minus", self.minus)
+        self.connect("at_level", self.at_level)
 
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
@@ -110,6 +111,34 @@ class TabLive(Gtk.ScrolledWindow):
             self.flowbox.unselect_child(child)
             child.grab_focus()
             self.last_chan = channel
+        App().statusbar_remove_all()
+
+    def at_level(self, _widget):
+        """At level signal"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().statusbar_remove_all()
+            return
+        level = int(App().keystring)
+        selected = self.flowbox.get_selected_children()
+        for flowboxchild in selected:
+            children = flowboxchild.get_children()
+            for channelwidget in children:
+                mini = (
+                    channelwidget.device.fixture.parameters.get("Intensity")
+                    .get("range")
+                    .get("Minimum")
+                )
+                maxi = (
+                    channelwidget.device.fixture.parameters.get("Intensity")
+                    .get("range")
+                    .get("Maximum")
+                )
+                if level < mini:
+                    level = mini
+                elif level > maxi:
+                    level = maxi
+                channelwidget.device.parameters["Intensity"] = level
+                channelwidget.device.send_dmx()
         App().statusbar_remove_all()
 
 

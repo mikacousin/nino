@@ -87,6 +87,13 @@
                 <property name="title" translatable="yes" context="shortcut window">Remove channel</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">equal</property>
+                <property name="title" translatable="yes" context="shortcut window">At level</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

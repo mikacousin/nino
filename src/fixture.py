@@ -27,7 +27,7 @@ class Fixture:
                 "offset": {"High Byte": 0, "Low Byte": 0, "Step": 4},
                 "default": 0,
                 "highligt": 255,
-                "range": {"Minimum": 0, "Maximum": 0, "Percent": True},
+                "range": {"Minimum": 0, "Maximum": 255, "Percent": True},
             }
         }
         self.mode = {"name": "", "parameters": ["Intensity"]}

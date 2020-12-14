@@ -121,6 +121,7 @@ class Nino(Gtk.Application, Console):
             "thru": ("_thru", None),
             "plus": ("_plus", None),
             "minus": ("_minus", None),
+            "at_level": ("_at_level", None),
             "output": ("_output", None),
             "insert": ("_insert", None),
         }
@@ -217,6 +218,9 @@ class Nino(Gtk.Application, Console):
 
     def _minus(self, _action, _parameter):
         self.send("minus")
+
+    def _at_level(self, _action, _parameter):
+        self.send("at_level")
 
     def _output(self, _action, _parameter):
         self.send("output")
