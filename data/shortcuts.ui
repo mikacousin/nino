@@ -55,6 +55,53 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">True</property>
+            <property name="title" translatable="yes" context="shortcut window">Live</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">c</property>
+                <property name="title" translatable="yes" context="shortcut window">Select channel</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">greater</property>
+                <property name="title" translatable="yes" context="shortcut window">Thru</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">True</property>
+            <property name="title" translatable="yes" context="shortcut window">Patch</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">c</property>
+                <property name="title" translatable="yes" context="shortcut window">Select channel</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">o</property>
+                <property name="title" translatable="yes" context="shortcut window">Patch output</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="accelerator">Insert</property>
+                <property name="title" translatable="yes" context="shortcut window">Insert output</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>
