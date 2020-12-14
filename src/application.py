@@ -231,10 +231,12 @@ class Nino(Gtk.Application, Console):
             print("Another window")
 
     def statusbar_push(self):
+        """Push keystring to StatusBars"""
         self.live.statusbar.push(self.playback.context_id, self.keystring)
         self.playback.statusbar.push(self.playback.context_id, self.keystring)
 
     def statusbar_remove_all(self):
+        """Empty StatusBars"""
         self.keystring = ""
         self.live.statusbar.remove_all(self.playback.context_id)
         self.playback.statusbar.remove_all(self.playback.context_id)
