@@ -134,7 +134,7 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 255,
+            "default": 0,
             "highlight": 255,
             "range": {
                 "Minimum": 0,
