@@ -4,3 +4,5 @@ data/about.ui.in
 data/com.github.mikacousin.nino.desktop.in
 data/menu.ui
 data/shortcuts.ui
+src/application.py
+src/settings.py

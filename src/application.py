@@ -11,10 +11,12 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+from gettext import gettext as _
 from gi.repository import Gdk, Gio, GLib, Gtk
 
 import nino.shortcuts as shortcuts
 from nino.console import Console
+from nino.settings import Settings, TabSettings
 from nino.tab_patch import TabPatch
 from nino.window_live import LiveWindow
 from nino.window_playback import PlaybackWindow
@@ -41,6 +43,8 @@ class Nino(Gtk.Application, Console):
         self.keystring = ""
         # About window
         self.about = None
+        # Application settings
+        self.settings = Settings.new()
 
         self.init_notebooks()
 
@@ -56,8 +60,10 @@ class Nino(Gtk.Application, Console):
             screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
         )
         # Use dark theme
-        settings = Gtk.Settings.get_default()
-        settings.set_property("gtk-application-prefer-dark-theme", True)
+        Gtk.Settings.get_default().set_property(
+            "gtk-application-prefer-dark-theme", True
+        )
+        # Create 2 windows
         self.create_main_windows()
 
     def do_startup(self):
@@ -87,7 +93,7 @@ class Nino(Gtk.Application, Console):
 
     def init_notebooks(self):
         """Notebooks initialization"""
-        self.tabs = {"live": None, "patch": None}
+        self.tabs = {"live": None, "patch": None, "settings": None}
 
     def setup_app_menu(self):
         """Setup application menu.
@@ -101,6 +107,7 @@ class Nino(Gtk.Application, Console):
         actions = {
             "shortcuts": ("_shortcuts", None),
             "about": ("_about", None),
+            "settings": ("_settings", None),
             "quit": ("_exit", None),
             "undo": ("_undo", None),
             "redo": ("_redo", None),
@@ -145,6 +152,20 @@ class Nino(Gtk.Application, Console):
         else:
             win = self.tabs["patch"].window
             page = win.notebook.page_num(self.tabs["patch"])
+            win.notebook.set_current_page(page)
+
+    def _settings(self, _action, _parameter):
+        active = self.get_active_window()
+        if self.tabs["settings"] is None:
+            self.tabs["settings"] = TabSettings(active)
+            active.notebook.append_page(
+                self.tabs["settings"], Gtk.Label(_("Preferences"))
+            )
+            active.notebook.show_all()
+            active.notebook.set_current_page(-1)
+        else:
+            win = self.tabs["settings"].window
+            page = win.notebook.page_num(self.tabs["settings"])
             win.notebook.set_current_page(page)
 
     def _close_tab(self, _action, _parameter):

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="com.github.mikacousin.nino" path="/com/github/mikacousin/nino/" gettext-domain="nino">
+    <key name="percent" type="b">
+      <default>true</default>
+      <summary>Percent mode</summary>
+      <description>Display levels in percent.</description>
+    </key>
+  </schema>
+</schemalist>

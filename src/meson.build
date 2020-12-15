@@ -26,6 +26,7 @@ nino_sources = [
   'device.py',
   'fixture.py',
   'patch.py',
+  'settings.py',
   'shortcuts.py',
   'signals.py',
   'tab_live.py',

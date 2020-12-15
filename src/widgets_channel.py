@@ -130,12 +130,15 @@ class ChannelWidget(Gtk.Misc):
         cr.select_font_face(
             "Cantarell Regular", cairo.FontSlant.NORMAL, cairo.FontWeight.BOLD
         )
-        cr.set_font_size(9 * self.scale)
+        cr.set_font_size(13 * self.scale)
         cr.move_to(6 * self.scale, 48 * self.scale)
         level = self.device.parameters.get("Intensity")
         if level:
-            if level == 255:
-                cr.show_text("F")
+            if App().settings.percent_mode:
+                if level == 255:
+                    cr.show_text("F")
+                else:
+                    cr.show_text(str(int(round((level / 255) * 100))))
             else:
                 cr.show_text(str(level))
 

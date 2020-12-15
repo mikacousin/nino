@@ -133,11 +133,15 @@ class TabLive(Gtk.ScrolledWindow):
                     .get("range")
                     .get("Maximum")
                 )
-                if level < mini:
-                    level = mini
-                elif level > maxi:
-                    level = maxi
-                channelwidget.device.parameters["Intensity"] = level
+                if App().settings.percent_mode:
+                    intensity = int(round((level / 100) * maxi))
+                else:
+                    intensity = level
+                if intensity < mini:
+                    intensity = mini
+                elif intensity > maxi:
+                    intensity = maxi
+                channelwidget.device.parameters["Intensity"] = intensity
                 channelwidget.device.send_dmx()
         App().statusbar_remove_all()
 
