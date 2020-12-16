@@ -24,7 +24,7 @@ from nino.signals import gsignals
 from nino.widgets_output import OutputWidget
 
 
-class FixturesLibrary(Gtk.VBox):
+class FixturesLibrary(Gtk.Box):
     """Fixtures library
 
     Attributes:
@@ -36,7 +36,7 @@ class FixturesLibrary(Gtk.VBox):
     """
 
     def __init__(self, fixtures):
-        Gtk.VBox.__init__(self)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
 
         self.show_fixtures = fixtures
 
@@ -295,7 +295,7 @@ class SacnWidget(Gtk.ScrolledWindow):
         Gtk.ScrolledWindow.__init__(self)
         self.set_vexpand(True)
         self.set_hexpand(True)
-        vbox = Gtk.VBox()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         flowbox = []
         self.outputs = {}
         for univ in UNIVERSES:
@@ -378,7 +378,7 @@ class TabPatch(Gtk.Box):
         stack.add_titled(FixturesLibrary(fixtures), "fixtures", "Fixtures library")
         stack_switcher = Gtk.StackSwitcher()
         stack_switcher.set_stack(stack)
-        vbox = Gtk.VBox()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         vbox.pack_start(stack_switcher, False, False, 0)
         vbox.pack_start(stack, True, True, 0)
         paned.pack2(vbox, resize=True, shrink=False)

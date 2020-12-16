@@ -41,7 +41,7 @@ class LiveWindow(Gtk.ApplicationWindow):
         header.pack_end(box)
         self.set_titlebar(header)
 
-        vbox = Gtk.VBox()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         self.notebook = Gtk.Notebook()
         app.tabs["live"] = TabLive()
