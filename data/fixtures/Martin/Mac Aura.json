@@ -1483,6 +1483,7 @@
     "modes": [
         {
             "name": "Standard",
+            "footprint": 14,
             "parameters": [
                 "Strobe",
                 "Intensity",
@@ -1500,6 +1501,7 @@
         },
         {
             "name": "Extended",
+            "footprint": 25,
             "parameters": [
                 "Strobe",
                 "Intensity",

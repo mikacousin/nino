@@ -51,21 +51,18 @@ class FixturesLibrary(Gtk.VBox):
         for files in data.values():
             manu = files.get("manufacturer")
             model = files.get("model_name")
-        for files in data.values():
-            manu = files.get("manufacturer")
-            model = files.get("model_name")
             modes = files.get("modes")
             manufacturers[manu][model] = modes
 
         # Fixtures treestore
-        self.fixtures = Gtk.TreeStore(bool, str)
+        self.fixtures = Gtk.TreeStore(bool, str, str)
         for manu, models in manufacturers.items():
             if manu not in ("Internal", "Scrollers"):
-                piter = self.fixtures.append(None, [True, manu])
+                piter = self.fixtures.append(None, [True, manu, ""])
                 for model, modes in models.items():
-                    piter2 = self.fixtures.append(piter, [True, model])
-                    for mode in modes:
-                        self.fixtures.append(piter2, [True, mode])
+                    piter2 = self.fixtures.append(piter, [True, model, ""])
+                    for mode, footprint in modes.items():
+                        self.fixtures.append(piter2, [True, mode, str(footprint)])
         # Search fixtures
         self.search_entry = Gtk.SearchEntry()
         self.search_entry.set_placeholder_text("Enter fixture name")
@@ -80,6 +77,7 @@ class FixturesLibrary(Gtk.VBox):
         self.view.connect("row-activated", self.fixtures_activated)
         renderer = Gtk.CellRendererText()
         self.view.append_column(Gtk.TreeViewColumn("Fixtures", renderer, text=1))
+        self.view.append_column(Gtk.TreeViewColumn("Footprint", renderer, text=2))
         self.pack_end(self.view, True, True, 0)
 
     def refresh_results(self, _widget):

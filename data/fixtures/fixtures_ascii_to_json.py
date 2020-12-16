@@ -25,6 +25,7 @@ class Template:
         self.manufacturer = ""
         self.model_name = ""
         self.mode_name = ""
+        self.footprint = 0
         self.parameters = {}
         self.modes = []
 
@@ -42,7 +43,7 @@ class Parameter:
 
 
 def make_index(index):
-    for root, dirs, files in os.walk("."):
+    for root, _dirs, files in os.walk("."):
         for name in files:
             if name not in ["index.json", "fixtures_ascii_to_json.py"]:
                 file_name = os.path.join(root, name)
@@ -51,10 +52,11 @@ def make_index(index):
                 index[file_name] = {
                     "manufacturer": d["manufacturer"],
                     "model_name": d["model_name"],
-                    "modes": [],
+                    "modes": {},
                 }
                 for m in d["modes"]:
-                    index[file_name]["modes"].append(m["name"])
+                    name = m["name"]
+                    index[file_name]["modes"][name] = m["footprint"]
 
     with open("index.json", "w") as index_file:
         json.dump(index, index_file, indent=4, sort_keys=True)
@@ -103,9 +105,13 @@ for line in data:
             template.model_name = line[12:]
         if line[:11].upper() == "$$MODENAME ":
             template.mode_name = line[11:]
+        if line[:12].upper() == "$$FOOTPRINT ":
+            template.footprint = int(line[12:])
         if line[:7].upper() == "$$DCID " and line[7:] in multi_parts:
             # This is another part of a template
+            footprint = template.footprint
             template = multi_parts.get(line[7:])[0]
+            template.footprint += footprint
             text_part = f" PART {multi_parts.get(line[7:])[1]}"
             del templates[-1]
         if line[:15].upper() == "$$TEMPLATEPART ":
@@ -175,7 +181,11 @@ for template in templates:
         "parameters": {},
         "modes": [],
     }
-    mode = {"name": template.mode_name, "parameters": []}
+    mode = {
+        "name": template.mode_name,
+        "footprint": template.footprint,
+        "parameters": [],
+    }
     for param, values in template.parameters.items():
         mode["parameters"].append(param)
         data["parameters"][param] = {
