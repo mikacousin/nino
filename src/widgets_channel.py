@@ -111,17 +111,20 @@ class ChannelWidget(Gtk.Misc):
         cr.move_to(allocation.width / 2 - text_width / 2, 15 * self.scale)
         cr.show_text(str(self.channel))
         # Level
-        self._draw_intensity(cr)
+        self._draw_intensity(cr, width, allocation)
         # Device informations if not a dimmer
         if self.device and self.device.fixture.name != "Dimmer" and self.device.output:
             self._draw_device(cr, width, allocation)
 
-    def _draw_intensity(self, cr):
+    def _draw_intensity(self, cr, width, allocation):
         """Draw Intensity level
 
         Args:
             cr (cairo.Context): Used to draw with cairo
+            width (int): widget width
+            allocation (Gdk.Rectangle): Widget's allocation
         """
+        # Intensity value
         cr.set_source_rgb(
             self.color_level.get("red"),
             self.color_level.get("green"),
@@ -133,14 +136,26 @@ class ChannelWidget(Gtk.Misc):
         cr.set_font_size(13 * self.scale)
         cr.move_to(6 * self.scale, 48 * self.scale)
         level = self.device.parameters.get("Intensity")
+        maxi = (
+            self.device.fixture.parameters.get("Intensity").get("range").get("Maximum")
+        )
         if level:
             if App().settings.percent_mode:
-                if level == 255:
+                if level == maxi:
                     cr.show_text("F")
                 else:
-                    cr.show_text(str(int(round((level / 255) * 100))))
+                    cr.show_text(str(int(round((level / maxi) * 100))))
             else:
                 cr.show_text(str(level))
+        # Intensity bar
+        cr.set_source_rgb(0.9, 0.6, 0.2)
+        cr.rectangle(
+            allocation.width - 9,
+            width - 4,
+            6 * self.scale,
+            -((50 / 255) * self.scale) * level,
+        )
+        cr.fill()
 
     def _draw_device(self, cr, width, allocation):
         """Draw device informations
