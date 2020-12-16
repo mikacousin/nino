@@ -154,7 +154,7 @@
             "highlight": 0,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1068,7 +1068,7 @@
             "number": 46,
             "type": "LTP8",
             "offset": {
-                "High Byte": 0,
+                "High Byte": 19,
                 "Low Byte": 0,
                 "Step": 4
             },
@@ -1191,7 +1191,7 @@
             "number": 0,
             "type": "HTP8",
             "offset": {
-                "High Byte": 1,
+                "High Byte": 20,
                 "Low Byte": 0,
                 "Step": 4
             },
@@ -1207,7 +1207,7 @@
             "number": 26,
             "type": "LTP8",
             "offset": {
-                "High Byte": 2,
+                "High Byte": 21,
                 "Low Byte": 0,
                 "Step": 4
             },
@@ -1435,7 +1435,7 @@
             "number": 5,
             "type": "LTP8",
             "offset": {
-                "High Byte": 3,
+                "High Byte": 22,
                 "Low Byte": 0,
                 "Step": 4
             },
@@ -1451,7 +1451,7 @@
             "number": 10,
             "type": "LTP8",
             "offset": {
-                "High Byte": 4,
+                "High Byte": 23,
                 "Low Byte": 0,
                 "Step": 4
             },
@@ -1467,7 +1467,7 @@
             "number": 13,
             "type": "LTP8",
             "offset": {
-                "High Byte": 5,
+                "High Byte": 24,
                 "Low Byte": 0,
                 "Step": 4
             },
