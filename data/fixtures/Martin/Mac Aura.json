@@ -172,7 +172,7 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 0,
+            "default": 255,
             "highlight": 0,
             "range": {
                 "Minimum": 0,
@@ -767,157 +767,188 @@
                 [
                     0,
                     9,
-                    "Idle"
+                    "Idle",
+                    false
                 ],
                 [
                     10,
                     12,
-                    "Dimmer sync"
+                    "Dimmer sync",
+                    false
                 ],
                 [
                     13,
                     15,
-                    "Strobe sync"
+                    "Strobe sync",
+                    false
                 ],
                 [
                     16,
                     18,
-                    "Dimmer + strobe sync"
+                    "Dimmer + strobe sync",
+                    false
                 ],
                 [
                     19,
                     21,
-                    "Aura color sync"
+                    "Aura color sync",
+                    false
                 ],
                 [
                     22,
                     24,
-                    "Aura all sync"
+                    "Aura all sync",
+                    false
                 ],
                 [
                     40,
                     42,
-                    "Aura strobe delay"
+                    "Aura strobe delay",
+                    false
                 ],
                 [
                     43,
                     45,
-                    "Strobe alternate single"
+                    "Strobe alternate single",
+                    false
                 ],
                 [
                     46,
                     48,
-                    "Strobe alternate dual"
+                    "Strobe alternate dual",
+                    false
                 ],
                 [
                     49,
                     51,
-                    "Strobe alternate triple"
+                    "Strobe alternate triple",
+                    false
                 ],
                 [
                     52,
                     54,
-                    "3-step strobe"
+                    "3-step strobe",
+                    false
                 ],
                 [
                     61,
                     63,
-                    "Intensity Rnd alternate"
+                    "Intensity Rnd alternate",
+                    false
                 ],
                 [
                     64,
                     66,
-                    "Aura ramp, Beam flash"
+                    "Aura ramp, Beam flash",
+                    false
                 ],
                 [
                     67,
                     69,
-                    "Beam ramp, Aura flash"
+                    "Beam ramp, Aura flash",
+                    false
                 ],
                 [
                     70,
                     72,
-                    "Intensity Aura, Beam ramp"
+                    "Intensity Aura, Beam ramp",
+                    false
                 ],
                 [
                     73,
                     75,
-                    "Intensity Beam, Aura ramp"
+                    "Intensity Beam, Aura ramp",
+                    false
                 ],
                 [
                     100,
                     102,
-                    "Aura color offset"
+                    "Aura color offset",
+                    false
                 ],
                 [
                     109,
                     111,
-                    "Hue shimmer"
+                    "Hue shimmer",
+                    false
                 ],
                 [
                     112,
                     114,
-                    "Saturation shimmer"
+                    "Saturation shimmer",
+                    false
                 ],
                 [
                     127,
                     129,
-                    "Color strobe"
+                    "Color strobe",
+                    false
                 ],
                 [
                     130,
                     132,
-                    "Color offset strobe"
+                    "Color offset strobe",
+                    false
                 ],
                 [
                     133,
                     135,
-                    "Aura color strobe"
+                    "Aura color strobe",
+                    false
                 ],
                 [
                     136,
                     138,
-                    "Aura color offset strobe"
+                    "Aura color offset strobe",
+                    false
                 ],
                 [
                     139,
                     141,
-                    "Color spikes"
+                    "Color spikes",
+                    false
                 ],
                 [
                     160,
                     162,
-                    "Zoom / color offset"
+                    "Zoom / color offset",
+                    false
                 ],
                 [
                     163,
                     165,
-                    "Color zoom ramp in"
+                    "Color zoom ramp in",
+                    false
                 ],
                 [
                     166,
                     168,
-                    "Color zoom ramp out"
+                    "Color zoom ramp out",
+                    false
                 ],
                 [
                     169,
                     171,
-                    "Color zoom fade in"
+                    "Color zoom fade in",
+                    false
                 ],
                 [
                     172,
                     174,
-                    "Color zoom fade out"
+                    "Color zoom fade out",
+                    false
                 ],
                 [
                     175,
                     177,
-                    "Zoom ramp up"
+                    "Zoom ramp up",
+                    false
                 ],
                 [
                     178,
                     180,
-                    "Zoom ramp down"
+                    "Zoom ramp down",
+                    false
                 ]
             ]
         },
@@ -929,7 +960,7 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 0,
+            "default": 128,
             "highlight": 0,
             "range": {
                 "Minimum": 0,
@@ -951,157 +982,188 @@
                 [
                     0,
                     9,
-                    "Idle"
+                    "Idle",
+                    false
                 ],
                 [
                     10,
                     12,
-                    "FX Macros 1"
+                    "FX Macros 1",
+                    false
                 ],
                 [
                     13,
                     15,
-                    "FX Macros 2"
+                    "FX Macros 2",
+                    false
                 ],
                 [
                     16,
                     18,
-                    "FX Macros 3"
+                    "FX Macros 3",
+                    false
                 ],
                 [
                     19,
                     21,
-                    "FX Macros 4"
+                    "FX Macros 4",
+                    false
                 ],
                 [
                     22,
                     24,
-                    "FX Macros 5"
+                    "FX Macros 5",
+                    false
                 ],
                 [
                     40,
                     42,
-                    "FX Macros 6"
+                    "FX Macros 6",
+                    false
                 ],
                 [
                     43,
                     45,
-                    "FX Macros 7"
+                    "FX Macros 7",
+                    false
                 ],
                 [
                     46,
                     48,
-                    "FX Macros 8"
+                    "FX Macros 8",
+                    false
                 ],
                 [
                     49,
                     51,
-                    "FX Macros 9"
+                    "FX Macros 9",
+                    false
                 ],
                 [
                     52,
                     54,
-                    "FX Macros 10"
+                    "FX Macros 10",
+                    false
                 ],
                 [
                     61,
                     63,
-                    "FX Macros 11"
+                    "FX Macros 11",
+                    false
                 ],
                 [
                     64,
                     66,
-                    "FX Macros 12"
+                    "FX Macros 12",
+                    false
                 ],
                 [
                     67,
                     69,
-                    "FX Macros 13"
+                    "FX Macros 13",
+                    false
                 ],
                 [
                     70,
                     72,
-                    "FX Macros 14"
+                    "FX Macros 14",
+                    false
                 ],
                 [
                     73,
                     75,
-                    "FX Macros 15"
+                    "FX Macros 15",
+                    false
                 ],
                 [
                     100,
                     102,
-                    "FX Macros 16"
+                    "FX Macros 16",
+                    false
                 ],
                 [
                     109,
                     111,
-                    "FX Macros 17"
+                    "FX Macros 17",
+                    false
                 ],
                 [
                     112,
                     114,
-                    "FX Macros 18"
+                    "FX Macros 18",
+                    false
                 ],
                 [
                     127,
                     129,
-                    "FX Macros 19"
+                    "FX Macros 19",
+                    false
                 ],
                 [
                     130,
                     132,
-                    "FX Macros 20"
+                    "FX Macros 20",
+                    false
                 ],
                 [
                     133,
                     135,
-                    "FX Macros 21"
+                    "FX Macros 21",
+                    false
                 ],
                 [
                     136,
                     138,
-                    "FX Macros 22"
+                    "FX Macros 22",
+                    false
                 ],
                 [
                     139,
                     141,
-                    "FX Macros 23"
+                    "FX Macros 23",
+                    false
                 ],
                 [
                     160,
                     162,
-                    "FX Macros 24"
+                    "FX Macros 24",
+                    false
                 ],
                 [
                     163,
                     165,
-                    "FX Macros 25"
+                    "FX Macros 25",
+                    false
                 ],
                 [
                     166,
                     168,
-                    "FX Macros 26"
+                    "FX Macros 26",
+                    false
                 ],
                 [
                     169,
                     171,
-                    "FX Macros 27"
+                    "FX Macros 27",
+                    false
                 ],
                 [
                     172,
                     174,
-                    "FX Macros 28"
+                    "FX Macros 28",
+                    false
                 ],
                 [
                     175,
                     177,
-                    "FX Macros 29"
+                    "FX Macros 29",
+                    false
                 ],
                 [
                     178,
                     180,
-                    "FX Macros 30"
+                    "FX Macros 30",
+                    false
                 ]
             ]
         },
@@ -1113,7 +1175,7 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 0,
+            "default": 128,
             "highlight": 0,
             "range": {
                 "Minimum": 0,
