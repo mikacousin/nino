@@ -55,10 +55,10 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         for flowboxchild in selected:
             children = flowboxchild.get_children()
             for channelwidget in children:
-                model = channelwidget.device.fixture.model_name
+                name = channelwidget.device.fixture.name
                 if not self.devices:
                     self.devices.append(channelwidget.device)
-                elif self.devices[-1].fixture.model_name == model:
+                elif self.devices[-1].fixture.name == name:
                     self.devices.append(channelwidget.device)
         if self.devices:
             for param, value in self.devices[0].parameters.items():

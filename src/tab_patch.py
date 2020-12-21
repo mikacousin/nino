@@ -215,7 +215,8 @@ def get_fixture(manufacturer=None, model=None, mode=None):
             break
     with open(os.path.join(path, file_name), "r") as fixture_file:
         fixture_json = json.load(fixture_file)
-    fixture = Fixture(fixture_json.get("name"))
+    name = f"{fixture_json.get('manufacturer')} {fixture_json.get('model_name')} {mode}"
+    fixture = Fixture(name)
     fixture.manufacturer = fixture_json.get("manufacturer")
     fixture.model_name = fixture_json.get("model_name")
     fixture.parameters = fixture_json.get("parameters")
