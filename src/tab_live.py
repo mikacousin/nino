@@ -40,6 +40,7 @@ class TabLive(Gtk.ScrolledWindow):
         self.flowbox.set_max_children_per_line(MAX_CHANNELS)
         self.flowbox.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
         self.flowbox.set_filter_func(filter_channels, None)
+        self.flowbox.connect("selected-children-changed", child_activated)
         self.channels = []
         for channel in range(MAX_CHANNELS):
             self.channels.append(ChannelWidget(channel + 1))
@@ -162,3 +163,10 @@ def filter_channels(child, _user_data):
             if device.output:
                 return True
     return False
+
+
+def child_activated(_flowbox):
+    """Selected channels changed"""
+    if App().tabs.get("device_controls"):
+        App().tabs.get("device_controls").populate()
+        App().tabs.get("device_controls").show_all()

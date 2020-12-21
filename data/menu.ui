@@ -6,6 +6,10 @@
         <attribute name="label" translatable="yes">_Patch</attribute>
         <attribute name="accel">&lt;Primary&gt;p</attribute>
       </item>
+      <item>
+        <attribute name="action">app.device_controls</attribute>
+        <attribute name="label" translatable="yes">_Device Controls</attribute>
+      </item>
     </section>
     <section>
       <item>

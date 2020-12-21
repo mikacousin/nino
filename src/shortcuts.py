@@ -19,6 +19,7 @@ def setup_shortcuts():
     # General shortcuts
     App().set_accels_for_action("app.quit", ["<Control>q"])
     App().set_accels_for_action("app.patch", ["<Control>p"])
+    App().set_accels_for_action("app.device_controls", ["<Control>d"])
     App().set_accels_for_action("app.settings", ["<Control>comma"])
     App().set_accels_for_action("app.close_tab", ["<Control>w"])
     App().set_accels_for_action("app.undo", ["<Control>z"])

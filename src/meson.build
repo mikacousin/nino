@@ -29,6 +29,7 @@ nino_sources = [
   'settings.py',
   'shortcuts.py',
   'signals.py',
+  'tab_device_controls.py',
   'tab_live.py',
   'tab_patch.py',
   'undo_redo.py',

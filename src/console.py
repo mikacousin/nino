@@ -40,6 +40,7 @@ class Console:
     """Application's heart"""
 
     def __init__(self):
+        self.tabs = {}
         # Dimmer fixture at index 0
         self.fixtures = []
         dimmer = Fixture("Dimmer")
@@ -49,12 +50,18 @@ class Console:
         self.patch = Patch()
         self.dmx = DMX()
 
-        # Start sACN sender
+        # Start sACN sender and receiver
         self.sender = sacn.sACNsender()
         self.sender.start()
+        self.receiver = sacn.sACNreceiver()
+        self.receiver.start()
         for universe in UNIVERSES:
             self.sender.activate_output(universe)
             self.sender[universe].multicast = True
+            self.receiver.join_multicast(universe)
+            self.receiver.register_listener(
+                "universe", receive_packet, universe=universe
+            )
 
         # Undo manager
         self.undo_manager = UndoManager()
@@ -62,3 +69,18 @@ class Console:
     def console_exit(self):
         """Stop console"""
         self.sender.stop()
+        self.receiver.stop()
+
+
+def receive_packet(_packet):
+    """Callback when receive sACN packets
+
+    Args:
+        _packet (sacn.DataPacket): DMX data
+    """
+    if App().tabs.get("live"):
+        # Update Live view
+        App().tabs.get("live").flowbox.queue_draw()
+    if App().tabs.get("device_controls"):
+        # Update Device Controls
+        App().tabs.get("device_controls").update_view()

@@ -40,19 +40,7 @@ class FixturesLibrary(Gtk.Box):
 
         self.show_fixtures = fixtures
 
-        # Load fixtures index
-        path = get_fixtures_dir()
-        with open(os.path.join(path, "index.json"), "r") as index_file:
-            data = json.load(index_file)
-        manufacturers = {}
-        for files in data.values():
-            manu = files.get("manufacturer")
-            manufacturers[manu] = {}
-        for files in data.values():
-            manu = files.get("manufacturer")
-            model = files.get("model_name")
-            modes = files.get("modes")
-            manufacturers[manu][model] = modes
+        manufacturers = load_fixtures_index()
 
         # Fixtures treestore
         self.fixtures = Gtk.TreeStore(bool, str, str)
@@ -182,6 +170,25 @@ class FixturesLibrary(Gtk.Box):
                 button.connect("clicked", self.show_fixtures.clicked)
                 self.show_fixtures.flowbox.add(button)
                 self.show_fixtures.flowbox.show_all()
+
+
+def load_fixtures_index():
+    """Load fixtures index
+
+    Returns:
+        dic
+    """
+    path = get_fixtures_dir()
+    with open(os.path.join(path, "index.json"), "r") as index_file:
+        data = json.load(index_file)
+    manufacturers = {}
+    for files in data.values():
+        manu = files.get("manufacturer")
+        manufacturers[manu] = {}
+        model = files.get("model_name")
+        modes = files.get("modes")
+        manufacturers[manu][model] = modes
+    return manufacturers
 
 
 def get_fixture(manufacturer=None, model=None, mode=None):
@@ -337,7 +344,7 @@ class TabPatch(Gtk.Box):
     """Tab Patch
 
     Attributes:
-        keystring (str): String of command
+        window (Gtk.Window): Parent window
     """
 
     __gsignals__ = gsignals

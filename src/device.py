@@ -45,6 +45,12 @@ class Device:
                     print("Device parameter type '{param_type}' not supported")
                     print("Supported types are : HTP8, LTP8, HTP16, LTP16")
 
+    def home(self):
+        """Put all parameters to default value"""
+        for name, param in self.fixture.parameters.items():
+            self.parameters[name] = param.get("default")
+        self.send_dmx()
+
     def send_dmx(self):
         """Send device parameters"""
         if not self.output:

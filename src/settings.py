@@ -54,7 +54,11 @@ class Settings(Gio.Settings):
 
 
 class TabSettings(Gtk.ScrolledWindow):
-    """Settings Dialog"""
+    """Settings Dialog
+
+    Attributes:
+        window (Gtk.Window): Parent window
+    """
 
     def __init__(self, window):
         Gtk.ScrolledWindow.__init__(self)

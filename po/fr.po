@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-15 17:18+0100\n"
-"PO-Revision-Date: 2020-12-15 17:19+0100\n"
+"POT-Creation-Date: 2020-12-21 14:34+0100\n"
+"PO-Revision-Date: 2020-12-21 14:36+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
 "Language: fr\n"
@@ -45,19 +45,23 @@ msgstr "nino;light;console;"
 msgid "_Patch"
 msgstr "Patch"
 
-#: data/menu.ui:13
+#: data/menu.ui:11
+msgid "_Device Controls"
+msgstr "Contrôle des devices"
+
+#: data/menu.ui:17
 msgid "_Preferences"
 msgstr "Préférences"
 
-#: data/menu.ui:17
+#: data/menu.ui:21
 msgid "_Keyboard Shortcuts"
 msgstr "Raccourcis claviers"
 
-#: data/menu.ui:21
+#: data/menu.ui:25
 msgid "_About Nino"
 msgstr "À propos de niño"
 
-#: data/menu.ui:25
+#: data/menu.ui:29
 msgid "_Quit"
 msgstr "Quitter"
 
@@ -146,11 +150,11 @@ msgctxt "shortcut window"
 msgid "Insert output"
 msgstr "Insérer une adresse"
 
-#: src/application.py:162
+#: src/application.py:183
 msgid "Preferences"
 msgstr "Préférences"
 
-#: src/settings.py:63
+#: src/settings.py:68
 msgid "Percent mode"
 msgstr "Affichage en pourcent"
 

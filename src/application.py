@@ -17,6 +17,7 @@ from gi.repository import Gdk, Gio, GLib, Gtk
 import nino.shortcuts as shortcuts
 from nino.console import Console
 from nino.settings import Settings, TabSettings
+from nino.tab_device_controls import TabDeviceControls
 from nino.tab_patch import TabPatch
 from nino.window_live import LiveWindow
 from nino.window_playback import PlaybackWindow
@@ -93,7 +94,12 @@ class Nino(Gtk.Application, Console):
 
     def init_notebooks(self):
         """Notebooks initialization"""
-        self.tabs = {"live": None, "patch": None, "settings": None}
+        self.tabs = {
+            "device_controls": None,
+            "live": None,
+            "patch": None,
+            "settings": None,
+        }
 
     def setup_app_menu(self):
         """Setup application menu.
@@ -105,6 +111,7 @@ class Nino(Gtk.Application, Console):
         builder.add_from_resource("/com/github/mikacousin/nino/menu.ui")
         menu = builder.get_object("app-menu")
         actions = {
+            "device_controls": ("_device_controls", None),
             "shortcuts": ("_shortcuts", None),
             "about": ("_about", None),
             "settings": ("_settings", None),
@@ -152,6 +159,20 @@ class Nino(Gtk.Application, Console):
         else:
             win = self.tabs["patch"].window
             page = win.notebook.page_num(self.tabs["patch"])
+            win.notebook.set_current_page(page)
+
+    def _device_controls(self, _action, _parameter):
+        active = self.get_active_window()
+        if self.tabs["device_controls"] is None:
+            self.tabs["device_controls"] = TabDeviceControls(active)
+            active.notebook.append_page(
+                self.tabs["device_controls"], Gtk.Label("Device Controls")
+            )
+            active.notebook.show_all()
+            active.notebook.set_current_page(-1)
+        else:
+            win = self.tabs["device_controls"].window
+            page = win.notebook.page_num(self.tabs["device_controls"])
             win.notebook.set_current_page(page)
 
     def _settings(self, _action, _parameter):
