@@ -17,112 +17,134 @@
                 [
                     0,
                     19,
-                    "Closed"
+                    "Closed",
+                    false
                 ],
                 [
                     20,
                     24,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     25,
                     64,
-                    "Strobe"
+                    "Strobe",
+                    true
                 ],
                 [
                     65,
                     69,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     70,
                     84,
-                    "O Pulse"
+                    "O Pulse",
+                    true
                 ],
                 [
                     85,
                     89,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     90,
                     104,
-                    "C Pulse"
+                    "C Pulse",
+                    true
                 ],
                 [
                     105,
                     109,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     110,
                     124,
-                    "Rnd"
+                    "Rnd",
+                    true
                 ],
                 [
                     125,
                     129,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     130,
                     144,
-                    "Rnd O Pulse"
+                    "Rnd O Pulse",
+                    true
                 ],
                 [
                     145,
                     149,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     150,
                     164,
-                    "Rnd C Pulse"
+                    "Rnd C Pulse",
+                    true
                 ],
                 [
                     165,
                     169,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     170,
                     184,
-                    "Burst"
+                    "Burst",
+                    true
                 ],
                 [
                     185,
                     189,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     190,
                     204,
-                    "Burst Rnd"
+                    "Burst Rnd",
+                    true
                 ],
                 [
                     205,
                     209,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     210,
                     224,
-                    "Strobe Sine"
+                    "Strobe Sine",
+                    true
                 ],
                 [
                     225,
                     229,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     230,
                     244,
-                    "Burst"
+                    "Burst",
+                    true
                 ],
                 [
                     245,
                     255,
-                    "Open"
+                    "Open",
+                    false
                 ]
             ]
         },
@@ -170,7 +192,7 @@
             "highlight": 32767,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 65535,
                 "Percent": false
             }
         },
@@ -186,7 +208,7 @@
             "highlight": 32768,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 65535,
                 "Percent": false
             }
         },
@@ -204,62 +226,74 @@
                 [
                     0,
                     9,
-                    "No function"
+                    "No function",
+                    false
                 ],
                 [
                     10,
                     14,
-                    "Reset"
+                    "Reset",
+                    false
                 ],
                 [
                     40,
                     44,
-                    "PTSP = Norm"
+                    "PTSP = Norm",
+                    false
                 ],
                 [
                     45,
                     49,
-                    "PTSP = Fast"
+                    "PTSP = Fast",
+                    false
                 ],
                 [
                     50,
                     54,
-                    "PTSP = Slow"
+                    "PTSP = Slow",
+                    false
                 ],
                 [
                     60,
                     64,
-                    "Fan mode FULL"
+                    "Fan mode FULL",
+                    false
                 ],
                 [
                     70,
                     74,
-                    "Fan mode REGULATED"
+                    "Fan mode REGULATED",
+                    false
                 ],
                 [
                     90,
                     94,
-                    "Calibrated color output mode COLOR CALIB = ON"
+                    "Calibrated color output mode COLOR CALIB = ON",
+                    false
                 ],
                 [
                     100,
                     104,
-                    "Raw color output mode COLOR CALIB = OFF"
+                    "Raw color output mode COLOR CALIB = OFF",
+                    false
                 ],
                 [
                     110,
                     114,
-                    "Fast dimming"
+                    "Fast dimming",
+                    false
                 ],
                 [
                     120,
                     124,
-                    "Smooth dimming"
+                    "Smooth dimming",
+                    false
                 ],
                 [
                     250,
                     255,
-                    "Display On"
+                    "Display On",
+                    false
                 ]
             ]
         },
@@ -277,217 +311,260 @@
                 [
                     0,
                     9,
-                    "No function"
+                    "Open, RGBW mode",
+                    false
                 ],
                 [
                     10,
                     14,
-                    "Lee 790 - Moroccan pink [Mix Pos]"
+                    "LEE 790 - Moroccan pink",
+                    false
                 ],
                 [
                     15,
                     19,
-                    "Lee 157 - Pink [Mix Pos]"
+                    "LEE 157 - Pink",
+                    false
                 ],
                 [
                     20,
                     24,
-                    "Lee 332 - Special rose pink [Mix Pos]"
+                    "LEE 332 - Special rose pink",
+                    false
                 ],
                 [
                     25,
                     29,
-                    "Lee 328 - Follies pink [Mix Pos]"
+                    "LEE 328 - Follies pink",
+                    false
                 ],
                 [
                     30,
                     34,
-                    "Lee 345 - Fuchsia pink [Mix Pos]"
+                    "LEE 345 - Fuchsia pink",
+                    false
                 ],
                 [
                     35,
                     39,
-                    "Lee 194 - Surprise pink [Mix Pos]"
+                    "LEE 194 - Surprise pink",
+                    false
                 ],
                 [
                     40,
                     44,
-                    "Lee 181 - Congo blue [Mix Pos]"
+                    "LEE 181 - Congo blue",
+                    false
                 ],
                 [
                     45,
                     49,
-                    "Lee 071 - Tokyo blue [Mix Pos]"
+                    "LEE 071 - Tokyo blue",
+                    false
                 ],
                 [
                     50,
                     54,
-                    "Lee 120 - Deep blue [Mix Pos]"
+                    "LEE 120 - Deep blue",
+                    false
                 ],
                 [
                     55,
                     59,
-                    "Lee 079 - Just blue [Mix Pos]"
+                    "LEE 079 - Just blue",
+                    false
                 ],
                 [
                     60,
                     64,
-                    "Lee 132 - Medium blue [Mix Pos]"
+                    "LEE 132 - Medium blue",
+                    false
                 ],
                 [
                     65,
                     69,
-                    "Lee 200 - Double CT blue [Mix Pos]"
+                    "LEE 200 - Double CT blue",
+                    false
                 ],
                 [
                     70,
                     74,
-                    "Lee 161 - Slate blue [Mix Pos]"
+                    "LEE 161 - Slate blue",
+                    false
                 ],
                 [
                     75,
                     79,
-                    "Lee 201 - Full CT blue [Mix Pos]"
+                    "LEE 201 - Full CT blue",
+                    false
                 ],
                 [
                     80,
                     84,
-                    "Lee 202 - Half CT blue [Mix Pos]"
+                    "LEE 202 - Half CT blue",
+                    false
                 ],
                 [
                     85,
                     89,
-                    "Lee 117 - Steel blue [Mix Pos]"
+                    "LEE 117 - Steel blue",
+                    false
                 ],
                 [
                     90,
                     94,
-                    "Lee 353 - Lighter blue [Mix Pos]"
+                    "LEE 353 - Lighter blue",
+                    false
                 ],
                 [
                     95,
                     99,
-                    "Lee 118 - Light blue [Mix Pos]"
+                    "LEE 118 - Light blue",
+                    false
                 ],
                 [
                     100,
                     104,
-                    "Lee 116 - Medium blue green [Mix Pos]"
+                    "LEE 116 - Medium blue green",
+                    false
                 ],
                 [
                     105,
                     109,
-                    "Lee 124 - Dark green [Mix Pos]"
+                    "LEE 124 - Dark green",
+                    false
                 ],
                 [
                     110,
                     114,
-                    "Lee 139 - Primary green [Mix Pos]"
+                    "LEE 139 - Primary green",
+                    false
                 ],
                 [
                     115,
                     119,
-                    "Lee 089 - Moss green [Mix Pos]"
+                    "LEE 089 - Moss green",
+                    false
                 ],
                 [
                     120,
                     124,
-                    "Lee 122 - Fern green [Mix Pos]"
+                    "LEE 122 - Fern green",
+                    false
                 ],
                 [
                     125,
                     129,
-                    "Lee 738 - JAS green [Mix Pos]"
+                    "LEE 738 - JAS green",
+                    false
                 ],
                 [
                     130,
                     134,
-                    "Lee 088 - Lime green [Mix Pos]"
+                    "LEE 088 - Lime green",
+                    false
                 ],
                 [
                     135,
                     139,
-                    "Lee 100 - Spring yellow [Mix Pos]"
+                    "LEE 100 - Spring yellow",
+                    false
                 ],
                 [
                     140,
                     144,
-                    "Lee 104 - Deep amber [Mix Pos]"
+                    "LEE 104 - Deep amber",
+                    false
                 ],
                 [
                     145,
                     149,
-                    "Lee 179 - Chrome orange [Mix Pos]"
+                    "LEE 179 - Chrome orange",
+                    false
                 ],
                 [
                     150,
                     154,
-                    "Lee 105 - Orange [Mix Pos]"
+                    "LEE 105 - Orange",
+                    false
                 ],
                 [
                     155,
                     159,
-                    "Lee 021 - Gold amber [Mix Pos]"
+                    "LEE 021 - Gold amber",
+                    false
                 ],
                 [
                     160,
                     164,
-                    "Lee 778 - Millennium gold [Mix Pos]"
+                    "LEE 778 - Millennium gold",
+                    false
                 ],
                 [
                     165,
                     169,
-                    "Lee 135 - Deep golden amber [Mix Pos]"
+                    "LEE 135 - Deep golden amber",
+                    false
                 ],
                 [
                     170,
                     174,
-                    "Lee 164 - Flame red [Mix Pos]"
+                    "LEE 164 - Flame red",
+                    false
                 ],
                 [
                     175,
                     179,
-                    "No function"
+                    "Open",
+                    false
                 ],
                 [
                     180,
                     201,
-                    "Color fade fast…slow (Virtual color wheel rotation)"
+                    "Color fade fast…slow (Virtual color wheel rotation)",
+                    true
                 ],
                 [
                     202,
                     207,
-                    "Color fade stop (Virtual color wheel rotation)"
+                    "Color fade stop (Virtual color wheel rotation)",
+                    false
                 ],
                 [
                     208,
                     229,
-                    "Color fade reverse slow…fast (Virtual color wheel rotation)"
+                    "Color fade reverse slow…fast (Virtual color wheel rotation)",
+                    true
                 ],
                 [
                     230,
                     234,
-                    "No function"
+                    "Open",
+                    false
                 ],
                 [
                     235,
                     239,
-                    "Random color fast"
+                    "Random color fast",
+                    false
                 ],
                 [
                     240,
                     244,
-                    "Random color 50% speed"
+                    "Random color 50% speed",
+                    false
                 ],
                 [
                     245,
                     249,
-                    "Random color slow"
+                    "Random color slow",
+                    false
                 ],
                 [
                     250,
                     255,
-                    "No function"
+                    "Open",
+                    false
                 ]
             ]
         },
@@ -569,92 +646,110 @@
                 [
                     0,
                     19,
-                    "Color Temp Control Disabled"
+                    "Color Temp Control Disabled",
+                    false
                 ],
                 [
                     20,
                     50,
-                    "10000K"
+                    "10000K",
+                    true
                 ],
                 [
                     51,
                     81,
-                    "9000K"
+                    "9000K",
+                    true
                 ],
                 [
                     82,
                     113,
-                    "8000K"
+                    "8000K",
+                    true
                 ],
                 [
                     114,
                     128,
-                    "7000K"
+                    "7000K",
+                    true
                 ],
                 [
                     129,
                     144,
-                    "6500K"
+                    "6500K",
+                    true
                 ],
                 [
                     145,
                     156,
-                    "6000K"
+                    "6000K",
+                    true
                 ],
                 [
                     157,
                     175,
-                    "5600K"
+                    "5600K",
+                    true
                 ],
                 [
                     176,
                     191,
-                    "5000K"
+                    "5000K",
+                    true
                 ],
                 [
                     192,
                     207,
-                    "4500K"
+                    "4500K",
+                    true
                 ],
                 [
                     208,
                     219,
-                    "4000K"
+                    "4000K",
+                    true
                 ],
                 [
                     220,
                     227,
-                    "3600K"
+                    "3600K",
+                    true
                 ],
                 [
                     228,
                     232,
-                    "3350K"
+                    "3350K",
+                    true
                 ],
                 [
                     233,
                     238,
-                    "3200K"
+                    "3200K",
+                    true
                 ],
                 [
                     239,
                     244,
-                    "3000K"
+                    "3000K",
+                    true
                 ],
                 [
                     245,
                     247,
-                    "2800K"
+                    "2800K",
+                    true
                 ],
                 [
                     248,
                     250,
-                    "2700K"
+                    "2700K",
+                    true
                 ],
                 [
                     251,
                     255,
-                    "2600K"
+                    "2600K",
+                    true
                 ]
             ]
         },
@@ -838,7 +933,7 @@
             "highlight": 0,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1022,7 +1117,7 @@
             "highlight": 0,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1040,27 +1135,32 @@
                 [
                     0,
                     49,
-                    "No sync"
+                    "No sync",
+                    false
                 ],
                 [
                     50,
                     50,
-                    "Sync"
+                    "Sync",
+                    false
                 ],
                 [
                     51,
                     169,
-                    "Sync shift"
+                    "Sync shift",
+                    true
                 ],
                 [
                     170,
                     209,
-                    "Sync Rnd"
+                    "Sync Rnd",
+                    false
                 ],
                 [
                     210,
                     255,
-                    "No sync Rnd"
+                    "No sync Rnd",
+                    false
                 ]
             ]
         },
@@ -1072,118 +1172,140 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 5632,
-            "highlight": 5632,
+            "default": 22,
+            "highlight": 22,
             "table": [
                 [
                     0,
                     19,
-                    "Closed"
+                    "Closed",
+                    false
                 ],
                 [
                     20,
                     24,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     25,
                     64,
-                    "Strobe"
+                    "Strobe",
+                    true
                 ],
                 [
                     65,
                     69,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     70,
                     84,
-                    "O Pulse"
+                    "O Pulse",
+                    true
                 ],
                 [
                     85,
                     89,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     90,
                     104,
-                    "C Pulse"
+                    "C Pulse",
+                    true
                 ],
                 [
                     105,
                     109,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     110,
                     124,
-                    "Rnd"
+                    "Rnd",
+                    true
                 ],
                 [
                     125,
                     129,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     130,
                     144,
-                    "Rnd O Pulse"
+                    "Rnd O Pulse",
+                    true
                 ],
                 [
                     145,
                     149,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     150,
                     164,
-                    "Rnd C Pulse"
+                    "Rnd C Pulse",
+                    true
                 ],
                 [
                     165,
                     169,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     170,
                     184,
-                    "Burst"
+                    "Burst",
+                    true
                 ],
                 [
                     185,
                     189,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     190,
                     204,
-                    "Burst Rnd"
+                    "Burst Rnd",
+                    true
                 ],
                 [
                     205,
                     209,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     210,
                     224,
-                    "Strobe Sine"
+                    "Strobe Sine",
+                    true
                 ],
                 [
                     225,
                     229,
-                    "Open"
+                    "Open",
+                    false
                 ],
                 [
                     230,
                     244,
-                    "Burst"
+                    "Burst",
+                    true
                 ],
                 [
                     245,
                     255,
-                    "Open"
+                    "Open",
+                    false
                 ]
             ]
         },
@@ -1199,7 +1321,7 @@
             "highlight": 65535,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1217,217 +1339,260 @@
                 [
                     0,
                     9,
-                    "No function"
+                    "Open, RGBW mode",
+                    false
                 ],
                 [
                     10,
                     14,
-                    "Lee 790 - Moroccan pink [Mix Pos]"
+                    "LEE 790 - Moroccan pink",
+                    false
                 ],
                 [
                     15,
                     19,
-                    "Lee 157 - Pink [Mix Pos]"
+                    "LEE 157 - Pink",
+                    false
                 ],
                 [
                     20,
                     24,
-                    "Lee 332 - Special rose pink [Mix Pos]"
+                    "LEE 332 - Special rose pink",
+                    false
                 ],
                 [
                     25,
                     29,
-                    "Lee 328 - Follies pink [Mix Pos]"
+                    "LEE 328 - Follies pink",
+                    false
                 ],
                 [
                     30,
                     34,
-                    "Lee 345 - Fuchsia pink [Mix Pos]"
+                    "LEE 345 - Fuchsia pink",
+                    false
                 ],
                 [
                     35,
                     39,
-                    "Lee 194 - Surprise pink [Mix Pos]"
+                    "LEE 194 - Surprise pink",
+                    false
                 ],
                 [
                     40,
                     44,
-                    "Lee 181 - Congo blue [Mix Pos]"
+                    "LEE 181 - Congo blue",
+                    false
                 ],
                 [
                     45,
                     49,
-                    "Lee 071 - Tokyo blue [Mix Pos]"
+                    "LEE 071 - Tokyo blue",
+                    false
                 ],
                 [
                     50,
                     54,
-                    "Lee 120 - Deep blue [Mix Pos]"
+                    "LEE 120 - Deep blue",
+                    false
                 ],
                 [
                     55,
                     59,
-                    "Lee 079 - Just blue [Mix Pos]"
+                    "LEE 079 - Just blue",
+                    false
                 ],
                 [
                     60,
                     64,
-                    "Lee 132 - Medium blue [Mix Pos]"
+                    "LEE 132 - Medium blue",
+                    false
                 ],
                 [
                     65,
                     69,
-                    "Lee 200 - Double CT blue [Mix Pos]"
+                    "LEE 200 - Double CT blue",
+                    false
                 ],
                 [
                     70,
                     74,
-                    "Lee 161 - Slate blue [Mix Pos]"
+                    "LEE 161 - Slate blue",
+                    false
                 ],
                 [
                     75,
                     79,
-                    "Lee 201 - Full CT blue [Mix Pos]"
+                    "LEE 201 - Full CT blue",
+                    false
                 ],
                 [
                     80,
                     84,
-                    "Lee 202 - Half CT blue [Mix Pos]"
+                    "LEE 202 - Half CT blue",
+                    false
                 ],
                 [
                     85,
                     89,
-                    "Lee 117 - Steel blue [Mix Pos]"
+                    "LEE 117 - Steel blue",
+                    false
                 ],
                 [
                     90,
                     94,
-                    "Lee 353 - Lighter blue [Mix Pos]"
+                    "LEE 353 - Lighter blue",
+                    false
                 ],
                 [
                     95,
                     99,
-                    "Lee 118 - Light blue [Mix Pos]"
+                    "LEE 118 - Light blue",
+                    false
                 ],
                 [
                     100,
                     104,
-                    "Lee 116 - Medium blue green [Mix Pos]"
+                    "LEE 116 - Medium blue green",
+                    false
                 ],
                 [
                     105,
                     109,
-                    "Lee 124 - Dark green [Mix Pos]"
+                    "LEE 124 - Dark green",
+                    false
                 ],
                 [
                     110,
                     114,
-                    "Lee 139 - Primary green [Mix Pos]"
+                    "LEE 139 - Primary green",
+                    false
                 ],
                 [
                     115,
                     119,
-                    "Lee 089 - Moss green [Mix Pos]"
+                    "LEE 089 - Moss green",
+                    false
                 ],
                 [
                     120,
                     124,
-                    "Lee 122 - Fern green [Mix Pos]"
+                    "LEE 122 - Fern green",
+                    false
                 ],
                 [
                     125,
                     129,
-                    "Lee 738 - JAS green [Mix Pos]"
+                    "LEE 738 - JAS green",
+                    false
                 ],
                 [
                     130,
                     134,
-                    "Lee 088 - Lime green [Mix Pos]"
+                    "LEE 088 - Lime green",
+                    false
                 ],
                 [
                     135,
                     139,
-                    "Lee 100 - Spring yellow [Mix Pos]"
+                    "LEE 100 - Spring yellow",
+                    false
                 ],
                 [
                     140,
                     144,
-                    "Lee 104 - Deep amber [Mix Pos]"
+                    "LEE 104 - Deep amber",
+                    false
                 ],
                 [
                     145,
                     149,
-                    "Lee 179 - Chrome orange [Mix Pos]"
+                    "LEE 179 - Chrome orange",
+                    false
                 ],
                 [
                     150,
                     154,
-                    "Lee 105 - Orange [Mix Pos]"
+                    "LEE 105 - Orange",
+                    false
                 ],
                 [
                     155,
                     159,
-                    "Lee 021 - Gold amber [Mix Pos]"
+                    "LEE 021 - Gold amber",
+                    false
                 ],
                 [
                     160,
                     164,
-                    "Lee 778 - Millennium gold [Mix Pos]"
+                    "LEE 778 - Millennium gold",
+                    false
                 ],
                 [
                     165,
                     169,
-                    "Lee 135 - Deep golden amber [Mix Pos]"
+                    "LEE 135 - Deep golden amber",
+                    false
                 ],
                 [
                     170,
                     174,
-                    "Lee 164 - Flame red [Mix Pos]"
+                    "LEE 164 - Flame red",
+                    false
                 ],
                 [
                     175,
                     179,
-                    "Mix Pos"
+                    "Open",
+                    false
                 ],
                 [
                     180,
                     201,
-                    "MixCycle"
+                    "Color fade fast…slow (Virtual color wheel rotation)",
+                    true
                 ],
                 [
                     202,
                     207,
-                    "MixCycle"
+                    "Color fade stop (Virtual color wheel rotation)",
+                    false
                 ],
                 [
                     208,
                     229,
-                    "MixCycle"
+                    "Color fade reverse slow…fast (Virtual color wheel rotation)",
+                    true
                 ],
                 [
                     230,
                     234,
-                    "off"
+                    "Open",
+                    false
                 ],
                 [
                     235,
                     239,
-                    "MixRnd 100"
+                    "Random color fast",
+                    false
                 ],
                 [
                     240,
                     244,
-                    "MixRnd 50"
+                    "Random color 50% speed",
+                    false
                 ],
                 [
                     245,
                     249,
-                    "MixRnd 1"
+                    "Random color slow",
+                    false
                 ],
                 [
                     250,
                     255,
-                    "off"
+                    "Open",
+                    false
                 ]
             ]
         },
@@ -1443,7 +1608,7 @@
             "highlight": 65535,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1459,7 +1624,7 @@
             "highlight": 65535,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         },
@@ -1475,7 +1640,7 @@
             "highlight": 65535,
             "range": {
                 "Minimum": 0,
-                "Maximum": 0,
+                "Maximum": 255,
                 "Percent": false
             }
         }

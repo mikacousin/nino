@@ -166,7 +166,7 @@ for line in data:
                 for item in items[3:]:
                     range_name += item + " "
                 range_name = range_name[:-1]
-                parameter.table.append([start, stop, flags, range_name])
+                parameter.table.append([start, stop, range_name, True])
             if line[:13].upper() == "$$RANGEGROUP ":
                 pass
             if line == "":
