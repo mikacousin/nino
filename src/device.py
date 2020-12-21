@@ -47,8 +47,10 @@ class Device:
 
     def home(self):
         """Put all parameters to default value"""
+        list_param = self.fixture.mode.get("parameters")
         for name, param in self.fixture.parameters.items():
-            self.parameters[name] = param.get("default")
+            if name in list_param:
+                self.parameters[name] = param.get("default")
         self.send_dmx()
 
     def send_dmx(self):
