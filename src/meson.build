@@ -35,6 +35,7 @@ nino_sources = [
   'undo_redo.py',
   'widgets_channel.py',
   'widgets_output.py',
+  'widgets_wheel.py',
   'window_live.py',
   'window_playback.py',
 ]

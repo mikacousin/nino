@@ -11,11 +11,16 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-from gi.repository import Gio, Gtk
+import json
+import os
+
+from gi.repository import Gdk, Gio, Gtk
 
 import nino.shortcuts as shortcuts
 from nino.defines import App
+from nino.paths import get_fixtures_dir
 from nino.signals import gsignals
+from nino.widgets_wheel import WheelWidget
 
 
 class TabDeviceControls(Gtk.ScrolledWindow):
@@ -48,8 +53,42 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         button = Gtk.Button()
         button.add(image)
         button.connect("clicked", self.home)
-        self.big_box.add(button)
+        grid = Gtk.Grid()
+        grid.add(button)
+        self.big_box.add(grid)
+        # Stack with groups parameters
+        intensity = Gtk.Grid()
+        intensity.set_column_spacing(10)
+        intensity.set_row_spacing(10)
+        focus = Gtk.Grid()
+        focus.set_column_spacing(10)
+        focus.set_row_spacing(10)
+        color = Gtk.Grid()
+        color.set_column_spacing(10)
+        color.set_row_spacing(10)
+        beam = Gtk.Grid()
+        beam.set_column_spacing(10)
+        beam.set_row_spacing(10)
+        effect = Gtk.Grid()
+        effect.set_column_spacing(10)
+        effect.set_row_spacing(10)
+        control = Gtk.Grid()
+        control.set_column_spacing(10)
+        control.set_row_spacing(10)
+        stack = Gtk.Stack()
+        stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        stack.add_titled(intensity, "intensity", "Intensity")
+        stack.add_titled(focus, "focus", "Focus")
+        stack.add_titled(color, "color", "Color")
+        stack.add_titled(beam, "beam", "Beam")
+        stack.add_titled(effect, "effect", "Effect")
+        stack.add_titled(control, "control", "Control")
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(stack)
+        self.big_box.pack_start(stack_switcher, False, False, 0)
+        self.big_box.pack_start(stack, True, True, 0)
         # Find selected devices with same model
+        groups = load_fixtures_groups()
         self.devices = []
         selected = App().tabs.get("live").flowbox.get_selected_children()
         for flowboxchild in selected:
@@ -64,10 +103,34 @@ class TabDeviceControls(Gtk.ScrolledWindow):
             for param, value in self.devices[0].parameters.items():
                 if self.devices[0].fixture.parameters.get(param).get("range"):
                     box = self.new_range_parameter(param, value)
-                    self.big_box.add(box)
+                    group = groups.get(param)
+                    if group == "Intensity":
+                        intensity.add(box)
+                    elif group == "Focus":
+                        focus.add(box)
+                    elif group == "Color":
+                        color.add(box)
+                    elif group == "Beam":
+                        beam.add(box)
+                    elif group == "Effect":
+                        effect.add(box)
+                    elif group == "Control":
+                        control.add(box)
                 elif self.devices[0].fixture.parameters.get(param).get("table"):
                     box = self.new_table_parameter(param, value)
-                    self.big_box.add(box)
+                    group = groups.get(param)
+                    if group == "Intensity":
+                        intensity.add(box)
+                    elif group == "Focus":
+                        focus.add(box)
+                    elif group == "Color":
+                        color.add(box)
+                    elif group == "Beam":
+                        beam.add(box)
+                    elif group == "Effect":
+                        effect.add(box)
+                    elif group == "Control":
+                        control.add(box)
                 else:
                     print("No 'range' or 'table'")
 
@@ -81,15 +144,12 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         Returns:
             Gtk.Box contained widgets
         """
-        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        mini = self.devices[0].fixture.parameters.get(param).get("range").get("Minimum")
-        maxi = self.devices[0].fixture.parameters.get(param).get("range").get("Maximum")
-        adj = Gtk.Adjustment(value=value, lower=mini, upper=maxi)
-        scale = Scale(param, orientation=Gtk.Orientation.HORIZONTAL, adjustment=adj)
-        scale.set_digits(0)
-        scale.connect("value-changed", self.scale_moved)
-        box.pack_start(Gtk.Label(param), False, False, 0)
-        box.pack_start(scale, True, True, 0)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box.set_spacing(5)
+        box.add(Gtk.Label(param))
+        wheel = WheelWidget(param)
+        wheel.connect("moved", self.wheel_moved)
+        box.add(wheel)
         return box
 
     def new_table_parameter(self, param, value):
@@ -102,7 +162,7 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         Returns:
             Gtk.Box contained widgets
         """
-        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.add(Gtk.Label(param))
         table = self.devices[0].fixture.parameters.get(param).get("table")
         spin = SpinButton(param)
@@ -169,14 +229,34 @@ class TabDeviceControls(Gtk.ScrolledWindow):
             spin.set_value(value)
             spin.set_visible(model[tree_iter][5])
 
-    def scale_moved(self, widget):
+    def wheel_moved(self, widget, direction, step):
         """Change range value
 
         Args:
-            widget (Scale): widget modified
+            widget (WheelWidget): wheel actioned
+            direction (Gdk.ScrollDirection): Up or down
+            step (int): increment or decrement step size
         """
+        scale = 1
         for device in self.devices:
-            device.parameters[widget.parameter] = int(widget.get_value())
+            mini = (
+                device.fixture.parameters.get(widget.parameter)
+                .get("range")
+                .get("Minimum")
+            )
+            maxi = (
+                device.fixture.parameters.get(widget.parameter)
+                .get("range")
+                .get("Maximum")
+            )
+            param_type = device.fixture.parameters.get(widget.parameter).get("type")
+            if param_type in ("HTP16", "LTP16"):
+                scale = 10
+            level = device.parameters[widget.parameter]
+            if direction == Gdk.ScrollDirection.UP:
+                device.parameters[widget.parameter] = min(level + (step * scale), maxi)
+            elif direction == Gdk.ScrollDirection.DOWN:
+                device.parameters[widget.parameter] = max(level - (step * scale), mini)
             device.send_dmx()
 
     def home(self, _button):
@@ -207,6 +287,18 @@ class TabDeviceControls(Gtk.ScrolledWindow):
                         if row[2] <= value <= row[3]:
                             child.set_active(index)
                             break
+
+
+def load_fixtures_groups():
+    """Load fixtures groups
+
+    Returns:
+        dictionnary
+    """
+    path = get_fixtures_dir()
+    with open(os.path.join(path, "groups.json"), "r") as groups_file:
+        groups = json.load(groups_file)
+    return groups
 
 
 class Scale(Gtk.Scale):
