@@ -1666,8 +1666,8 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 65535,
-            "highlight": 65535,
+            "default": 255,
+            "highlight": 255,
             "range": {
                 "Minimum": 0,
                 "Maximum": 255,
@@ -1682,8 +1682,8 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 65535,
-            "highlight": 65535,
+            "default": 255,
+            "highlight": 255,
             "range": {
                 "Minimum": 0,
                 "Maximum": 255,
@@ -1698,8 +1698,8 @@
                 "Low Byte": 0,
                 "Step": 4
             },
-            "default": 65535,
-            "highlight": 65535,
+            "default": 255,
+            "highlight": 255,
             "range": {
                 "Minimum": 0,
                 "Maximum": 255,
