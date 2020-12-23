@@ -63,7 +63,9 @@ class Patch:
             self.channels[channel] = {}
             self.channels[channel][f"{output}.{universe}"] = device
             device.send_dmx()
-        App().tabs.get("live").channels[channel - 1].device = device
+        # Update Live View
+        devices = list(self.channels[channel].values())
+        App().tabs.get("live").channels[channel - 1].devices = devices
 
     @undoable
     def insert_output(self, channel, output, universe, fixture):
@@ -85,6 +87,9 @@ class Patch:
 
         self.channels[channel][f"{output}.{universe}"] = device
         device.send_dmx()
+        # Update Live View
+        devices = list(self.channels[channel].values())
+        App().tabs.get("live").channels[channel - 1].devices = devices
 
     # pylint: disable=no-self-use
     def do(self, command):

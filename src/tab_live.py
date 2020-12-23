@@ -124,26 +124,27 @@ class TabLive(Gtk.ScrolledWindow):
         for flowboxchild in selected:
             children = flowboxchild.get_children()
             for channelwidget in children:
-                mini = (
-                    channelwidget.device.fixture.parameters.get("Intensity")
-                    .get("range")
-                    .get("Minimum")
-                )
-                maxi = (
-                    channelwidget.device.fixture.parameters.get("Intensity")
-                    .get("range")
-                    .get("Maximum")
-                )
-                if App().settings.percent_mode:
-                    intensity = int(round((level / 100) * maxi))
-                else:
-                    intensity = level
-                if intensity < mini:
-                    intensity = mini
-                elif intensity > maxi:
-                    intensity = maxi
-                channelwidget.device.parameters["Intensity"] = intensity
-                channelwidget.device.send_dmx()
+                for device in channelwidget.devices:
+                    mini = (
+                        device.fixture.parameters.get("Intensity")
+                        .get("range")
+                        .get("Minimum")
+                    )
+                    maxi = (
+                        device.fixture.parameters.get("Intensity")
+                        .get("range")
+                        .get("Maximum")
+                    )
+                    if App().settings.percent_mode:
+                        intensity = int(round((level / 100) * maxi))
+                    else:
+                        intensity = level
+                    if intensity < mini:
+                        intensity = mini
+                    elif intensity > maxi:
+                        intensity = maxi
+                    device.parameters["Intensity"] = intensity
+                    device.send_dmx()
         App().statusbar_remove_all()
 
 
