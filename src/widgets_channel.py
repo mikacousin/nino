@@ -24,11 +24,11 @@ class ChannelWidget(Gtk.Misc):
 
     __gtype_name__ = "ChannelWidget"
 
-    def __init__(self, channel, device=None):
+    def __init__(self, channel):
         Gtk.Misc.__init__(self)
 
         self.channel = channel
-        self.device = device
+        self.devices = []
         self.scale = 1.0
         self.color_level = {"red": 0.9, "green": 0.9, "blue": 0.9}
 
@@ -68,15 +68,18 @@ class ChannelWidget(Gtk.Misc):
         Args:
             cr (cairo.Context): Used to draw with cairo
         """
+        # Devices in a channel are with same model, so we can use the first one
+        if self.devices:
+            device = self.devices[0]
         # Set widget dimension
         width = 80 * self.scale
-        if self.device and self.device.fixture.name != "Dimmer" and self.device.output:
+        if device and device.fixture.name != "Dimmer" and device.output:
             height = 130 * self.scale
         else:
             height = width
         self.set_size_request(width, height)
         allocation = self.get_allocation()
-        if not self.device or self.device.fixture.name == "Dimmer":
+        if not device or device.fixture.name == "Dimmer":
             allocation.height = width
         # allocation.width = width
 
@@ -113,7 +116,7 @@ class ChannelWidget(Gtk.Misc):
         # Level
         self._draw_intensity(cr, width, allocation)
         # Device informations if not a dimmer
-        if self.device and self.device.fixture.name != "Dimmer" and self.device.output:
+        if device and device.fixture.name != "Dimmer" and device.output:
             self._draw_device(cr, width, allocation)
 
     def _draw_intensity(self, cr, width, allocation):
@@ -135,9 +138,12 @@ class ChannelWidget(Gtk.Misc):
         )
         cr.set_font_size(13 * self.scale)
         cr.move_to(6 * self.scale, 48 * self.scale)
-        level = self.device.parameters.get("Intensity")
+        level = self.devices[0].parameters.get("Intensity")
         maxi = (
-            self.device.fixture.parameters.get("Intensity").get("range").get("Maximum")
+            self.devices[0]
+            .fixture.parameters.get("Intensity")
+            .get("range")
+            .get("Maximum")
         )
         if level:
             if App().settings.percent_mode:
@@ -175,13 +181,13 @@ class ChannelWidget(Gtk.Misc):
             "Cantarell Regular", cairo.FontSlant.NORMAL, cairo.FontWeight.NORMAL
         )
         cr.set_font_size(9 * self.scale)
-        text = self.device.fixture.model_name
+        text = self.devices[0].fixture.model_name
         if len(text) > 15:
             text = text[:13] + "..."
         (_, _, text_width, _, _, _) = cr.text_extents(text)
         cr.move_to(allocation.width / 2 - text_width / 2, 83 * self.scale)
         cr.show_text(text)
-        text = self.device.fixture.mode.get("name")
+        text = self.devices[0].fixture.mode.get("name")
         if len(text) > 15:
             text = text[:13] + "..."
         (_, _, text_width, _, _, _) = cr.text_extents(text)
