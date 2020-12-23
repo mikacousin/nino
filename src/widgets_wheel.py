@@ -43,6 +43,12 @@ class WheelWidget(Gtk.DrawingArea):
         self.step = 0
         self.pressed = False
 
+        # Widget dimensions
+        self.scale = 1.5
+        self.width = 20 * self.scale
+        self.height = 80 * self.scale
+        self.set_size_request(self.width, self.height)
+
         self.add_events(Gdk.EventMask.SCROLL_MASK)
         self.connect("scroll-event", self.on_scroll)
         self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
@@ -53,6 +59,11 @@ class WheelWidget(Gtk.DrawingArea):
         self.connect("motion-notify-event", self.on_motion)
 
     def on_timeout(self, _data):
+        """Until mouse button pressed
+
+        Returns:
+            (bool): True=continue, False=stop
+        """
         if not self.pressed:
             return False
         if self.step > 0:
@@ -62,6 +73,11 @@ class WheelWidget(Gtk.DrawingArea):
         self.queue_draw()
         return True
 
+    def on_release(self, _tgt, _event):
+        """Mouse button released"""
+        self.pressed = False
+        self.emit("clicked")
+
     def on_press(self, _tgt, event):
         """Mouse button pressed
 
@@ -69,23 +85,8 @@ class WheelWidget(Gtk.DrawingArea):
             event (Gdk.EventButton) : Button pressed event
         """
         self.pressed = True
-        y = self.get_allocation().height / 2
-        y_now = event.y
-        delta = y - y_now
-        if delta > y:
-            delta = y
-        elif delta < -y:
-            delta = -y
-        if delta > 0:
-            self.step = int((delta / y) * 4) + 1
-        elif delta < 0:
-            self.step = int((delta / y) * 4) - 1
+        self.new_step(event)
         GLib.timeout_add(100, self.on_timeout, None)
-
-    def on_release(self, _tgt, _event):
-        """Mouse button released"""
-        self.pressed = False
-        self.emit("clicked")
 
     def on_motion(self, _tgt, event):
         """Track mouse to move wheel
@@ -94,20 +95,28 @@ class WheelWidget(Gtk.DrawingArea):
             event: Motion event
         """
         if self.pressed:
-            # Center
-            y = self.get_allocation().height / 2
-            # Actual position
-            y_now = event.y
-            # Distance beetwen center and actual position
-            delta = y - y_now
-            if delta > y:
-                delta = y
-            elif delta < -y:
-                delta = -y
-            if delta > 0:
-                self.step = int((delta / y) * 4) + 1
-            elif delta < 0:
-                self.step = int((delta / y) * 4) - 1
+            self.new_step(event)
+
+    def new_step(self, event):
+        """Set step on new mouse position
+
+        Args:
+            event: an event with mouse position
+        """
+        # Center
+        y_center = self.get_allocation().height / 2
+        # Actual position
+        y_now = event.y
+        # Distance beetwen center and actual position
+        delta = y_center - y_now
+        if delta > y_center:
+            delta = y_center
+        elif delta < -y_center:
+            delta = -y_center
+        if delta > 0:
+            self.step = int((delta / y_center) * 4) + 1
+        elif delta < 0:
+            self.step = int((delta / y_center) * 4) - 1
 
     def on_scroll(self, _widget, event):
         """On scroll wheel event
@@ -148,27 +157,23 @@ class WheelWidget(Gtk.DrawingArea):
         Args:
             cr (cairo.Context): Used to draw with cairo
         """
-        scale = 2
-        width = 20 * scale
-        height = 80 * scale
-        self.set_size_request(width, height)
         # To center widget horizontally
-        offset = int((self.get_allocation().width - width) / 2)
+        offset = int((self.get_allocation().width - self.width) / 2)
 
-        line_width = scale / 2
+        line_width = self.scale / 2
         cr.set_line_width(line_width)
         cr.set_line_cap(cairo.LineCap.BUTT)
         cr.set_source_rgba(0.0, 0.0, 0.0, 1.0)
-        cr.translate(0, height / 2)
+        cr.translate(0, self.height / 2)
         for angle in range(self.angle, self.angle + 190, 10):
-            h = math.cos(math.radians(angle)) * (height / 2)
-            cr.move_to(offset + line_width * 3, h)
-            cr.line_to(offset + width - (line_width * 3), h)
+            height = math.cos(math.radians(angle)) * (self.height / 2)
+            cr.move_to(offset + line_width * 3, height)
+            cr.line_to(offset + self.width - (line_width * 3), height)
             cr.stroke()
-        line_width = 3 * (scale / 2)
+        line_width = 3 * (self.scale / 2)
         cr.set_line_width(line_width)
         cr.set_line_cap(cairo.LineCap.ROUND)
         cr.set_source_rgba(0.5, 0.3, 0.0, 1.0)
         cr.move_to(offset + line_width / 2, 0)
-        cr.line_to(offset + width - (line_width / 2), 0)
+        cr.line_to(offset + self.width - (line_width / 2), 0)
         cr.stroke()
