@@ -272,11 +272,13 @@ class RangeParameter(Gtk.Box):
         self.label = Gtk.Label(value)
         self.add(self.label)
         button = Gtk.Button(label="Max")
+        button.connect("clicked", self.set_value_to_max)
         self.add(button)
         wheel = WheelWidget(param)
         wheel.connect("moved", self.wheel_moved)
         self.add(wheel)
         button = Gtk.Button(label="Min")
+        button.connect("clicked", self.set_value_to_min)
         self.add(button)
 
     def set_value(self, value):
@@ -289,6 +291,38 @@ class RangeParameter(Gtk.Box):
         self.label.set_label(str(value))
         self.label.queue_draw()
 
+    def set_value_to_max(self, _button):
+        """Sets the value to its maximum"""
+        selected = App().tabs.get("live").flowbox.get_selected_children()
+        for flowboxchild in selected:
+            children = flowboxchild.get_children()
+            for channelwidget in children:
+                if self.parameter in channelwidget.devices[0].parameters:
+                    for device in channelwidget.devices:
+                        maxi = (
+                            device.fixture.parameters.get(self.parameter)
+                            .get("range")
+                            .get("Maximum")
+                        )
+                        device.parameters[self.parameter] = maxi
+                        device.send_dmx()
+
+    def set_value_to_min(self, _button):
+        """Sets the value to its minimum"""
+        selected = App().tabs.get("live").flowbox.get_selected_children()
+        for flowboxchild in selected:
+            children = flowboxchild.get_children()
+            for channelwidget in children:
+                if self.parameter in channelwidget.devices[0].parameters:
+                    for device in channelwidget.devices:
+                        mini = (
+                            device.fixture.parameters.get(self.parameter)
+                            .get("range")
+                            .get("Minimum")
+                        )
+                        device.parameters[self.parameter] = mini
+                        device.send_dmx()
+
     def wheel_moved(self, widget, direction, step):
         """Change range value
 
@@ -299,13 +333,11 @@ class RangeParameter(Gtk.Box):
         """
         scale = 1
         # List of list of devices
-        devices = []
         selected = App().tabs.get("live").flowbox.get_selected_children()
         for flowboxchild in selected:
             children = flowboxchild.get_children()
             for channelwidget in children:
                 if widget.parameter in channelwidget.devices[0].parameters:
-                    devices.append(channelwidget.devices)
                     for device in channelwidget.devices:
                         mini = (
                             device.fixture.parameters.get(widget.parameter)
@@ -321,7 +353,7 @@ class RangeParameter(Gtk.Box):
                             widget.parameter
                         ).get("type")
                         if param_type in ("HTP16", "LTP16"):
-                            scale = 10
+                            scale = 100
                         level = device.parameters[widget.parameter]
                         self.value = level
                         if direction == Gdk.ScrollDirection.UP:
