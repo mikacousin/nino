@@ -278,8 +278,17 @@ class RangeParameter(Gtk.Box):
 
         self.set_spacing(5)
         self.add(Gtk.Label(param))
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        box.set_spacing(5)
+        icon = Gio.ThemedIcon(name="go-home-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        button = Gtk.Button()
+        button.connect("clicked", self.parameter_to_home)
+        button.add(image)
+        box.add(button)
         self.label = Gtk.Label(value)
-        self.add(self.label)
+        box.add(self.label)
+        self.add(box)
         button = Gtk.Button(label="Max")
         button.connect("clicked", self.set_value_to_max)
         self.add(button)
@@ -289,6 +298,20 @@ class RangeParameter(Gtk.Box):
         button = Gtk.Button(label="Min")
         button.connect("clicked", self.set_value_to_min)
         self.add(button)
+
+    def parameter_to_home(self, _button):
+        """Sets parameter to home"""
+        selected = App().tabs.get("live").flowbox.get_selected_children()
+        for flowboxchild in selected:
+            children = flowboxchild.get_children()
+            for channelwidget in children:
+                if self.parameter in channelwidget.devices[0].parameters:
+                    for device in channelwidget.devices:
+                        value = device.fixture.parameters.get(self.parameter).get(
+                            "default"
+                        )
+                        device.parameters[self.parameter] = value
+                        device.send_dmx()
 
     def set_value(self, value):
         """Sets the value and display it
