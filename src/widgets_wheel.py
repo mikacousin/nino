@@ -19,7 +19,9 @@ from gi.repository import Gdk, GLib, GObject, Gtk  # noqa:E402
 
 
 class WheelWidget(Gtk.DrawingArea):
-    """Wheel widget, inherits from Gtk.DrawingArea"""
+    """Wheel widget, inherits from Gtk.DrawingArea.
+    Used to change device parameter of type range.
+    """
 
     __gtype_name__ = "WheelWidget"
 
@@ -35,18 +37,18 @@ class WheelWidget(Gtk.DrawingArea):
         "clicked": (GObject.SignalFlags.ACTION, None, ()),
     }
 
-    def __init__(self, param):
+    def __init__(self, param, param_type):
         Gtk.DrawingArea.__init__(self)
 
         self.parameter = param
+        self.param_type = param_type
         self.angle = 0
         self.step = 0
         self.pressed = False
 
         # Widget dimensions
-        self.scale = 1.5
-        self.width = 20 * self.scale
-        self.height = 80 * self.scale
+        self.width = 30
+        self.height = 120
         self.set_size_request(self.width, self.height)
 
         self.add_events(Gdk.EventMask.SCROLL_MASK)
@@ -66,10 +68,14 @@ class WheelWidget(Gtk.DrawingArea):
         """
         if not self.pressed:
             return False
+        if self.param_type in ("HTP16", "LTP16"):
+            scale = 100
+        else:
+            scale = 1
         if self.step > 0:
-            self.emit("moved", Gdk.ScrollDirection.UP, self.step)
+            self.emit("moved", Gdk.ScrollDirection.UP, self.step * scale)
         elif self.step < 0:
-            self.emit("moved", Gdk.ScrollDirection.DOWN, abs(self.step))
+            self.emit("moved", Gdk.ScrollDirection.DOWN, abs(self.step) * scale)
         self.queue_draw()
         return True
 
@@ -128,6 +134,8 @@ class WheelWidget(Gtk.DrawingArea):
         step = 4
         if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
             step = 1
+        elif self.param_type in ("HTP16", "LTP16"):
+            step *= 100
         (scroll, direction) = event.get_scroll_direction()
         if scroll and direction == Gdk.ScrollDirection.UP:
             self.emit("moved", Gdk.ScrollDirection.UP, step)
@@ -141,6 +149,8 @@ class WheelWidget(Gtk.DrawingArea):
             direction (Gdk.ScrollDirection): Direction
             step (int): increment or decrement value
         """
+        if step > 99:
+            step = int(step / 100)
         if direction == Gdk.ScrollDirection.UP:
             self.angle += step
         elif direction == Gdk.ScrollDirection.DOWN:
@@ -160,7 +170,7 @@ class WheelWidget(Gtk.DrawingArea):
         # To center widget horizontally
         offset = int((self.get_allocation().width - self.width) / 2)
 
-        line_width = self.scale / 2
+        line_width = 1
         cr.set_line_width(line_width)
         cr.set_line_cap(cairo.LineCap.BUTT)
         cr.set_source_rgba(0.0, 0.0, 0.0, 1.0)
@@ -170,7 +180,7 @@ class WheelWidget(Gtk.DrawingArea):
             cr.move_to(offset + line_width * 3, height)
             cr.line_to(offset + self.width - (line_width * 3), height)
             cr.stroke()
-        line_width = 3 * (self.scale / 2)
+        line_width = 3
         cr.set_line_width(line_width)
         cr.set_line_cap(cairo.LineCap.ROUND)
         cr.set_source_rgba(0.5, 0.3, 0.0, 1.0)

@@ -87,21 +87,30 @@ class TabDeviceControls(Gtk.ScrolledWindow):
             for channelwidget in children:
                 for device in channelwidget.devices:
                     for param, value in device.parameters.items():
-                        group = self.groups.get(param)
-                        if param not in self.stacks[group]["parameters"]:
-                            self.stacks[group]["parameters"][param] = [device]
-                            if device.fixture.parameters.get(param).get("range"):
-                                box = RangeParameter(param, value)
-                                self.stacks[group]["stack"].add(box)
-                            elif device.fixture.parameters.get(param).get("table"):
-                                box = self.new_table_parameter(
-                                    device.fixture, param, value
-                                )
-                                self.stacks[group]["stack"].add(box)
-                            else:
-                                print("No 'range' or 'table'")
-                        else:
-                            self.stacks[group]["parameters"][param].append(device)
+                        self._create_parameter_widget(device, param, value)
+
+    def _create_parameter_widget(self, device, param, value):
+        """Create widgets
+
+        Args:
+            device (Device): Device
+            param (str): Parameter
+            value (int): Actual value
+        """
+        group = self.groups.get(param)
+        if param not in self.stacks[group]["parameters"]:
+            self.stacks[group]["parameters"][param] = [device]
+            if device.fixture.parameters.get(param).get("range"):
+                param_type = device.fixture.parameters.get(param).get("type")
+                box = RangeParameter(param, param_type, value)
+                self.stacks[group]["stack"].add(box)
+            elif device.fixture.parameters.get(param).get("table"):
+                box = self.new_table_parameter(device.fixture, param, value)
+                self.stacks[group]["stack"].add(box)
+            else:
+                print("No 'range' or 'table'")
+        else:
+            self.stacks[group]["parameters"][param].append(device)
 
     def new_table_parameter(self, fixture, param, value):
         """Widgets for table parameter
@@ -261,7 +270,7 @@ class RangeParameter(Gtk.Box):
         value (int): Value
     """
 
-    def __init__(self, param, value):
+    def __init__(self, param, param_type, value):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
 
         self.parameter = param
@@ -274,7 +283,7 @@ class RangeParameter(Gtk.Box):
         button = Gtk.Button(label="Max")
         button.connect("clicked", self.set_value_to_max)
         self.add(button)
-        wheel = WheelWidget(param)
+        wheel = WheelWidget(param, param_type)
         wheel.connect("moved", self.wheel_moved)
         self.add(wheel)
         button = Gtk.Button(label="Min")
@@ -331,7 +340,6 @@ class RangeParameter(Gtk.Box):
             direction (Gdk.ScrollDirection): Up or down
             step (int): increment or decrement step size
         """
-        scale = 1
         # List of list of devices
         selected = App().tabs.get("live").flowbox.get_selected_children()
         for flowboxchild in selected:
@@ -349,16 +357,11 @@ class RangeParameter(Gtk.Box):
                             .get("range")
                             .get("Maximum")
                         )
-                        param_type = device.fixture.parameters.get(
-                            widget.parameter
-                        ).get("type")
-                        if param_type in ("HTP16", "LTP16"):
-                            scale = 100
                         level = device.parameters[widget.parameter]
                         self.value = level
                         if direction == Gdk.ScrollDirection.UP:
-                            self.value = min(level + (step * scale), maxi)
+                            self.value = min(level + step, maxi)
                         elif direction == Gdk.ScrollDirection.DOWN:
-                            self.value = max(level - (step * scale), mini)
+                            self.value = max(level - step, mini)
                         device.parameters[widget.parameter] = self.value
                         device.send_dmx()
