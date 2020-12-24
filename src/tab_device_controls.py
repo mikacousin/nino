@@ -125,7 +125,17 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         """
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.add(Gtk.Label(param))
-        table = fixture.parameters.get(param).get("table")
+        # Home parameter
+        button = Button(param)
+        button.add(
+            Gtk.Image.new_from_gicon(
+                Gio.ThemedIcon(name="go-home-symbolic"), Gtk.IconSize.BUTTON
+            )
+        )
+        button.connect("clicked", parameter_to_home)
+        grid = Gtk.Grid()
+        grid.add(button)
+        box.add(grid)
         spin = SpinButton(param)
         spin.set_numeric(True)
         spin.set_no_show_all(True)
@@ -135,9 +145,10 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         # ListStore: text, param, mini, maxi, SpinButton, visible
         liststore = Gtk.ListStore(str, str, int, int, Gtk.SpinButton, bool)
         combo = Gtk.ComboBox.new_with_model(liststore)
+        button.combo = combo
         box.add(combo)
         box.add(spin)
-        for index, item in enumerate(table):
+        for index, item in enumerate(fixture.parameters.get(param).get("table")):
             try:
                 spin_visible = item[3]
             except IndexError:
@@ -238,6 +249,38 @@ def home(_button):
                 device.home()
 
 
+def parameter_to_home(button):
+    """Sets parameter to home
+
+    Args:
+        button (Button): Home button clicked
+    """
+    selected = App().tabs.get("live").flowbox.get_selected_children()
+    for flowboxchild in selected:
+        children = flowboxchild.get_children()
+        for channelwidget in children:
+            if button.parameter in channelwidget.devices[0].parameters:
+                for device in channelwidget.devices:
+                    _set_home(device, button)
+
+
+def _set_home(device, button):
+    """Sets device parameter to home
+
+    Args:
+        device (Device): Device
+        button (Button): Button clicked
+    """
+    value = device.fixture.parameters.get(button.parameter).get("default")
+    device.parameters[button.parameter] = value
+    device.send_dmx()
+    model = button.combo.get_model()
+    for index, row in enumerate(model):
+        if row[2] <= value <= row[3]:
+            button.combo.set_active(index)
+            break
+
+
 def load_fixtures_groups():
     """Load fixtures groups
 
@@ -248,6 +291,19 @@ def load_fixtures_groups():
     with open(os.path.join(path, "groups.json"), "r") as groups_file:
         groups = json.load(groups_file)
     return groups
+
+
+class Button(Gtk.Button):
+    """Button widget
+
+    Attributes:
+        parameter (str): Device parameter controlled by the widget
+    """
+
+    def __init__(self, param):
+        Gtk.Button.__init__(self)
+        self.parameter = param
+        self.combo = None
 
 
 class SpinButton(Gtk.SpinButton):
