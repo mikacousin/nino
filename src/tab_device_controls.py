@@ -101,8 +101,7 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         if param not in self.stacks[group]["parameters"]:
             self.stacks[group]["parameters"][param] = [device]
             if device.fixture.parameters.get(param).get("range"):
-                param_type = device.fixture.parameters.get(param).get("type")
-                box = RangeParameter(param, param_type, value)
+                box = RangeParameter(param, value)
                 self.stacks[group]["stack"].add(box)
             elif device.fixture.parameters.get(param).get("table"):
                 box = self.new_table_parameter(device.fixture, param, value)
@@ -326,7 +325,7 @@ class RangeParameter(Gtk.Box):
         value (int): Value
     """
 
-    def __init__(self, param, param_type, value):
+    def __init__(self, param, value):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
 
         self.parameter = param
@@ -348,7 +347,7 @@ class RangeParameter(Gtk.Box):
         button = Gtk.Button(label="Max")
         button.connect("clicked", self.set_value_to_max)
         self.add(button)
-        wheel = WheelWidget(param, param_type)
+        wheel = WheelWidget(param)
         wheel.connect("moved", self.wheel_moved)
         self.add(wheel)
         button = Gtk.Button(label="Min")
@@ -411,13 +410,14 @@ class RangeParameter(Gtk.Box):
                         device.parameters[self.parameter] = mini
                         device.send_dmx()
 
-    def wheel_moved(self, widget, direction, step):
+    def wheel_moved(self, widget, direction, step, fine):
         """Change range value
 
         Args:
             widget (WheelWidget): wheel actioned
             direction (Gdk.ScrollDirection): Up or down
             step (int): increment or decrement step size
+            fine (bool): True if actived
         """
         # List of list of devices
         selected = App().tabs.get("live").flowbox.get_selected_children()
@@ -436,11 +436,18 @@ class RangeParameter(Gtk.Box):
                             .get("range")
                             .get("Maximum")
                         )
+                        param_type = device.fixture.parameters.get(
+                            widget.parameter
+                        ).get("type")
+                        if not fine and param_type in ("HTP16", "LTP16"):
+                            scale = 256
+                        else:
+                            scale = 1
                         level = device.parameters[widget.parameter]
                         self.value = level
                         if direction == Gdk.ScrollDirection.UP:
-                            self.value = min(level + step, maxi)
+                            self.value = min(level + (step * scale), maxi)
                         elif direction == Gdk.ScrollDirection.DOWN:
-                            self.value = max(level - step, mini)
+                            self.value = max(level - (step * scale), mini)
                         device.parameters[widget.parameter] = self.value
                         device.send_dmx()

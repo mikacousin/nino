@@ -1,0 +1,183 @@
+{
+    "name": "D40 Lustr+",
+    "manufacturer": "ETC",
+    "model_name": "D40 Lustr+",
+    "parameters": {
+        "Red": {
+            "number": 5,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 0,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "White": {
+            "number": 19,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 1,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Amber": {
+            "number": 7,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 2,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Green": {
+            "number": 10,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 3,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Cyan": {
+            "number": 12,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 4,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Blue": {
+            "number": 13,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 5,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Indigo": {
+            "number": 15,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 6,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Intensity": {
+            "number": 0,
+            "type": "HTP8",
+            "offset": {
+                "High Byte": 7,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 0,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Strobe": {
+            "number": 46,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 8,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 0,
+            "highlight": 0,
+            "table": [
+                [
+                    0,
+                    0,
+                    "Open",
+                    false
+                ],
+                [
+                    1,
+                    254,
+                    "Strobe",
+                    true
+                ],
+                [
+                    255,
+                    255,
+                    "Open",
+                    false
+                ]
+            ]
+        }
+    },
+    "modes": [
+        {
+            "name": "Direct Strobe",
+            "footprint": 9,
+            "parameters": [
+                "Red",
+                "White",
+                "Amber",
+                "Green",
+                "Cyan",
+                "Blue",
+                "Indigo",
+                "Intensity",
+                "Strobe"
+            ]
+        }
+    ]
+}

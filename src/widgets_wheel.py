@@ -32,19 +32,20 @@ class WheelWidget(Gtk.DrawingArea):
             (
                 Gdk.ScrollDirection,
                 int,
+                bool,
             ),
         ),
         "clicked": (GObject.SignalFlags.ACTION, None, ()),
     }
 
-    def __init__(self, param, param_type):
+    def __init__(self, param):
         Gtk.DrawingArea.__init__(self)
 
         self.parameter = param
-        self.param_type = param_type
         self.angle = 0
         self.step = 0
         self.pressed = False
+        self.fine = False
 
         # Widget dimensions
         self.width = 30
@@ -68,20 +69,17 @@ class WheelWidget(Gtk.DrawingArea):
         """
         if not self.pressed:
             return False
-        if self.param_type in ("HTP16", "LTP16"):
-            scale = 100
-        else:
-            scale = 1
         if self.step > 0:
-            self.emit("moved", Gdk.ScrollDirection.UP, self.step * scale)
+            self.emit("moved", Gdk.ScrollDirection.UP, self.step, self.fine)
         elif self.step < 0:
-            self.emit("moved", Gdk.ScrollDirection.DOWN, abs(self.step) * scale)
+            self.emit("moved", Gdk.ScrollDirection.DOWN, abs(self.step), self.fine)
         self.queue_draw()
         return True
 
     def on_release(self, _tgt, _event):
         """Mouse button released"""
         self.pressed = False
+        self.fine = False
         self.emit("clicked")
 
     def on_press(self, _tgt, event):
@@ -109,6 +107,11 @@ class WheelWidget(Gtk.DrawingArea):
         Args:
             event: an event with mouse position
         """
+        accel_mask = Gtk.accelerator_get_default_mod_mask()
+        if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
+            self.fine = True
+        else:
+            self.fine = False
         # Center
         y_center = self.get_allocation().height / 2
         # Actual position
@@ -131,26 +134,24 @@ class WheelWidget(Gtk.DrawingArea):
             event (Gdk.EventScroll): Scroll event
         """
         accel_mask = Gtk.accelerator_get_default_mod_mask()
-        step = 4
+        self.step = 4
+        self.fine = False
         if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
-            step = 1
-        elif self.param_type in ("HTP16", "LTP16"):
-            step *= 100
+            self.step = 1
+            self.fine = True
         (scroll, direction) = event.get_scroll_direction()
         if scroll and direction == Gdk.ScrollDirection.UP:
-            self.emit("moved", Gdk.ScrollDirection.UP, step)
+            self.emit("moved", Gdk.ScrollDirection.UP, self.step, self.fine)
         if scroll and direction == Gdk.ScrollDirection.DOWN:
-            self.emit("moved", Gdk.ScrollDirection.DOWN, step)
+            self.emit("moved", Gdk.ScrollDirection.DOWN, self.step, self.fine)
 
-    def do_moved(self, direction, step):
+    def do_moved(self, direction, step, _fine):
         """On moved event
 
         Args:
             direction (Gdk.ScrollDirection): Direction
             step (int): increment or decrement value
         """
-        if step > 99:
-            step = int(step / 100)
         if direction == Gdk.ScrollDirection.UP:
             self.angle += step
         elif direction == Gdk.ScrollDirection.DOWN:

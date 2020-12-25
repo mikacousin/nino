@@ -153,15 +153,15 @@ class ChannelWidget(Gtk.Misc):
                     cr.show_text(str(int(round((level / maxi) * 100))))
             else:
                 cr.show_text(str(level))
-        # Intensity bar
-        cr.set_source_rgb(0.9, 0.6, 0.2)
-        cr.rectangle(
-            allocation.width - 9,
-            width - 4,
-            6 * self.scale,
-            -((50 / 255) * self.scale) * level,
-        )
-        cr.fill()
+            # Intensity bar
+            cr.set_source_rgb(0.9, 0.6, 0.2)
+            cr.rectangle(
+                allocation.width - 9,
+                width - 4,
+                6 * self.scale,
+                -((50 / maxi) * self.scale) * level,
+            )
+            cr.fill()
 
     def _draw_device(self, cr, width, allocation):
         """Draw device informations

@@ -1,10 +1,25 @@
 {
+    "./ETC/D40 Lustr+.json": {
+        "manufacturer": "ETC",
+        "model_name": "D40 Lustr+",
+        "modes": {
+            "Direct Strobe": 9
+        }
+    },
     "./Martin/Mac Aura.json": {
         "manufacturer": "Martin",
         "model_name": "Mac Aura",
         "modes": {
             "Extended": 25,
             "Standard": 14
+        }
+    },
+    "./Martin/Rush Par 2 RGBW Zoom.json": {
+        "manufacturer": "Martin",
+        "model_name": "Rush Par 2 RGBW Zoom",
+        "modes": {
+            "5ch": 5,
+            "9ch": 9
         }
     }
 }

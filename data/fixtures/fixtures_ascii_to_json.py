@@ -45,7 +45,7 @@ class Parameter:
 def make_index(index):
     for root, _dirs, files in os.walk("."):
         for name in files:
-            if name not in ["index.json", "fixtures_ascii_to_json.py"]:
+            if name not in ["groups.json", "index.json", "fixtures_ascii_to_json.py"]:
                 file_name = os.path.join(root, name)
                 with open(file_name, "r") as read_file:
                     d = json.load(read_file)

@@ -1,0 +1,468 @@
+{
+    "name": "Rush Par 2 RGBW Zoom",
+    "manufacturer": "Martin",
+    "model_name": "Rush Par 2 RGBW Zoom",
+    "parameters": {
+        "Intensity": {
+            "number": 0,
+            "type": "HTP16",
+            "offset": {
+                "High Byte": 0,
+                "Low Byte": 1,
+                "Step": 4
+            },
+            "default": 0,
+            "highlight": 65535,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 65535,
+                "Percent": false
+            }
+        },
+        "Strobe": {
+            "number": 46,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 2,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 12,
+            "highlight": 12,
+            "table": [
+                [
+                    0,
+                    7,
+                    "Closed",
+                    false
+                ],
+                [
+                    8,
+                    15,
+                    "Open",
+                    false
+                ],
+                [
+                    16,
+                    131,
+                    "Strobe slow...fast",
+                    true
+                ],
+                [
+                    132,
+                    167,
+                    "Ramp up strobe slow...fast",
+                    true
+                ],
+                [
+                    168,
+                    203,
+                    "Ramp down strobe slow...fast",
+                    true
+                ],
+                [
+                    204,
+                    239,
+                    "Pulse slow...fast",
+                    true
+                ],
+                [
+                    240,
+                    247,
+                    "Random",
+                    false
+                ],
+                [
+                    248,
+                    255,
+                    "Open",
+                    false
+                ]
+            ]
+        },
+        "Red": {
+            "number": 5,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 3,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Green": {
+            "number": 10,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 4,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Blue": {
+            "number": 13,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 5,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "White": {
+            "number": 19,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 6,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 255,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        },
+        "Color Mix": {
+            "number": 146,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 7,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 0,
+            "highlight": 0,
+            "table": [
+                [
+                    0,
+                    10,
+                    "Open",
+                    false
+                ],
+                [
+                    11,
+                    15,
+                    "Color 1",
+                    false
+                ],
+                [
+                    16,
+                    20,
+                    "Color 2",
+                    false
+                ],
+                [
+                    21,
+                    25,
+                    "Color 3",
+                    false
+                ],
+                [
+                    26,
+                    30,
+                    "Color 4",
+                    false
+                ],
+                [
+                    31,
+                    35,
+                    "Color 5",
+                    false
+                ],
+                [
+                    36,
+                    40,
+                    "Color 6",
+                    false
+                ],
+                [
+                    41,
+                    45,
+                    "Color 7",
+                    false
+                ],
+                [
+                    46,
+                    50,
+                    "Color 8",
+                    false
+                ],
+                [
+                    51,
+                    55,
+                    "Color 9",
+                    false
+                ],
+                [
+                    56,
+                    60,
+                    "Color 10",
+                    false
+                ],
+                [
+                    61,
+                    65,
+                    "Color 11",
+                    false
+                ],
+                [
+                    66,
+                    70,
+                    "Color 12",
+                    false
+                ],
+                [
+                    71,
+                    75,
+                    "Color 13",
+                    false
+                ],
+                [
+                    76,
+                    80,
+                    "Color 14",
+                    false
+                ],
+                [
+                    81,
+                    85,
+                    "Color 15",
+                    false
+                ],
+                [
+                    86,
+                    90,
+                    "Color 16",
+                    false
+                ],
+                [
+                    91,
+                    95,
+                    "Color 17",
+                    false
+                ],
+                [
+                    96,
+                    100,
+                    "Color 18",
+                    false
+                ],
+                [
+                    101,
+                    105,
+                    "Color 19",
+                    false
+                ],
+                [
+                    106,
+                    110,
+                    "Color 20",
+                    false
+                ],
+                [
+                    111,
+                    115,
+                    "Color 21",
+                    false
+                ],
+                [
+                    116,
+                    120,
+                    "Color 22",
+                    false
+                ],
+                [
+                    121,
+                    125,
+                    "Color 23",
+                    false
+                ],
+                [
+                    126,
+                    130,
+                    "Color 24",
+                    false
+                ],
+                [
+                    131,
+                    135,
+                    "Color 25",
+                    false
+                ],
+                [
+                    136,
+                    140,
+                    "Color 26",
+                    false
+                ],
+                [
+                    141,
+                    145,
+                    "Color 27",
+                    false
+                ],
+                [
+                    146,
+                    150,
+                    "Color 28",
+                    false
+                ],
+                [
+                    151,
+                    155,
+                    "Color 29",
+                    false
+                ],
+                [
+                    156,
+                    160,
+                    "Color 30",
+                    false
+                ],
+                [
+                    161,
+                    165,
+                    "Color 31",
+                    false
+                ],
+                [
+                    166,
+                    170,
+                    "Color 32",
+                    false
+                ],
+                [
+                    171,
+                    175,
+                    "Color 33",
+                    false
+                ],
+                [
+                    176,
+                    180,
+                    "Color 34",
+                    false
+                ],
+                [
+                    181,
+                    185,
+                    "Color 35",
+                    false
+                ],
+                [
+                    186,
+                    190,
+                    "Color 36",
+                    false
+                ],
+                [
+                    191,
+                    192,
+                    "Open",
+                    false
+                ],
+                [
+                    193,
+                    214,
+                    "Color jump fast...slow",
+                    true
+                ],
+                [
+                    215,
+                    221,
+                    "Color jump stop",
+                    false
+                ],
+                [
+                    222,
+                    243,
+                    "Color jump reverse slow...fast",
+                    true
+                ],
+                [
+                    244,
+                    247,
+                    "Color jump fast (random)",
+                    false
+                ],
+                [
+                    248,
+                    251,
+                    "Color jump 50% speed (random)",
+                    false
+                ],
+                [
+                    252,
+                    255,
+                    "Color jump slow (random)",
+                    false
+                ]
+            ]
+        },
+        "Zoom": {
+            "number": 45,
+            "type": "LTP8",
+            "offset": {
+                "High Byte": 8,
+                "Low Byte": 0,
+                "Step": 4
+            },
+            "default": 128,
+            "highlight": 255,
+            "range": {
+                "Minimum": 0,
+                "Maximum": 255,
+                "Percent": false
+            }
+        }
+    },
+    "modes": [
+        {
+            "name": "5ch",
+            "footprint": 5,
+            "parameters": [
+                "Red",
+                "Green",
+                "Blue",
+                "White",
+                "Zoom"
+            ]
+        },
+        {
+            "name": "9ch",
+            "footprint": 9,
+            "parameters": [
+                "Intensity",
+                "Strobe",
+                "Red",
+                "Green",
+                "Blue",
+                "White",
+                "Color Mix",
+                "Zoom"
+            ]
+        }
+    ]
+}

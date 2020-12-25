@@ -184,7 +184,8 @@ def load_fixtures_index():
     manufacturers = {}
     for files in data.values():
         manu = files.get("manufacturer")
-        manufacturers[manu] = {}
+        if not manufacturers.get(manu):
+            manufacturers[manu] = {}
         model = files.get("model_name")
         modes = files.get("modes")
         manufacturers[manu][model] = modes

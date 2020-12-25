@@ -297,7 +297,7 @@
                 ]
             ]
         },
-        "Color": {
+        "Color Mix": {
             "number": 26,
             "type": "LTP8",
             "offset": {
@@ -1387,7 +1387,7 @@
                 "Percent": false
             }
         },
-        "Aura Color": {
+        "Aura Color Mix": {
             "number": 26,
             "type": "LTP8",
             "offset": {
@@ -1718,7 +1718,7 @@
                 "Pan",
                 "Tilt",
                 "Control",
-                "Color",
+                "Color Mix",
                 "Red",
                 "Green",
                 "Blue",
@@ -1736,7 +1736,7 @@
                 "Pan",
                 "Tilt",
                 "Control",
-                "Color",
+                "Color Mix",
                 "Red",
                 "Green",
                 "Blue",
@@ -1749,7 +1749,7 @@
                 "FX Macros 3",
                 "Aura Strobe",
                 "Aura Intensity",
-                "Aura Color",
+                "Aura Color Mix",
                 "Aura Red",
                 "Aura Green",
                 "Aura Blue"
