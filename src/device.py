@@ -32,7 +32,18 @@ class Device:
         self.fixture = fixture
         self.parameters = {}
         self.footprint = 0
+        self.virtual_intensity = None
         list_param = self.fixture.mode.get("parameters")
+        # Add Virtual Intensity if needed
+        if "Intensity" not in list_param:
+            self.virtual_intensity = 0
+            self.fixture.parameters["Intensity"] = {
+                "type": "VIRTUAL",
+                "default": 0,
+                "highlight": 255,
+                "range": {"Minimum": 0, "Maximum": 255},
+            }
+            self.parameters["Intensity"] = 0
         for name, param in self.fixture.parameters.items():
             if name in list_param:
                 self.parameters[name] = param.get("default")
@@ -41,9 +52,9 @@ class Device:
                     self.footprint += 1
                 elif param_type in ("HTP16", "LTP16"):
                     self.footprint += 2
-                else:
+                elif param_type not in "VIRTUAL":
                     print("Device parameter type '{param_type}' not supported")
-                    print("Supported types are : HTP8, LTP8, HTP16, LTP16")
+                    print("Supported types are : HTP8, LTP8, HTP16, LTP16, VIRTUAL")
 
     def home(self):
         """Put all parameters to default value"""
@@ -58,6 +69,11 @@ class Device:
         if not self.output:
             return
         for name, value in self.parameters.items():
+            if (
+                self.virtual_intensity is not None
+                and App().fixtures_param_grps.get(name) == "Color"
+            ):
+                value = int(value * self.virtual_intensity)
             param_type = self.fixture.parameters[name].get("type")
             offset = self.fixture.parameters[name].get("offset")
             if param_type in ("HTP8", "LTP8"):

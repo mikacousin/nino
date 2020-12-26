@@ -348,6 +348,16 @@ class RangeParameter(Gtk.Box):
                             "default"
                         )
                         device.parameters[self.parameter] = value
+                        param_type = device.fixture.parameters.get(self.parameter).get(
+                            "type"
+                        )
+                        if param_type == "VIRTUAL" and self.parameter == "Intensity":
+                            maxi = (
+                                device.fixture.parameters.get(self.parameter)
+                                .get("range")
+                                .get("Maximum")
+                            )
+                            device.virtual_intensity = value / maxi
                         device.send_dmx()
 
     def set_value(self, value):
@@ -374,6 +384,11 @@ class RangeParameter(Gtk.Box):
                             .get("Maximum")
                         )
                         device.parameters[self.parameter] = maxi
+                        param_type = device.fixture.parameters.get(self.parameter).get(
+                            "type"
+                        )
+                        if param_type == "VIRTUAL" and self.parameter == "Intensity":
+                            device.virtual_intensity = 1
                         device.send_dmx()
 
     def set_value_to_min(self, _button):
@@ -390,6 +405,16 @@ class RangeParameter(Gtk.Box):
                             .get("Minimum")
                         )
                         device.parameters[self.parameter] = mini
+                        param_type = device.fixture.parameters.get(self.parameter).get(
+                            "type"
+                        )
+                        if param_type == "VIRTUAL" and self.parameter == "Intensity":
+                            maxi = (
+                                device.fixture.parameters.get(self.parameter)
+                                .get("range")
+                                .get("Maximum")
+                            )
+                            device.virtual_intensity = mini / maxi
                         device.send_dmx()
 
     def wheel_moved(self, widget, direction, step, fine):
@@ -432,4 +457,6 @@ class RangeParameter(Gtk.Box):
                         elif direction == Gdk.ScrollDirection.DOWN:
                             self.value = max(level - (step * scale), mini)
                         device.parameters[widget.parameter] = self.value
+                        if param_type == "VIRTUAL" and widget.parameter == "Intensity":
+                            device.virtual_intensity = self.value / maxi
                         device.send_dmx()

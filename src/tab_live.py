@@ -144,6 +144,11 @@ class TabLive(Gtk.ScrolledWindow):
                     elif intensity > maxi:
                         intensity = maxi
                     device.parameters["Intensity"] = intensity
+                    if (
+                        device.fixture.parameters.get("Intensity").get("type")
+                        == "VIRTUAL"
+                    ):
+                        device.virtual_intensity = intensity / maxi
                     device.send_dmx()
         App().statusbar_remove_all()
 
