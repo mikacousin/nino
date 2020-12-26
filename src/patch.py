@@ -42,13 +42,13 @@ class Patch:
         """
         # Channel already patched
         if channel in self.channels:
+            # Reset DMX output
+            for device in self.channels[channel].values():
+                for name in device.parameters.keys():
+                    device.parameters[name] = 0
+                device.send_dmx()
             # Depatch
             if output == 0:
-                # Reset device's dmx output
-                for device in self.channels[channel].values():
-                    for name in device.parameters.keys():
-                        device.parameters[name] = 0
-                    device.send_dmx()
                 del self.channels[channel]
                 App().tabs.get("live").channels[channel - 1].device = None
                 return
