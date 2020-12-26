@@ -604,8 +604,6 @@ def update_channels_list(out, footprint, channel, model, path):
     universe = int(out.split(".")[1])
     if not output or channel not in App().patch.channels:
         model[path][1] = ""
-        for device in App().patch.channels[channel].values():
-            model[path][2] = _get_fixture_name(device)
         return
     for device in App().patch.channels[channel].values():
         if device.universe != UNIVERSES[0]:
