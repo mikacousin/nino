@@ -58,10 +58,12 @@ class Device:
 
     def home(self):
         """Put all parameters to default value"""
-        list_param = self.fixture.mode.get("parameters")
         for name, param in self.fixture.parameters.items():
-            if name in list_param:
-                self.parameters[name] = param.get("default")
+            self.parameters[name] = param.get("default")
+            param_type = param.get("type")
+            if param_type in "VIRTUAL":
+                maxi = param.get("range").get("Maximum")
+                self.virtual_intensity = param.get("default") / maxi
         self.send_dmx()
 
     def send_dmx(self):
