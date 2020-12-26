@@ -220,11 +220,46 @@ def get_fixture(manufacturer=None, model=None, mode=None):
     fixture = Fixture(name)
     fixture.manufacturer = fixture_json.get("manufacturer")
     fixture.model_name = fixture_json.get("model_name")
-    fixture.parameters = fixture_json.get("parameters")
+    fixture.parameters = {}
+    parameters = fixture_json.get("parameters")
     for mode_name in fixture_json.get("modes"):
         if mode_name.get("name") == mode:
             fixture.mode = mode_name
             break
+    # Add parameters needed by this mode
+    fixture = _add_parameters(fixture, parameters)
+    return fixture
+
+
+def _add_parameters(fixture, parameters):
+    """Add mode's parameters to fixture
+
+    Args:
+        fixture (Fixture): New fixture
+        parameters : dic of available parameters
+
+    Returns:
+        Fixture
+    """
+    param_list = fixture.mode.get("parameters")
+    offset = 0
+    for param in param_list:
+        fixture.parameters[param] = {}
+        param_type = parameters.get(param).get("type")
+        fixture.parameters[param]["type"] = param_type
+        if param_type in ("HTP8", "LTP8"):
+            param_offset = {"High Byte": offset, "Low Byte": 0}
+            offset += 1
+        elif param_type in ("HTP16", "LTP16"):
+            param_offset = {"High Byte": offset, "Low Byte": offset + 1}
+            offset += 2
+        fixture.parameters[param]["offset"] = param_offset
+        fixture.parameters[param]["default"] = parameters.get(param).get("default")
+        fixture.parameters[param]["highlight"] = parameters.get(param).get("highlight")
+        if parameters.get(param).get("range"):
+            fixture.parameters[param]["range"] = parameters.get(param).get("range")
+        elif parameters.get(param).get("table"):
+            fixture.parameters[param]["table"] = parameters.get(param).get("table")
     return fixture
 
 

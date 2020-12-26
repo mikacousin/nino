@@ -6,11 +6,6 @@
         "Strobe": {
             "number": 46,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 0,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 22,
             "highlight": 22,
             "table": [
@@ -151,11 +146,6 @@
         "Intensity": {
             "number": 0,
             "type": "HTP8",
-            "offset": {
-                "High Byte": 1,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 255,
             "range": {
@@ -167,11 +157,6 @@
         "Zoom": {
             "number": 45,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 2,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 0,
             "range": {
@@ -183,11 +168,6 @@
         "Pan": {
             "number": 1,
             "type": "LTP16",
-            "offset": {
-                "High Byte": 3,
-                "Low Byte": 4,
-                "Step": 4
-            },
             "default": 32767,
             "highlight": 32767,
             "range": {
@@ -199,11 +179,6 @@
         "Tilt": {
             "number": 2,
             "type": "LTP16",
-            "offset": {
-                "High Byte": 5,
-                "Low Byte": 6,
-                "Step": 4
-            },
             "default": 32768,
             "highlight": 32768,
             "range": {
@@ -215,11 +190,6 @@
         "Control": {
             "number": 40,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 7,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -300,11 +270,6 @@
         "Color Mix": {
             "number": 26,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 8,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -571,11 +536,6 @@
         "Red": {
             "number": 5,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 9,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -587,11 +547,6 @@
         "Green": {
             "number": 10,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 10,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -603,11 +558,6 @@
         "Blue": {
             "number": 13,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 11,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -619,11 +569,6 @@
         "White": {
             "number": 19,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 12,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -635,11 +580,6 @@
         "Color Temp": {
             "number": 35,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 13,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -756,11 +696,6 @@
         "FX Macros": {
             "number": 147,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 14,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -955,11 +890,6 @@
         "FX Macro Rate": {
             "number": 148,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 15,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 128,
             "highlight": 0,
             "range": {
@@ -971,11 +901,6 @@
         "FX Macros 2": {
             "number": 149,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 16,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -1170,11 +1095,6 @@
         "FX Macro 2 Rate": {
             "number": 150,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 17,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 128,
             "highlight": 0,
             "range": {
@@ -1186,11 +1106,6 @@
         "FX Macros 3": {
             "number": 151,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 18,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -1229,11 +1144,6 @@
         "Aura Strobe": {
             "number": 46,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 19,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 22,
             "highlight": 22,
             "table": [
@@ -1374,11 +1284,6 @@
         "Aura Intensity": {
             "number": 0,
             "type": "HTP8",
-            "offset": {
-                "High Byte": 20,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 65535,
             "range": {
@@ -1390,11 +1295,6 @@
         "Aura Color Mix": {
             "number": 26,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 21,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -1661,11 +1561,6 @@
         "Aura Red": {
             "number": 5,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 22,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -1677,11 +1572,6 @@
         "Aura Green": {
             "number": 10,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 23,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -1693,11 +1583,6 @@
         "Aura Blue": {
             "number": 13,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 24,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {

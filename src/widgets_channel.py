@@ -139,13 +139,13 @@ class ChannelWidget(Gtk.Misc):
         cr.set_font_size(13 * self.scale)
         cr.move_to(6 * self.scale, 48 * self.scale)
         level = self.devices[0].parameters.get("Intensity")
-        maxi = (
-            self.devices[0]
-            .fixture.parameters.get("Intensity")
-            .get("range")
-            .get("Maximum")
-        )
         if level:
+            maxi = (
+                self.devices[0]
+                .fixture.parameters.get("Intensity")
+                .get("range")
+                .get("Maximum")
+            )
             if App().settings.percent_mode:
                 if level == maxi:
                     cr.show_text("F")

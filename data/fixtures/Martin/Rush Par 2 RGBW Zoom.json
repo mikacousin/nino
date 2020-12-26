@@ -6,11 +6,6 @@
         "Intensity": {
             "number": 0,
             "type": "HTP16",
-            "offset": {
-                "High Byte": 0,
-                "Low Byte": 1,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 65535,
             "range": {
@@ -22,11 +17,6 @@
         "Strobe": {
             "number": 46,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 2,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 12,
             "highlight": 12,
             "table": [
@@ -83,11 +73,6 @@
         "Red": {
             "number": 5,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 3,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -99,11 +84,6 @@
         "Green": {
             "number": 10,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 4,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -115,11 +95,6 @@
         "Blue": {
             "number": 13,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 5,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -131,11 +106,6 @@
         "White": {
             "number": 19,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 6,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 255,
             "highlight": 255,
             "range": {
@@ -147,11 +117,6 @@
         "Color Mix": {
             "number": 146,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 7,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 0,
             "highlight": 0,
             "table": [
@@ -424,11 +389,6 @@
         "Zoom": {
             "number": 45,
             "type": "LTP8",
-            "offset": {
-                "High Byte": 8,
-                "Low Byte": 0,
-                "Step": 4
-            },
             "default": 128,
             "highlight": 255,
             "range": {

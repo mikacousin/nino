@@ -11,11 +11,14 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+import json
+import os
 import sacn
 
 from nino.defines import App, UNIVERSES
 from nino.fixture import Fixture
 from nino.patch import Patch
+from nino.paths import get_fixtures_dir
 from nino.undo_redo import UndoManager
 
 
@@ -36,6 +39,7 @@ class DMX:
         App().sender[universe].dmx_data = tuple(self.levels[universe])
 
 
+# pylint: disable=too-many-instance-attributes
 class Console:
     """Application's heart"""
 
@@ -46,6 +50,8 @@ class Console:
         dimmer = Fixture("Dimmer")
         dimmer.model_name = "Dimmer"
         self.fixtures.append(dimmer)
+        # Fixtures parameters groups
+        self.fixtures_param_grps = load_fixtures_groups()
 
         self.patch = Patch()
         self.dmx = DMX()
@@ -70,6 +76,18 @@ class Console:
         """Stop console"""
         self.sender.stop()
         self.receiver.stop()
+
+
+def load_fixtures_groups():
+    """Load fixtures groups
+
+    Returns:
+        dictionnary
+    """
+    path = get_fixtures_dir()
+    with open(os.path.join(path, "groups.json"), "r") as groups_file:
+        groups = json.load(groups_file)
+    return groups
 
 
 def receive_packet(_packet):

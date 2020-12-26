@@ -11,14 +11,10 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-import json
-import os
-
 from gi.repository import Gdk, Gio, Gtk
 
 import nino.shortcuts as shortcuts
 from nino.defines import App
-from nino.paths import get_fixtures_dir
 from nino.signals import gsignals
 from nino.widgets_wheel import WheelWidget
 
@@ -35,8 +31,6 @@ class TabDeviceControls(Gtk.ScrolledWindow):
     def __init__(self, window):
         Gtk.ScrolledWindow.__init__(self)
         self.window = window
-        # Define groups parameters
-        self.groups = load_fixtures_groups()
 
         self.big_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.big_box)
@@ -97,7 +91,7 @@ class TabDeviceControls(Gtk.ScrolledWindow):
             param (str): Parameter
             value (int): Actual value
         """
-        group = self.groups.get(param)
+        group = App().fixtures_param_grps.get(param)
         if param not in self.stacks[group]["parameters"]:
             self.stacks[group]["parameters"][param] = [device]
             if device.fixture.parameters.get(param).get("range"):
@@ -177,7 +171,7 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         Args:
             widget (SpinButton): widget modified
         """
-        group = self.groups.get(widget.parameter)
+        group = App().fixtures_param_grps.get(widget.parameter)
         devices = self.stacks.get(group).get("parameters").get(widget.parameter)
         for device in devices:
             device.parameters[widget.parameter] = widget.get_value_as_int()
@@ -191,20 +185,20 @@ class TabDeviceControls(Gtk.ScrolledWindow):
                 # Gtk.ComboBox, SpinButton, RangeParameter
                 if isinstance(child, RangeParameter):
                     param = child.parameter
-                    group = self.groups.get(param)
+                    group = App().fixtures_param_grps.get(param)
                     devices = self.stacks.get(group).get("parameters").get(param)
                     value = devices[0].parameters.get(param)
                     child.set_value(value)
                 if isinstance(child, SpinButton):
                     param = child.parameter
-                    group = self.groups.get(param)
+                    group = App().fixtures_param_grps.get(param)
                     devices = self.stacks.get(group).get("parameters").get(param)
                     value = devices[0].parameters.get(param)
                     child.set_value(value)
                 elif isinstance(child, Gtk.ComboBox):
                     model = child.get_model()
                     param = model[0][1]
-                    group = self.groups.get(param)
+                    group = App().fixtures_param_grps.get(param)
                     devices = self.stacks.get(group).get("parameters").get(param)
                     value = devices[0].parameters.get(param)
                     for index, row in enumerate(model):
@@ -278,18 +272,6 @@ def _set_home(device, button):
         if row[2] <= value <= row[3]:
             button.combo.set_active(index)
             break
-
-
-def load_fixtures_groups():
-    """Load fixtures groups
-
-    Returns:
-        dictionnary
-    """
-    path = get_fixtures_dir()
-    with open(os.path.join(path, "groups.json"), "r") as groups_file:
-        groups = json.load(groups_file)
-    return groups
 
 
 class Button(Gtk.Button):

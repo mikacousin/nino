@@ -35,7 +35,6 @@ class Parameter:
         self.name = name
         self.number = number
         self.type = param_type
-        self.offset = {}
         self.default = 0
         self.highlight = 0
         self.range = {}
@@ -138,13 +137,6 @@ for line in data:
             parameter = Parameter(param_name, param_number, param_type)
             on_parameter = True
         if on_parameter:
-            if line[:9].upper() == "$$OFFSET ":
-                items = line[9:].split(" ")
-                parameter.offset = {
-                    "High Byte": int(items[0]),
-                    "Low Byte": int(items[1]),
-                    "Step": int(items[2]),
-                }
             if line[:10].upper() == "$$DEFAULT ":
                 parameter.default = int(line[10:])
             if line[:12].upper() == "$$HIGHLIGHT ":
@@ -191,7 +183,6 @@ for template in templates:
         data["parameters"][param] = {
             "number": values.number,
             "type": values.type,
-            "offset": values.offset,
             "default": values.default,
             "highlight": values.highlight,
         }
