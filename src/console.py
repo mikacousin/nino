@@ -15,6 +15,8 @@ import json
 import os
 import sacn
 
+from gi.repository import GLib
+
 from nino.defines import App, UNIVERSES
 from nino.fixture import Fixture
 from nino.patch import Patch
@@ -98,7 +100,7 @@ def receive_packet(_packet):
     """
     if App().tabs.get("live"):
         # Update Live view
-        App().tabs.get("live").flowbox.queue_draw()
+        GLib.idle_add(App().tabs.get("live").flowbox.queue_draw)
     if App().tabs.get("device_controls"):
         # Update Device Controls
-        App().tabs.get("device_controls").update_view()
+        GLib.idle_add(App().tabs.get("device_controls").update_view)
