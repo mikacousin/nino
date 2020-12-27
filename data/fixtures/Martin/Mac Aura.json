@@ -4,7 +4,6 @@
     "model_name": "Mac Aura",
     "parameters": {
         "Strobe": {
-            "number": 46,
             "type": "LTP8",
             "default": 22,
             "highlight": 22,
@@ -144,7 +143,6 @@
             ]
         },
         "Intensity": {
-            "number": 0,
             "type": "HTP8",
             "default": 0,
             "highlight": 255,
@@ -155,7 +153,6 @@
             }
         },
         "Zoom": {
-            "number": 45,
             "type": "LTP8",
             "default": 255,
             "highlight": 0,
@@ -166,7 +163,6 @@
             }
         },
         "Pan": {
-            "number": 1,
             "type": "LTP16",
             "default": 32767,
             "highlight": 32767,
@@ -177,7 +173,6 @@
             }
         },
         "Tilt": {
-            "number": 2,
             "type": "LTP16",
             "default": 32768,
             "highlight": 32768,
@@ -188,7 +183,6 @@
             }
         },
         "Control": {
-            "number": 40,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -268,7 +262,6 @@
             ]
         },
         "Color Mix": {
-            "number": 26,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -534,7 +527,6 @@
             ]
         },
         "Red": {
-            "number": 5,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -545,7 +537,6 @@
             }
         },
         "Green": {
-            "number": 10,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -556,7 +547,6 @@
             }
         },
         "Blue": {
-            "number": 13,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -567,7 +557,6 @@
             }
         },
         "White": {
-            "number": 19,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -578,7 +567,6 @@
             }
         },
         "Color Temp": {
-            "number": 35,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -694,7 +682,6 @@
             ]
         },
         "FX Macros": {
-            "number": 147,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -888,7 +875,6 @@
             ]
         },
         "FX Macro Rate": {
-            "number": 148,
             "type": "LTP8",
             "default": 128,
             "highlight": 0,
@@ -899,7 +885,6 @@
             }
         },
         "FX Macros 2": {
-            "number": 149,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -1093,7 +1078,6 @@
             ]
         },
         "FX Macro 2 Rate": {
-            "number": 150,
             "type": "LTP8",
             "default": 128,
             "highlight": 0,
@@ -1104,7 +1088,6 @@
             }
         },
         "FX Macros 3": {
-            "number": 151,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -1142,7 +1125,6 @@
             ]
         },
         "Aura Strobe": {
-            "number": 46,
             "type": "LTP8",
             "default": 22,
             "highlight": 22,
@@ -1282,7 +1264,6 @@
             ]
         },
         "Aura Intensity": {
-            "number": 0,
             "type": "HTP8",
             "default": 0,
             "highlight": 65535,
@@ -1293,7 +1274,6 @@
             }
         },
         "Aura Color Mix": {
-            "number": 26,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -1559,7 +1539,6 @@
             ]
         },
         "Aura Red": {
-            "number": 5,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -1570,7 +1549,6 @@
             }
         },
         "Aura Green": {
-            "number": 10,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -1581,7 +1559,6 @@
             }
         },
         "Aura Blue": {
-            "number": 13,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,

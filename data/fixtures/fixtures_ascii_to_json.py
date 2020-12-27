@@ -31,9 +31,8 @@ class Template:
 
 
 class Parameter:
-    def __init__(self, name, number, param_type):
+    def __init__(self, name, param_type):
         self.name = name
-        self.number = number
         self.type = param_type
         self.default = 0
         self.highlight = 0
@@ -121,7 +120,6 @@ for line in data:
             multi_parts[dcid] = (template, part)
         if line[:12].upper() == "$$PARAMETER ":
             items = line[12:].split(" ")
-            param_number = int(items[0])
             if int(items[1]) == 0:
                 param_type = "HTP8"
             elif int(items[1]) == 1:
@@ -134,7 +132,7 @@ for line in data:
             for item in items[5:]:
                 param_name += item + " "
             param_name = param_name[:-1] + text_part
-            parameter = Parameter(param_name, param_number, param_type)
+            parameter = Parameter(param_name, param_type)
             on_parameter = True
         if on_parameter:
             if line[:10].upper() == "$$DEFAULT ":
@@ -181,7 +179,6 @@ for template in templates:
     for param, values in template.parameters.items():
         mode["parameters"].append(param)
         data["parameters"][param] = {
-            "number": values.number,
             "type": values.type,
             "default": values.default,
             "highlight": values.highlight,

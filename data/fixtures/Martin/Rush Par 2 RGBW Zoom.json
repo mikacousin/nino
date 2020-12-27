@@ -4,7 +4,6 @@
     "model_name": "Rush Par 2 RGBW Zoom",
     "parameters": {
         "Intensity": {
-            "number": 0,
             "type": "HTP16",
             "default": 0,
             "highlight": 65535,
@@ -15,7 +14,6 @@
             }
         },
         "Strobe": {
-            "number": 46,
             "type": "LTP8",
             "default": 12,
             "highlight": 12,
@@ -71,7 +69,6 @@
             ]
         },
         "Red": {
-            "number": 5,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -82,7 +79,6 @@
             }
         },
         "Green": {
-            "number": 10,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -93,7 +89,6 @@
             }
         },
         "Blue": {
-            "number": 13,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -104,7 +99,6 @@
             }
         },
         "White": {
-            "number": 19,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -115,7 +109,6 @@
             }
         },
         "Color Mix": {
-            "number": 146,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
@@ -387,7 +380,6 @@
             ]
         },
         "Zoom": {
-            "number": 45,
             "type": "LTP8",
             "default": 128,
             "highlight": 255,

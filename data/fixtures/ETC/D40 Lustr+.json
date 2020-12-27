@@ -4,7 +4,6 @@
     "model_name": "D40 Lustr+",
     "parameters": {
         "Red": {
-            "number": 5,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -15,7 +14,6 @@
             }
         },
         "White": {
-            "number": 19,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -26,7 +24,6 @@
             }
         },
         "Amber": {
-            "number": 7,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -37,7 +34,6 @@
             }
         },
         "Green": {
-            "number": 10,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -48,7 +44,6 @@
             }
         },
         "Cyan": {
-            "number": 12,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -59,7 +54,6 @@
             }
         },
         "Blue": {
-            "number": 13,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -70,7 +64,6 @@
             }
         },
         "Indigo": {
-            "number": 15,
             "type": "LTP8",
             "default": 255,
             "highlight": 255,
@@ -81,7 +74,6 @@
             }
         },
         "Intensity": {
-            "number": 0,
             "type": "HTP8",
             "default": 0,
             "highlight": 255,
@@ -92,7 +84,6 @@
             }
         },
         "Strobe": {
-            "number": 46,
             "type": "LTP8",
             "default": 0,
             "highlight": 0,
