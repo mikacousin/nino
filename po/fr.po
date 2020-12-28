@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-21 14:34+0100\n"
-"PO-Revision-Date: 2020-12-21 14:36+0100\n"
+"POT-Creation-Date: 2020-12-28 19:09+0100\n"
+"PO-Revision-Date: 2020-12-28 19:12+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
 "Language: fr\n"
@@ -142,15 +142,20 @@ msgstr "Thru"
 
 #: data/shortcuts.ui:128
 msgctxt "shortcut window"
+msgid "Offset"
+msgstr "Définir un offset de patch"
+
+#: data/shortcuts.ui:135
+msgctxt "shortcut window"
 msgid "Patch output"
 msgstr "Patcher une adresse"
 
-#: data/shortcuts.ui:135
+#: data/shortcuts.ui:142
 msgctxt "shortcut window"
 msgid "Insert output"
 msgstr "Insérer une adresse"
 
-#: src/application.py:183
+#: src/application.py:181
 msgid "Preferences"
 msgstr "Préférences"
 
