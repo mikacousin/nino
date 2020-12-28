@@ -24,11 +24,7 @@ from nino.window_playback import PlaybackWindow
 
 
 class Nino(Gtk.Application, Console):
-    """niño is a Gtk application
-
-    Attributes:
-        gui (MainWindow): Application's main window
-    """
+    """niño is a Gtk application"""
 
     def __init__(self):
         Console.__init__(self)
@@ -120,6 +116,7 @@ class Nino(Gtk.Application, Console):
             "redo": ("_redo", None),
             "patch": ("_patch", None),
             "close_tab": ("_close_tab", None),
+            "clear": ("_clear", None),
             "one": ("_number", "i"),
             "two": ("_number", "i"),
             "three": ("_number", "i"),
@@ -240,6 +237,9 @@ class Nino(Gtk.Application, Console):
     def _redo(self, _action, _parameter):
         if self.undo_manager.can_redo():
             self.undo_manager.redo()
+
+    def _clear(self, _action, _parameter):
+        self.statusbar_remove_all()
 
     def _number(self, _action, param):
         self.keystring += str(param)
