@@ -108,7 +108,7 @@ class WheelWidget(Gtk.DrawingArea):
             event: an event with mouse position
         """
         accel_mask = Gtk.accelerator_get_default_mod_mask()
-        if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
+        if event.state & accel_mask == Gdk.ModifierType.CONTROL_MASK:
             self.fine = True
         else:
             self.fine = False
@@ -136,7 +136,7 @@ class WheelWidget(Gtk.DrawingArea):
         accel_mask = Gtk.accelerator_get_default_mod_mask()
         self.step = 4
         self.fine = False
-        if event.state & accel_mask == Gdk.ModifierType.SHIFT_MASK:
+        if event.state & accel_mask == Gdk.ModifierType.CONTROL_MASK:
             self.step = 1
             self.fine = True
         (scroll, direction) = event.get_scroll_direction()
