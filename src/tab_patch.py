@@ -615,26 +615,24 @@ def update_channels_list(out, footprint, channel, model, path):
         path (Gtk.TreePath): row
     """
     univ = ""
-    text = ""
+    text = []
     output = int(out.split(".")[0])
-    universe = int(out.split(".")[1])
+    # universe = int(out.split(".")[1])
     if not output or channel not in App().patch.channels:
         model[path][1] = ""
         return
     for device in App().patch.channels[channel].values():
         if device.universe != UNIVERSES[0]:
-            univ = f".{universe}"
-        if footprint > 1:
-            if text:
-                text += f", {device.output}{univ}-{device.output + footprint - 1}{univ}"
-            else:
-                text = f"{device.output}{univ}-{device.output + footprint - 1}{univ}"
+            univ = f".{device.universe}"
         else:
-            if text:
-                text += f", {device.output}{univ}"
-            else:
-                text = f"{device.output}{univ}"
-    model[path][1] = text
+            univ = ""
+        if footprint > 1:
+            text.append(f"{device.output}{univ}-{device.output + footprint - 1}{univ}")
+        else:
+            text.append(f"{device.output}{univ}")
+    text.sort(key=float)
+    txt = ", ".join(text)
+    model[path][1] = txt
     model[path][2] = _get_fixture_name(device)
 
 
