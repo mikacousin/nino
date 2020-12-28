@@ -1,3 +1,7 @@
+* {
+  outline-width: 0px;
+}
+
 flowboxchild:selected {
   outline-width: 0px;
   background-color: alpha(@theme_bg_color, 0);
