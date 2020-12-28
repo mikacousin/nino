@@ -21,4 +21,5 @@ gsignals = {
     "plus": (GObject.SignalFlags.ACTION, None, ()),
     "minus": (GObject.SignalFlags.ACTION, None, ()),
     "at_level": (GObject.SignalFlags.ACTION, None, ()),
+    "offset": (GObject.SignalFlags.ACTION, None, ()),
 }

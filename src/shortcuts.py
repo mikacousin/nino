@@ -48,6 +48,7 @@ def activate_shortcuts():
     App().set_accels_for_action("app.minus", ["minus", "KP_Subtract"])
     App().set_accels_for_action("app.at_level", ["equal", "KP_Enter"])
     App().set_accels_for_action("app.output", ["o"])
+    App().set_accels_for_action("app.offset", ["<Shift>o"])
     App().set_accels_for_action("app.insert", ["Insert"])
 
 
@@ -71,6 +72,7 @@ def desactivate_shortcuts():
     App().set_accels_for_action("app.minus", [])
     App().set_accels_for_action("app.at_level", [])
     App().set_accels_for_action("app.output", [])
+    App().set_accels_for_action("app.offset", [])
     App().set_accels_for_action("app.insert", [])
 
 

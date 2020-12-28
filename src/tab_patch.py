@@ -389,12 +389,14 @@ class TabPatch(Gtk.Box):
     def __init__(self, window):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.window = window
+        self.offset = 0
 
         # Connect signals
         self.connect("channel", self.channel)
         self.connect("output", self.output)
         self.connect("insert", self.insert)
         self.connect("thru", self.thru)
+        self.connect("offset", self.set_offset)
 
         # Paned container
         paned = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
@@ -475,6 +477,14 @@ class TabPatch(Gtk.Box):
         self.treeview.get_selection().select_range(start, end)
         App().statusbar_remove_all()
 
+    def set_offset(self, _widget):
+        """Offset signal"""
+        if not App().keystring or not App().keystring.isdigit():
+            App().statusbar_remove_all()
+            return
+        self.offset = int(App().keystring)
+        App().statusbar_remove_all()
+
     def output(self, _widget):
         """Output signal"""
         if not validate_entry(App().keystring):
@@ -492,9 +502,13 @@ class TabPatch(Gtk.Box):
         for i, path in enumerate(selected_channels):
             fixture = get_fixture_by_name(model, path)
             footprint = fixture.get_footprint()
+            if self.offset > footprint:
+                offset = self.offset
+            else:
+                offset = footprint
             channel = model[path][0]
             if output:
-                real_output = output + (i * footprint)
+                real_output = output + (i * offset)
                 if real_output + footprint > 513:
                     # If device outputs over 512, stop patching
                     break
@@ -515,6 +529,8 @@ class TabPatch(Gtk.Box):
             update_channels_list(
                 f"{real_output}.{universe}", footprint, channel, model, path
             )
+        # Reset offset
+        self.offset = 0
         # Update sACN View
         self.sacn.update_view()
         App().tabs.get("live").flowbox.invalidate_filter()

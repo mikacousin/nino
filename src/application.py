@@ -134,6 +134,7 @@ class Nino(Gtk.Application, Console):
             "minus": ("_minus", None),
             "at_level": ("_at_level", None),
             "output": ("_output", None),
+            "offset": ("_offset", None),
             "insert": ("_insert", None),
         }
         for name, func in actions.items():
@@ -269,6 +270,9 @@ class Nino(Gtk.Application, Console):
 
     def _insert(self, _action, _parameter):
         self.send("insert")
+
+    def _offset(self, _action, _parameter):
+        self.send("offset")
 
     def send(self, signal):
         """Send signal to the right place
