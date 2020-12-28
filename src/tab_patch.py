@@ -616,16 +616,13 @@ def update_channels_list(out, footprint, channel, model, path):
     """
     univ = ""
     text = []
+    device = None
     output = int(out.split(".")[0])
-    # universe = int(out.split(".")[1])
     if not output or channel not in App().patch.channels:
         model[path][1] = ""
         return
     for device in App().patch.channels[channel].values():
-        if device.universe != UNIVERSES[0]:
-            univ = f".{device.universe}"
-        else:
-            univ = ""
+        univ = f".{device.universe}" if device.universe != UNIVERSES[0] else ""
         if footprint > 1:
             text.append(f"{device.output}{univ}-{device.output + footprint - 1}{univ}")
         else:
