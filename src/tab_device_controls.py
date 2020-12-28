@@ -32,6 +32,12 @@ class TabDeviceControls(Gtk.ScrolledWindow):
         Gtk.ScrolledWindow.__init__(self)
         self.window = window
 
+        # Redirect channels selection signals to Live View
+        self.connect("channel", App().tabs.get("live").channel)
+        self.connect("thru", App().tabs.get("live").thru)
+        self.connect("plus", App().tabs.get("live").plus)
+        self.connect("minus", App().tabs.get("live").minus)
+
         self.big_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.big_box)
         # General Home parameters
