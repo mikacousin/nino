@@ -35,7 +35,7 @@ class ChannelWidget(Gtk.Misc):
         self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         self.connect("button-press-event", self.on_click)
 
-        self.set_size_request(80, 80)
+        self.set_size_request(80 * self.scale, 130 * self.scale)
 
     def on_click(self, widget, event):
         """Select / Unselect widget
@@ -73,35 +73,31 @@ class ChannelWidget(Gtk.Misc):
             device = self.devices[0]
         # Set widget dimension
         width = 80 * self.scale
-        if device and device.fixture.name != "Dimmer" and device.output:
-            height = 130 * self.scale
-        else:
-            height = width
-        self.set_size_request(width, height)
-        allocation = self.get_allocation()
         if not device or device.fixture.name == "Dimmer":
-            allocation.height = width
-        # allocation.width = width
+            height = 80
+        else:
+            height = 130 * self.scale
+        self.set_size_request(width, height)
 
         # Draw background
         if self.get_parent().is_selected():
             cr.set_source_rgb(0.6, 0.4, 0.1)
-            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.rectangle(0, 0, width, height)
             cr.fill()
         cr.set_source_rgba(0.3, 0.3, 0.3, 1)
-        cr.rectangle(0, 0, allocation.width, allocation.height)
+        cr.rectangle(0, 0, width, height)
         cr.stroke()
         background = Gdk.RGBA()
         background.parse("#33393B")
         cr.set_source_rgba(*list(background))
-        cr.rectangle(4, 4, allocation.width - 8, allocation.height - 8)
+        cr.rectangle(4, 4, width - 8, height - 8)
         cr.fill()
         # Rectangle for channel number
         if self.get_parent().is_selected():
             cr.set_source_rgb(0.4, 0.4, 0.4)
         else:
             cr.set_source_rgb(0.2, 0.2, 0.2)
-        cr.rectangle(4, 4, allocation.width - 8, 18 * self.scale)
+        cr.rectangle(4, 4, width - 8, 18 * self.scale)
         cr.fill()
         # Channel number
         cr.set_source_rgb(0.9, 0.6, 0.2)
@@ -111,21 +107,20 @@ class ChannelWidget(Gtk.Misc):
         cr.set_font_size(12 * self.scale)
         text = str(self.channel)
         (_, _, text_width, _, _, _) = cr.text_extents(text)
-        cr.move_to(allocation.width / 2 - text_width / 2, 15 * self.scale)
+        cr.move_to(width / 2 - text_width / 2, 15 * self.scale)
         cr.show_text(str(self.channel))
         # Level
-        self._draw_intensity(cr, width, allocation)
+        self._draw_intensity(cr, width)
         # Device informations if not a dimmer
         if device and device.fixture.name != "Dimmer" and device.output:
-            self._draw_device(cr, width, allocation)
+            self._draw_device(cr, width)
 
-    def _draw_intensity(self, cr, width, allocation):
+    def _draw_intensity(self, cr, width):
         """Draw Intensity level
 
         Args:
             cr (cairo.Context): Used to draw with cairo
             width (int): widget width
-            allocation (Gdk.Rectangle): Widget's allocation
         """
         # Intensity value
         cr.set_source_rgb(
@@ -156,24 +151,23 @@ class ChannelWidget(Gtk.Misc):
             # Intensity bar
             cr.set_source_rgb(0.9, 0.6, 0.2)
             cr.rectangle(
-                allocation.width - 9,
+                width - 9,
                 width - 4,
                 6 * self.scale,
                 -((50 / maxi) * self.scale) * level,
             )
             cr.fill()
 
-    def _draw_device(self, cr, width, allocation):
+    def _draw_device(self, cr, width):
         """Draw device informations
 
         Args:
             cr (cairo.Context): Used to draw with cairo
             width (int): widget width
-            allocation (Gdk.Rectangle): Widget's allocation
         """
         # Background
         cr.set_source_rgb(0.15, 0.15, 0.15)
-        cr.rectangle(4, width - 6, allocation.width - 8, 18 * self.scale)
+        cr.rectangle(4, width - 6, width - 8, 18 * self.scale)
         cr.fill()
         # Device name
         cr.set_source_rgb(0.9, 0.9, 0.9)
@@ -185,11 +179,11 @@ class ChannelWidget(Gtk.Misc):
         if len(text) > 15:
             text = text[:13] + "..."
         (_, _, text_width, _, _, _) = cr.text_extents(text)
-        cr.move_to(allocation.width / 2 - text_width / 2, 83 * self.scale)
+        cr.move_to(width / 2 - text_width / 2, 83 * self.scale)
         cr.show_text(text)
         text = self.devices[0].fixture.mode.get("name")
         if len(text) > 15:
             text = text[:13] + "..."
         (_, _, text_width, _, _, _) = cr.text_extents(text)
-        cr.move_to(allocation.width / 2 - text_width / 2, 90 * self.scale)
+        cr.move_to(width / 2 - text_width / 2, 90 * self.scale)
         cr.show_text(text)
