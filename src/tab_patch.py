@@ -627,7 +627,8 @@ def update_channels_list(out, footprint, channel, model, path):
             text.append(f"{device.output}{univ}-{device.output + footprint - 1}{univ}")
         else:
             text.append(f"{device.output}{univ}")
-    text.sort(key=float)
+    # Sort on the device's start output
+    text.sort(key=lambda x: float(x.split("-")[0]))
     txt = ", ".join(text)
     model[path][1] = txt
     model[path][2] = _get_fixture_name(device)
