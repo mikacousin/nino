@@ -454,6 +454,7 @@ class TabPatch(Gtk.Box):
 
     def channel(self, _widget):
         """Channel signal"""
+        self.offset = 0
         if not App().keystring or not App().keystring.isdigit():
             App().statusbar_remove_all()
             return
@@ -464,6 +465,7 @@ class TabPatch(Gtk.Box):
 
     def thru(self, _widget):
         """Thru signal"""
+        self.offset = 0
         if not App().keystring or not App().keystring.isdigit():
             App().statusbar_remove_all()
             return
@@ -483,7 +485,9 @@ class TabPatch(Gtk.Box):
             App().statusbar_remove_all()
             return
         self.offset = int(App().keystring)
-        App().statusbar_remove_all()
+        App().keystring = f"Offset: {self.offset}"
+        App().statusbar_push()
+        App().keystring = ""
 
     def output(self, _widget):
         """Output signal"""
@@ -573,6 +577,7 @@ class TabPatch(Gtk.Box):
 
     def insert(self, _widget):
         """Insert Output with channel's same fixture"""
+        self.offset = 0
         if not validate_entry(App().keystring):
             App().statusbar_remove_all()
             return
