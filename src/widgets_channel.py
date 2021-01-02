@@ -80,6 +80,7 @@ class ChannelWidget(Gtk.Misc):
         self.set_size_request(width, height)
 
         # Draw background
+        cr.set_line_width(1)
         if self.get_parent().is_selected():
             cr.set_source_rgb(0.6, 0.4, 0.1)
             cr.rectangle(0, 0, width, height)
