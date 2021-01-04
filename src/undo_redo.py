@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # niño
 # Copyright (c) 2016 Ross Anderson <ross.anderson@ualberta.ca>
-# Copyright (c) 2020 Mika Cousin <mika.cousin@gmail.com>
+# Copyright (c) 2020-2021 Mika Cousin <mika.cousin@gmail.com>
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or

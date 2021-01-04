@@ -7,7 +7,7 @@
     <property name="type_hint">normal</property>
     <property name="program_name">niño</property>
     <property name="version">@REVISION@</property>
-    <property name="copyright">Copyright © 2020 Mika Cousin</property>
+    <property name="copyright">Copyright © 2020-2021 Mika Cousin</property>
     <property name="comments" translatable="yes">A Lighting Console.</property>
     <property name="website">@PACKAGE_URL@</property>
     <property name="website_label" translatable="yes">Visit Nino website</property>
