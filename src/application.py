@@ -164,7 +164,7 @@ class Nino(Gtk.Application, Console):
         if self.tabs["device_controls"] is None:
             self.tabs["device_controls"] = TabDeviceControls(active)
             active.notebook.append_page(
-                self.tabs["device_controls"], Gtk.Label("Device Controls")
+                self.tabs["device_controls"], Gtk.Label(_("Device Controls"))
             )
             active.notebook.show_all()
             active.notebook.set_current_page(-1)

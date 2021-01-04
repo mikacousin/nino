@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-04 18:38+0100\n"
-"PO-Revision-Date: 2021-01-04 18:43+0100\n"
+"POT-Creation-Date: 2021-01-04 19:58+0100\n"
+"PO-Revision-Date: 2021-01-04 19:59+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
 "Language: fr\n"
@@ -47,7 +47,7 @@ msgstr "Patch"
 
 #: data/menu.ui:11
 msgid "_Device Controls"
-msgstr "Contrôle des devices"
+msgstr "Contrôle des appareils"
 
 #: data/menu.ui:17
 msgid "_Preferences"
@@ -155,6 +155,10 @@ msgctxt "shortcut window"
 msgid "Insert output"
 msgstr "Insérer une adresse"
 
+#: src/application.py:167
+msgid "Device Controls"
+msgstr "Contrôle des appareils"
+
 #: src/application.py:181
 msgid "Preferences"
 msgstr "Préférences"
@@ -163,13 +167,46 @@ msgstr "Préférences"
 msgid "Percent mode"
 msgstr "Affichage en pourcent"
 
-#: src/tab_patch.py:510
+#: src/tab_patch.py:57
+msgid "Enter fixture name"
+msgstr "Entrer le nom d'un appareil"
+
+#: src/tab_patch.py:68
+msgid "Fixtures"
+msgstr "Appareils"
+
+#: src/tab_patch.py:69
+msgid "Footprint"
+msgstr "Empreinte"
+
+#: src/tab_patch.py:348
+msgid "Universe {}"
+msgstr "Univers {}"
+
+#: src/tab_patch.py:426
+msgid "sACN universes"
+msgstr "Univers sACN"
+
+#: src/tab_patch.py:427
+msgid "Fixtures library"
+msgstr "Bibliothèque d'appareils"
+
+#: src/tab_patch.py:448
+msgid "Chan"
+msgstr "Circ."
+
+#: src/tab_patch.py:448
+msgid "Address"
+msgstr "Adresse"
+
+#: src/tab_patch.py:448
+msgid "Type"
+msgstr "Type"
+
+#: src/tab_patch.py:512
 msgid "Can't patch several fixtures at the same time"
 msgstr "Impossible de patcher différents types d'appareils à la fois"
 
-#: src/tab_patch.py:607
+#: src/tab_patch.py:609
 msgid "Can't insert an output to several channels"
 msgstr "Impossible d'insérer une adresse dans plusieurs circuits"
-
-#~ msgid "_Settings"
-#~ msgstr "Préférences"

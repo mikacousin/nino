@@ -54,7 +54,7 @@ class FixturesLibrary(Gtk.Box):
                         self.fixtures.append(piter2, [True, mode, str(footprint)])
         # Search fixtures
         self.search_entry = Gtk.SearchEntry()
-        self.search_entry.set_placeholder_text("Enter fixture name")
+        self.search_entry.set_placeholder_text(_("Enter fixture name"))
         self.search_entry.connect("changed", self.refresh_results)
         self.search_entry.connect("focus-in-event", shortcuts.editable_focus)
         self.search_entry.connect("focus-out-event", shortcuts.editable_focus)
@@ -65,8 +65,8 @@ class FixturesLibrary(Gtk.Box):
         self.view = Gtk.TreeView(model=self.filter)
         self.view.connect("row-activated", self.fixtures_activated)
         renderer = Gtk.CellRendererText()
-        self.view.append_column(Gtk.TreeViewColumn("Fixtures", renderer, text=1))
-        self.view.append_column(Gtk.TreeViewColumn("Footprint", renderer, text=2))
+        self.view.append_column(Gtk.TreeViewColumn(_("Fixtures"), renderer, text=1))
+        self.view.append_column(Gtk.TreeViewColumn(_("Footprint"), renderer, text=2))
         self.pack_end(self.view, True, True, 0)
 
     def refresh_results(self, _widget):
@@ -344,7 +344,9 @@ class SacnWidget(Gtk.ScrolledWindow):
         flowbox = []
         self.outputs = {}
         for univ in UNIVERSES:
-            vbox.pack_start(Gtk.Label(label=f"Universe {univ}"), True, True, 0)
+            vbox.pack_start(
+                Gtk.Label(label=_("Universe {}").format(univ)), True, True, 0
+            )
             flowbox.append(Gtk.FlowBox())
             flowbox[-1].set_valign(Gtk.Align.START)
             flowbox[-1].set_max_children_per_line(512)
@@ -421,8 +423,8 @@ class TabPatch(Gtk.Box):
         # Stack with sACN universes and Fixtures library
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
-        stack.add_titled(self.sacn, "sacn", "sACN universes")
-        stack.add_titled(FixturesLibrary(fixtures), "fixtures", "Fixtures library")
+        stack.add_titled(self.sacn, "sacn", _("sACN universes"))
+        stack.add_titled(FixturesLibrary(fixtures), "fixtures", _("Fixtures library"))
         stack_switcher = Gtk.StackSwitcher()
         stack_switcher.set_stack(stack)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -443,7 +445,7 @@ class TabPatch(Gtk.Box):
         self.treeview.set_grid_lines(Gtk.TreeViewGridLines.BOTH)
         self.treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
         self.treeview.set_activate_on_single_click(True)
-        for i, column_title in enumerate(["Chan", "Address", "Type"]):
+        for i, column_title in enumerate([_("Chan"), _("Address"), _("Type")]):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
             self.treeview.append_column(column)
