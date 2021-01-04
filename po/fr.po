@@ -1,12 +1,12 @@
 #
-# Mika Cousin <mika.cousin@gmail.com>, 2020.
+# Mika Cousin <mika.cousin@gmail.com>, 2020-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-28 19:09+0100\n"
-"PO-Revision-Date: 2020-12-28 19:12+0100\n"
+"POT-Creation-Date: 2021-01-04 18:38+0100\n"
+"PO-Revision-Date: 2021-01-04 18:43+0100\n"
 "Last-Translator: Mika Cousin <mika.cousin@gmail.com>\n"
 "Language-Team: French <mika.cousin@gmail.com>\n"
 "Language: fr\n"
@@ -162,6 +162,14 @@ msgstr "Préférences"
 #: src/settings.py:68
 msgid "Percent mode"
 msgstr "Affichage en pourcent"
+
+#: src/tab_patch.py:510
+msgid "Can't patch several fixtures at the same time"
+msgstr "Impossible de patcher différents types d'appareils à la fois"
+
+#: src/tab_patch.py:607
+msgid "Can't insert an output to several channels"
+msgstr "Impossible d'insérer une adresse dans plusieurs circuits"
 
 #~ msgid "_Settings"
 #~ msgstr "Préférences"

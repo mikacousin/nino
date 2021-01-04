@@ -6,3 +6,4 @@ data/menu.ui
 data/shortcuts.ui
 src/application.py
 src/settings.py
+src/tab_patch.py

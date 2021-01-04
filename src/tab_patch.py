@@ -14,6 +14,7 @@
 import json
 import os
 
+from gettext import gettext as _
 from gi.repository import Gtk
 
 import nino.shortcuts as shortcuts
@@ -469,7 +470,7 @@ class TabPatch(Gtk.Box):
         if not App().keystring or not App().keystring.isdigit():
             App().statusbar_remove_all()
             return
-        _, selected_channels = self.treeview.get_selection().get_selected_rows()
+        _model, selected_channels = self.treeview.get_selection().get_selected_rows()
         if not selected_channels:
             App().statusbar_remove_all()
             return
@@ -501,7 +502,15 @@ class TabPatch(Gtk.Box):
         model, selected_channels = self.treeview.get_selection().get_selected_rows()
         footprint = 0
         if not verify_fixture(model, selected_channels):
-            print("No multipatch with different fixtures")
+            dialog = Gtk.MessageDialog(
+                transient_for=self.window,
+                flags=0,
+                message_type=Gtk.MessageType.INFO,
+                buttons=Gtk.ButtonsType.OK,
+                text=_("Can't patch several fixtures at the same time"),
+            )
+            dialog.run()
+            dialog.destroy()
             return
         for i, path in enumerate(selected_channels):
             fixture = get_fixture_by_name(model, path)
@@ -590,7 +599,15 @@ class TabPatch(Gtk.Box):
             App().statusbar_remove_all()
             return
         if len(selected_channels) > 1:
-            print("Can't insert output to different channels")
+            dialog = Gtk.MessageDialog(
+                transient_for=self.window,
+                flags=0,
+                message_type=Gtk.MessageType.INFO,
+                buttons=Gtk.ButtonsType.OK,
+                text=_("Can't insert an output to several channels"),
+            )
+            dialog.run()
+            dialog.destroy()
             App().statusbar_remove_all()
             return
         path = selected_channels[0]
