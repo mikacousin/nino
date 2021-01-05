@@ -18,6 +18,7 @@ def setup_shortcuts():
     """Application shortcuts"""
     # General shortcuts
     App().set_accels_for_action("app.quit", ["<Control>q"])
+    App().set_accels_for_action("app.live", ["<Control>l"])
     App().set_accels_for_action("app.patch", ["<Control>p"])
     App().set_accels_for_action("app.device_controls", ["<Control>d"])
     App().set_accels_for_action("app.settings", ["<Control>comma"])

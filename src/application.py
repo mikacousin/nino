@@ -112,6 +112,7 @@ class Nino(Gtk.Application, Console):
             "about": ("_about", None),
             "settings": ("_settings", None),
             "quit": ("_exit", None),
+            "live": ("_live", None),
             "undo": ("_undo", None),
             "redo": ("_redo", None),
             "patch": ("_patch", None),
@@ -147,6 +148,11 @@ class Nino(Gtk.Application, Console):
             self.add_action(action)
         return menu
 
+    def _live(self, _action, _parameter):
+        page = self.live.notebook.page_num(self.tabs["live"])
+        self.live.notebook.set_current_page(page)
+        self.live.present()
+
     def _patch(self, _action, _parameter):
         active = self.get_active_window()
         if self.tabs["patch"] is None:
@@ -158,6 +164,7 @@ class Nino(Gtk.Application, Console):
             win = self.tabs["patch"].window
             page = win.notebook.page_num(self.tabs["patch"])
             win.notebook.set_current_page(page)
+            win.present()
 
     def _device_controls(self, _action, _parameter):
         active = self.get_active_window()
@@ -172,6 +179,7 @@ class Nino(Gtk.Application, Console):
             win = self.tabs["device_controls"].window
             page = win.notebook.page_num(self.tabs["device_controls"])
             win.notebook.set_current_page(page)
+            win.present()
 
     def _settings(self, _action, _parameter):
         active = self.get_active_window()
@@ -186,6 +194,7 @@ class Nino(Gtk.Application, Console):
             win = self.tabs["settings"].window
             page = win.notebook.page_num(self.tabs["settings"])
             win.notebook.set_current_page(page)
+            win.present()
 
     def _close_tab(self, _action, _parameter):
         active = self.get_active_window()
